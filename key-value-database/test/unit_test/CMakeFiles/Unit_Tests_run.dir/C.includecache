@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/papinutt/Unifr/BScInformatique/2eme/SA18/OS/Project/UniFr-OS-Project-SP18/key-value-database/test/lib/ctest/ctest.h
+inttypes.h
+-
+stddef.h
+-
+setjmp.h
+-
+stdarg.h
+-
+stdio.h
+-
+string.h
+-
+sys/time.h
+-
+unistd.h
+-
+stdint.h
+-
+stdlib.h
+-
+dlfcn.h
+-
+signal.h
+-
+
+/Users/papinutt/Unifr/BScInformatique/2eme/SA18/OS/Project/UniFr-OS-Project-SP18/key-value-database/test/unit_test/main_test.c
+../lib/ctest/ctest.h
+/Users/papinutt/Unifr/BScInformatique/2eme/SA18/OS/Project/UniFr-OS-Project-SP18/key-value-database/test/lib/ctest/ctest.h
+

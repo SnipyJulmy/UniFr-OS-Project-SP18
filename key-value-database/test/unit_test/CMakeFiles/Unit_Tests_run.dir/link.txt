@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  -O0 -std=c11 -Wall -Wuninitialized -O0 -std=c11 -Wall -Wuninitialized -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/Unit_Tests_run.dir/main_test.c.o  -o Unit_Tests_run -lm 

@@ -1,5 +1,6 @@
 //
-// Created by snipy on 21.03.18. Update server tcp/ip by MP on 22.03.18.
+// Created by snipy on 21.03.18.
+// Update server tcp/ip by MP on 22.03.18.
 //
 
 #include <sys/socket.h>

@@ -6,11 +6,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <time.h>
+#include <pthread.h>
+#include <stdio.h>
+#include "server_connection.h"
+#include "../debug.h"
 
 int main(void)
 {
@@ -32,15 +34,22 @@ int main(void)
 
     listen(listenfd, 10);
 
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wmissing-noreturn"
     while (1)
     {
+        // accept a connection
+        printf("Waiting on a connection on port %d\n",ntohs(serv_addr.sin_port));
         connfd = accept(listenfd, (struct sockaddr*) NULL, NULL);
+        printf("Connection accepted !\n");
+        // create a thread that will take care of the connection
+        pthread_t* pthread = malloc(sizeof(pthread_t));
+        ServerConnectionArgs* args = new_args(connfd, pthread);
+        if ((pthread_create(pthread, NULL, server_connection_handle, args)) != 0)
+        {
+            log_err("Can't create thread to handle connection %d\n", connfd);
+        }
 
-        ticks = time(NULL);
-        snprintf(sendBuff, sizeof(sendBuff), "Server provide you the local time: %.24s\r\n", ctime(&ticks));
-        write(connfd, sendBuff, strlen(sendBuff));
-
-        close(connfd);
         sleep(1);
         // TODO Idea :
         /*
@@ -48,4 +57,5 @@ int main(void)
          *  to stop the server manually if needed
          */
     }
+    #pragma clang diagnostic pop
 }

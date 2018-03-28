@@ -7,22 +7,22 @@
 
 
 typedef struct Stack Stack;
-typedef struct Stack
+struct Stack
 {
     /* Attributes */
-    void** data;
+    int* data;
     int size;
     int max_size;
     size_t elt_ptr_size;
 
     /* Methods */
     void (* destroy)(Stack* self);
-    void (* push)(Stack* s, void* element);
-    void* (* pop)(Stack* s);
-    void* (* peek)(Stack* s);
+    void (* push)(Stack* s, int element);
+    int (* pop)(Stack* s);
+    int (* peek)(Stack* s);
 };
 
-Stack* allocator_stack_create(int init_size, size_t elt_ptr_size);
+Stack* allocator_stack_create(int init_size);
 
 
 #endif //KEY_VALUE_DATABASE_STACK_H

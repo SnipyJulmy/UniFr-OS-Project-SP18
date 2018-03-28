@@ -39,7 +39,7 @@ int main(void)
     while (1)
     {
         // accept a connection
-        printf("Waiting on a connection on port %d\n",ntohs(serv_addr.sin_port));
+        printf("Waiting on a connection on port %d\n", ntohs(serv_addr.sin_port));
         connfd = accept(listenfd, (struct sockaddr*) NULL, NULL);
         printf("Connection accepted !\n");
         // create a thread that will take care of the connection

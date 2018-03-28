@@ -39,7 +39,7 @@ void* server_connection_handle(void* serverConnectionArgs)
     pthread_t self = pthread_self();
     char sendBuff[1025];
 
-    printf("Thread %d handle connection %d", self, args->connfd);
+    printf("Thread %d handle connection %d\n", self, args->connfd);
 
     time_t ticks = time(NULL);
     snprintf(sendBuff, sizeof(sendBuff), "Server provide you the local time: %.24s\r\n", ctime(&ticks));

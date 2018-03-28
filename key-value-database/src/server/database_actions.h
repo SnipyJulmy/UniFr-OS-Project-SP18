@@ -22,6 +22,7 @@
 #include <stdbool.h>
 
 uint32_t database_actions_insert_v(void* value);
+uint32_t database_actions_insert_int(int value);
 bool database_actions_insert_kv(uint32_t key, void* value);
 void* database_actions_read_k(uint32_t key);
 bool database_actions_contains_k(uint32_t key);

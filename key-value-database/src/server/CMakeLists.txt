@@ -8,6 +8,6 @@ set(CMAKE_C_STANDARD 11)
 add_executable(server
         main.c
         server_connection.c server_connection.h ../debug.h
-        )
+        database_actions.c database_actions.h)
 
 target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})

@@ -74,6 +74,17 @@ CTEST(set_semantics_test, user_key)
     set->free(set);
 }
 
+CTEST(set_semantics_test, set_operation_with_int)
+{
+    Set* set = lock_free_data_create_set(lock_free_set_hash);
+
+    int a = 2;
+    ASSERT_TRUE(set->add_with_key(set,10,&a));
+    int b = set->read_int(set,10);
+    ASSERT_TRUE(a == b);
+    set->free(set);
+}
+
 CTEST(set_semantics_test, free)
 {
     // Init a range of int

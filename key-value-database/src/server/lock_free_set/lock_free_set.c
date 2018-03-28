@@ -400,31 +400,28 @@ bool lock_free_data_add_with_key(Set* self, uint32_t key, void* data)
     return true;
 }
 
+// TODO
 int lock_free_data_read_int(Set* self, uint32_t key)
 {
     Node* pred;
     Node* curr;
     Node* bucket;
-    Node* tmpNext;
     Conversion next;
 
     if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
+    {
+        // TODO set ERRNO
         return false;
+    }
     key = lock_free_data_reverse(key);
     while (true)
     {
         if (!lock_free_data_find(bucket, key, false, &pred, &curr))
             return false;
-        next.node = tmpNext = curr->next;
+        next.node = curr->next;
         if ((next.value & 0x1) == 0)
         {
-            next.value |= 0x1;
-            if (compare_and_swap(&curr->next, tmpNext, next.node))
-            {
-                compare_and_swap(&pred->next, curr, tmpNext);
-                fetch_and_decrement(&(self->item_count));
-                return true;
-            }
+            return *(int*) (curr->data);
         }
     }
 }

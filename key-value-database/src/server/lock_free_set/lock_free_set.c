@@ -33,6 +33,9 @@ bool lock_free_data_remove_from_key(Set* self, uint32_t key);
 bool lock_free_data_contains(Set* self, void* data);
 bool lock_free_data_contains_from_key(Set* self, uint32_t key);
 
+// read
+int lock_free_data_read_int(Set* self, uint32_t key);
+
 // utility methods
 bool lock_free_data_free(Set* self);
 uint32_t lock_free_data_key(Set* self, void* data);
@@ -60,6 +63,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->free = lock_free_data_free;
     set->remove_from_key = lock_free_data_remove_from_key;
     set->contains_from_key = lock_free_data_contains_from_key;
+    set->read_int = lock_free_data_read_int;
 
     set->first_bucket = (Node***) calloc(48, sizeof(Node**));
     check_mem(set->first_bucket, {
@@ -343,7 +347,6 @@ bool lock_free_data_contains_from_key(Set* self, uint32_t key)
     Node* pred;
     Node* curr;
     Node* bucket;
-    Node* tmpNext;
     Conversion next;
 
     if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
@@ -353,7 +356,7 @@ bool lock_free_data_contains_from_key(Set* self, uint32_t key)
     {
         if (!lock_free_data_find(bucket, key, false, &pred, &curr))
             return false;
-        next.node = tmpNext = curr->next;
+        next.node = curr->next;
         if ((next.value & 0x1) == 0)
         {
             return true;
@@ -395,4 +398,33 @@ bool lock_free_data_add_with_key(Set* self, uint32_t key, void* data)
     if (fetch_and_increment(&(self->item_count)) / size >= MAXLOAD)
         compare_and_swap(&(self->size), size, size * 2);
     return true;
+}
+
+int lock_free_data_read_int(Set* self, uint32_t key)
+{
+    Node* pred;
+    Node* curr;
+    Node* bucket;
+    Node* tmpNext;
+    Conversion next;
+
+    if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
+        return false;
+    key = lock_free_data_reverse(key);
+    while (true)
+    {
+        if (!lock_free_data_find(bucket, key, false, &pred, &curr))
+            return false;
+        next.node = tmpNext = curr->next;
+        if ((next.value & 0x1) == 0)
+        {
+            next.value |= 0x1;
+            if (compare_and_swap(&curr->next, tmpNext, next.node))
+            {
+                compare_and_swap(&pred->next, curr, tmpNext);
+                fetch_and_decrement(&(self->item_count));
+                return true;
+            }
+        }
+    }
 }

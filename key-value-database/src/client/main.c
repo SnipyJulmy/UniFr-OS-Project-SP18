@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <errno.h>
 
 int main(int argc, char* argv[])
 {
@@ -36,12 +37,14 @@ int main(int argc, char* argv[])
 
     if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0)
     {
+        printf("Errno error : %s\n",strerror(errno));
         printf("\n inet_pton error occured\n");
         return 1;
     }
 
     if (connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
     {
+        printf("Errno error : %s\n",strerror(errno));
         printf("\n Error : Connect Failed \n");
         return 1;
     }

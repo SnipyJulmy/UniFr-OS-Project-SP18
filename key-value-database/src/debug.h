@@ -64,4 +64,12 @@
     #define debug_full(M, ...)
 #endif
 
+// Some utility macro
+
+#define check_mem(PTR, STATEMENTS) do { if((PTR) == NULL){log_err(MEM_ALLOC_ERR);STATEMENTS;} } while(0);
+
+// -- Some messages
+
+#define MEM_ALLOC_ERR "Can't allocate memory for the sentinel at __LINE__ in __FILE__"
+
 #endif //KEY_VALUE_DATABASE_DEBUG_H

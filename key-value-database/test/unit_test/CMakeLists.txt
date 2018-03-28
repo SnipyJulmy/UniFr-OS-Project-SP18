@@ -11,8 +11,6 @@ endif ()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized")
 
-set(SERVER_SRC )
-
 add_executable(Unit_Tests_run
         main_test.c
         multi_thread_access_test.c

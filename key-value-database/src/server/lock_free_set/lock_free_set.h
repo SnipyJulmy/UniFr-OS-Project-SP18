@@ -34,6 +34,7 @@ struct Set
     bool (* contains)(Set* self, void* data);
     bool (* contains_from_key)(Set* self, uint32_t key);
     bool (* remove_from_key)(Set* self, uint32_t key);
+    int (* read_int)(Set* self, uint32_t key);
 
     // private
     uint32_t (* item_hashcode)(void*);  // hashcode for the item to store

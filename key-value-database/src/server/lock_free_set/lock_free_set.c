@@ -37,7 +37,7 @@ bool lock_free_data_contains_from_key(Set* self, uint32_t key);
 int lock_free_data_read_int(Set* self, uint32_t key);
 
 // utility methods
-bool lock_free_data_free(Set* self);
+void lock_free_data_free(Set* self);
 uint32_t lock_free_data_key(Set* self, void* data);
 
 /**
@@ -92,9 +92,8 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
 }
 
 // TODO do it with allocator node... -> simpler
-bool lock_free_data_free(Set* self)
+void lock_free_data_free(Set* self)
 {
-    Node* itr;
     for (int i = 0; self->first_bucket[i] != NULL; i++)
     {
         for (int j = 0; self->first_bucket[i][j] != NULL; j++)
@@ -185,11 +184,11 @@ static Node* lock_free_data_get_secondary_bucket(Set* self, uint32_t key)
 
 uint32_t lock_free_data_reverse(uint32_t n)
 {
-    n = (n >> 1) & 0x55555555 | (n << 1) & 0xaaaaaaaa;
-    n = (n >> 2) & 0x33333333 | (n << 2) & 0xcccccccc;
-    n = (n >> 4) & 0x0f0f0f0f | (n << 4) & 0xf0f0f0f0;
-    n = (n >> 8) & 0x00ff00ff | (n << 8) & 0xff00ff00;
-    n = (n >> 16) & 0x0000ffff | (n << 16) & 0xffff0000;
+    n = ((n >> 1) & 0x55555555) | ((n << 1) & 0xaaaaaaaa);
+    n = ((n >> 2) & 0x33333333) | ((n << 2) & 0xcccccccc);
+    n = ((n >> 4) & 0x0f0f0f0f) | ((n << 4) & 0xf0f0f0f0);
+    n = ((n >> 8) & 0x00ff00ff) | ((n << 8) & 0xff00ff00);
+    n = ((n >> 16) & 0x0000ffff) | ((n << 16) & 0xffff0000);
     return n;
 }
 

@@ -27,7 +27,7 @@ struct Set
     /* methods */
     // free the whole set recursively
     // TODO : do it with a node allocator for perf
-    bool (* free)(Set* self);
+    void (* free)(Set* self);
     bool (* add)(Set* self, void* data);
     bool (* add_with_key)(Set* self, uint32_t key, void* data);
     bool (* remove)(Set* self, void* data);

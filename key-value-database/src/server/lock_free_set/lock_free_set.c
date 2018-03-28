@@ -45,7 +45,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
 {
     Set* set = malloc(1 * sizeof(Set));
     check_mem(set,
-    return NULL);
+              return NULL);
 
     set->size = INIT_SET_SIZE;
     set->item_count = 0;
@@ -63,30 +63,29 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
 
     set->first_bucket = (Node***) calloc(48, sizeof(Node**));
     check_mem(set->first_bucket, {
-            free(set);
-            return NULL;
+        free(set);
+        return NULL;
     });
 
     set->first_bucket[0] = (Node**) calloc(set->size, sizeof(Node*));
     check_mem(set->first_bucket[0], {
-            free(set->first_bucket);
-            free(set);
-            return NULL;
+        free(set->first_bucket);
+        free(set);
+        return NULL;
     });
 
     set->first_bucket[0][0] = (Node*) malloc(1 * sizeof(Node));
     check_mem(set->first_bucket[0][0], {
-            free(set->first_bucket[0]);
-            free(set->first_bucket);
-            free(set);
-            return NULL;
+        free(set->first_bucket[0]);
+        free(set->first_bucket);
+        free(set);
+        return NULL;
     });
 
     set->first_bucket[0][0]->sentinel = true;
     set->first_bucket[0][0]->next = NULL;
     return set;
 }
-
 
 // TODO do it with allocator node... -> simpler
 bool lock_free_data_free(Set* self)
@@ -104,6 +103,17 @@ bool lock_free_data_free(Set* self)
     free(self);
 }
 
+static void recursive_free(Node* node)
+{
+    // TODO
+    return;
+    if (node != NULL)
+    {
+        recursive_free(node->next);
+        free(node);
+    }
+}
+
 static Node* lock_free_data_initialize_bucket(Set* self, uint32_t key)
 {
     Node* sentinel;
@@ -118,8 +128,8 @@ static Node* lock_free_data_initialize_bucket(Set* self, uint32_t key)
 
     // TODO adjust behavior if memory alloc fail ? --> resources to free !
     check_mem(sentinel, {
-            log_err(MEM_ALLOC_ERR);
-            exit(0);
+        log_err(MEM_ALLOC_ERR);
+        exit(0);
     });
 
     sentinel->sentinel = true;
@@ -153,7 +163,7 @@ static Node* lock_free_data_get_secondary_bucket(Set* self, uint32_t key)
     {
         secondary = (Node**) calloc(self->size >> 1, sizeof(Node*));
         check_mem(secondary,
-        return NULL);
+                  return NULL);
         if (!(compare_and_swap(&(self->first_bucket[i]), NULL, secondary)))
             free(secondary);
     }
@@ -298,16 +308,6 @@ bool lock_free_data_contains(Set* self, void* data)
     }
 }
 
-static void recursive_free(Node* node)
-{
-    // TODO
-    return;
-    if (node != NULL)
-    {
-        recursive_free(node->next);
-        free(node);
-    }
-}
 
 bool lock_free_data_remove_from_key(Set* self, uint32_t key)
 {

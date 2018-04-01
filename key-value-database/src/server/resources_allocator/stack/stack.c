@@ -16,12 +16,12 @@ static int stack_peek(Stack* self);
 static void stack_double_size(Stack* stack);
 
 // if init_size <= 0, then init_size would be ALLOCATOR_STACK_INIT_SIZE
-Stack* allocator_stack_create(int init_size)
+Stack* allocator_stack_create(int init_size, size_t elt_size)
 {
     init_size = init_size >= 0 ? init_size : ALLOCATOR_STACK_INIT_SIZE;
     debug("stack -- create a stack of size %d\n", init_size);
     Stack* stack = malloc(1 * sizeof(Stack));
-    stack->elt_ptr_size = sizeof(int);
+    stack->elt_ptr_size = elt_size;
     stack->data = malloc(init_size * stack->elt_ptr_size);
     stack->size = 0;
     stack->max_size = init_size;

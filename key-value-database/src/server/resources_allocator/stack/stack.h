@@ -22,7 +22,7 @@ struct Stack
     int (* peek)(Stack* s);
 };
 
-Stack* allocator_stack_create(int init_size);
+Stack* allocator_stack_create(int init_size, size_t elt_size);
 
 
 #endif //KEY_VALUE_DATABASE_STACK_H

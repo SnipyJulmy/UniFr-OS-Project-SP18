@@ -20,4 +20,8 @@ add_executable(Unit_Tests_run
         ../../src/server/lock_free_set/lock_free_set.h
         ../../src/server/lock_free_set/lock_free_set_hash.c
         ../../src/server/lock_free_set/lock_free_set_hash.h
-        ../../src/server/resources_allocator/allocator_int_box.c ../../src/server/resources_allocator/allocator_int_box.h ../../src/server/resources_allocator/stack/stack.c ../../src/server/resources_allocator/stack/stack.h)
+        ../../src/server/resources_allocator/key_value_database_allocator.c
+        ../../src/server/resources_allocator/key_value_database_allocator.h
+        ../../src/server/resources_allocator/stack/stack.c
+        ../../src/server/resources_allocator/stack/stack.h
+        )

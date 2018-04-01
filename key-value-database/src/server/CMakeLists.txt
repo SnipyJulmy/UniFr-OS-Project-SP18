@@ -12,8 +12,8 @@ add_executable(server
         ../debug.h
         database_actions.c
         database_actions.h
-        resources_allocator/allocator_int_box.c
-        resources_allocator/allocator_int_box.h
+        resources_allocator/key_value_database_allocator.c
+        resources_allocator/key_value_database_allocator.h
         resources_allocator/stack/stack.c
         resources_allocator/stack/stack.h)
 

@@ -7,15 +7,14 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-
-typedef char* String;
+#include "key_value_database_typedef.h"
 
 // init the value memory allocator
 bool key_value_database_init(int init_stack_size);
 // allocate a string on the stack
-String* key_value_database_allocate(size_t size);
+K* key_value_database_allocate(size_t size);
 // deallocate the string
-void key_value_database_deallocate(String* string);
+void key_value_database_deallocate(K* string);
 // free the whole structure
 void key_value_database_destroy(void);
 

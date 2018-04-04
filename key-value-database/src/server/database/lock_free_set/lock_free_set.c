@@ -8,6 +8,7 @@
 #include "lock_free_set.h"
 #include "../../../debug.h"
 #include "atomic.h"
+#include "../resources_allocator/key_value_database_typedef.h"
 
 // private function
 
@@ -34,7 +35,7 @@ bool lock_free_data_contains(Set* self, void* data);
 bool lock_free_data_contains_from_key(Set* self, uint32_t key);
 
 // read
-int lock_free_data_read_int(Set* self, uint32_t key);
+void* lock_free_data_read(Set* self, Key key);
 
 // utility methods
 void lock_free_data_free(Set* self);
@@ -63,7 +64,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->free = lock_free_data_free;
     set->remove_from_key = lock_free_data_remove_from_key;
     set->contains_from_key = lock_free_data_contains_from_key;
-    set->read_int = lock_free_data_read_int;
+    set->read = lock_free_data_read;
 
     set->first_bucket = (Node***) calloc(48, sizeof(Node**));
     check_mem(set->first_bucket, {
@@ -250,7 +251,7 @@ bool lock_free_data_add(Set* self, void* data)
         return false;
     }
     size = self->size;
-    if (fetch_and_increment(&(self->item_count)) / size >= MAXLOAD)
+    if (fetch_and_increment(&(self->item_count)) / size >= MAX_LOAD)
         compare_and_swap(&(self->size), size, size * 2);
     return true;
 }
@@ -394,13 +395,13 @@ bool lock_free_data_add_with_key(Set* self, uint32_t key, void* data)
         return false;
     }
     size = self->size;
-    if (fetch_and_increment(&(self->item_count)) / size >= MAXLOAD)
+    if (fetch_and_increment(&(self->item_count)) / size >= MAX_LOAD)
         compare_and_swap(&(self->size), size, size * 2);
     return true;
 }
 
 // TODO
-int lock_free_data_read_int(Set* self, uint32_t key)
+void* lock_free_data_read(Set* self, uint32_t key)
 {
     Node* pred;
     Node* curr;
@@ -420,7 +421,7 @@ int lock_free_data_read_int(Set* self, uint32_t key)
         next.node = curr->next;
         if ((next.value & 0x1) == 0)
         {
-            return *(int*) (curr->data);
+            return (curr->data);
         }
     }
 }

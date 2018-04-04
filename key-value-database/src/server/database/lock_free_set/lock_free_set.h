@@ -3,8 +3,9 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "../resources_allocator/key_value_database_typedef.h"
 
-#define MAXLOAD 2
+#define MAX_LOAD 2
 #define INIT_SET_SIZE 2
 
 typedef struct Node Node;
@@ -34,7 +35,7 @@ struct Set
     bool (* contains)(Set* self, void* data);
     bool (* contains_from_key)(Set* self, uint32_t key);
     bool (* remove_from_key)(Set* self, uint32_t key);
-    int (* read_int)(Set* self, uint32_t key);
+    void* (* read)(Set* self, uint32_t key);
 
     // private
     uint32_t (* item_hashcode)(void*);  // hashcode for the item to store

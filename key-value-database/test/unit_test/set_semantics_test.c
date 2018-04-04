@@ -74,14 +74,60 @@ CTEST(set_semantics_test, user_key)
     set->free(set);
 }
 
-CTEST(set_semantics_test, set_operation_with_int)
+CTEST(set_semantics_test, set_operation_read)
 {
     Set* set = lock_free_data_create_set(lock_free_set_hash);
 
-    int a = 2;
-    ASSERT_TRUE(set->add_with_key(set,10,&a));
-    int b = set->read_int(set,10);
-    ASSERT_TRUE(a == b);
+    #pragma omp parallel default(none) num_threads(8) shared(set)
+    {
+        char* s1 = "asd";
+        Key key1 = set->item_hashcode(&s1);
+        ASSERT_TRUE(set->add_with_key(set, key1, &s1));
+        ASSERT_TRUE(set->read(set, key1) == &s1);
+        ASSERT_TRUE(set->remove_from_key(set, key1));
+        ASSERT_TRUE(set->add_with_key(set, key1, &s1));
+        ASSERT_TRUE(set->read(set, key1) == &s1);
+        ASSERT_TRUE(set->remove_from_key(set, key1));
+        ASSERT_TRUE(set->add_with_key(set, key1, &s1));
+        ASSERT_TRUE(set->read(set, key1) == &s1);
+        ASSERT_TRUE(set->remove_from_key(set, key1));
+
+        char* s2 = "asd2";
+        Key key2 = set->item_hashcode(&s2);
+        char* s3 = "asd2";
+        Key key3 = set->item_hashcode(&s3);
+        char* s4 = "asd2";
+        Key key4 = set->item_hashcode(&s4);
+
+        ASSERT_TRUE(set->add_with_key(set, key2, &s2));
+        ASSERT_TRUE(set->add_with_key(set, key3, &s3));
+        ASSERT_TRUE(set->add_with_key(set, key4, &s4));
+        ASSERT_TRUE(set->read(set, key2) == &s2);
+        ASSERT_TRUE(set->read(set, key3) == &s3);
+        ASSERT_TRUE(set->read(set, key4) == &s4);
+        ASSERT_FALSE(set->remove_from_key(set, key1));
+        ASSERT_TRUE(set->read(set, key2) == &s2);
+        ASSERT_TRUE(set->read(set, key3) == &s3);
+        ASSERT_TRUE(set->read(set, key4) == &s4);
+        ASSERT_TRUE(set->add_with_key(set, key1, &s1));
+        ASSERT_TRUE(set->read(set, key2) == &s2);
+        ASSERT_TRUE(set->read(set, key3) == &s3);
+        ASSERT_TRUE(set->read(set, key4) == &s4);
+        ASSERT_TRUE(set->remove_from_key(set, key1));
+        ASSERT_TRUE(set->read(set, key2) == &s2);
+        ASSERT_TRUE(set->read(set, key3) == &s3);
+        ASSERT_TRUE(set->read(set, key4) == &s4);
+        ASSERT_TRUE(set->remove_from_key(set, key2));
+        ASSERT_TRUE(set->read(set, key3) == &s3);
+        ASSERT_TRUE(set->read(set, key4) == &s4);
+        ASSERT_TRUE(set->remove_from_key(set, key3));
+        ASSERT_TRUE(set->read(set, key4) == &s4);
+        ASSERT_TRUE(set->remove_from_key(set, key4));
+        ASSERT_FALSE(set->read(set, key1) == &s1);
+        ASSERT_FALSE(set->read(set, key2) == &s2);
+        ASSERT_FALSE(set->read(set, key3) == &s3);
+        ASSERT_FALSE(set->read(set, key4) == &s4);
+    }
     set->free(set);
 }
 

@@ -21,16 +21,15 @@ static int nextIntBound(int max)
     return rand() % max;
 }
 
-static int nextIdx()
+static uint32_t nextIdx()
 {
-    return rand() % ARRAY_LENGTH;
+    return (uint32_t) (rand() % ARRAY_LENGTH);
 };
 
 CTEST(multi_thread_test, simple_add_remove)
 {
     Set* set = lock_free_data_create_set(lock_free_set_hash);
-    #pragma omp parallel default(none) num_threads(8)\
-        shared(set)
+    #pragma omp parallel default(none) num_threads(8) shared(set)
     {
         // const int thread_num = omp_get_thread_num();
         // generate random v
@@ -62,8 +61,7 @@ CTEST(multi_thread_test, simple_add_remove)
 CTEST(multi_thread_test, simple_add_remove_from_key)
 {
     Set* set = lock_free_data_create_set(lock_free_set_hash);
-    #pragma omp parallel default(none) num_threads(8)\
-        shared(set)
+    #pragma omp parallel default(none) num_threads(8) shared(set)
     {
         // const int thread_num = omp_get_thread_num();
         // generate random v
@@ -96,13 +94,12 @@ CTEST(multi_thread_test, simple_add_remove_from_key)
 CTEST(multi_thread_test, simple_add_from_key_remove_from_key)
 {
     Set* set = lock_free_data_create_set(lock_free_set_hash);
-    #pragma omp parallel default(none) num_threads(1)\
-        shared(set)
+    #pragma omp parallel default(none) num_threads(8) shared(set)
     {
         // const int thread_num = omp_get_thread_num();
         // generate random v
         int* p = malloc(ARRAY_LENGTH * sizeof(int));
-        int idx;
+        uint32_t idx;
         for (int i = 0; i < ARRAY_LENGTH; i++)
         {
             *p = nextInt();
@@ -116,12 +113,8 @@ CTEST(multi_thread_test, simple_add_from_key_remove_from_key)
                 ASSERT_TRUE(set->contains_from_key(set, idx));
                 set->remove_from_key(set, idx);
             }
-            else
-            {
-                ASSERT_TRUE(false);
-            }
         }
-
         free(p);
     }
+    set->free(set);
 }

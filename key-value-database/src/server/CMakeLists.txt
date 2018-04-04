@@ -4,17 +4,19 @@ project(${CMAKE_PROJECT_NAME}_server)
 find_package(Threads)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized -Wunknown-pragmas")
 
 add_executable(server
         main.c
         server_connection.c
         server_connection.h
         ../debug.h
-        database_actions.c
-        database_actions.h
-        resources_allocator/key_value_database_allocator.c
-        resources_allocator/key_value_database_allocator.h
-        resources_allocator/stack/stack.c
-        resources_allocator/stack/stack.h resources_allocator/key_value_database_typedef.h)
+        database/database_actions.c
+        database/database_actions.h
+        database/resources_allocator/key_value_database_allocator.c
+        database/resources_allocator/key_value_database_allocator.h
+        database/resources_allocator/stack/stack.c
+        database/resources_allocator/stack/stack.h
+        database/resources_allocator/key_value_database_typedef.h)
 
 target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})

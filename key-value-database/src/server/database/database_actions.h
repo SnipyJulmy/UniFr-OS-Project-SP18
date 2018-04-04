@@ -20,14 +20,14 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "resources_allocator/key_value_database_typedef.h"
 
-uint32_t database_actions_insert_v(void* value);
-uint32_t database_actions_insert_int(int value);
-bool database_actions_insert_kv(uint32_t key, void* value);
-void* database_actions_read_k(uint32_t key);
-bool database_actions_contains_k(uint32_t key);
-bool database_actions_contains_v(void* value);
-bool database_actions_contains_kv(uint32_t key, void* value);
+Key database_actions_insert_V(Value* value);
+bool database_actions_insert_kv(Key key, Value* value);
+Value* database_actions_read_k(Key key);
+bool database_actions_contains_k(Key key);
+bool database_actions_contains_v(Value* value);
+bool database_actions_contains_kv(Key key, Value* value);
 void database_actions_init(void);
 
 #endif //KEY_VALUE_DATABASE_DATABASE_ACTIONS_H

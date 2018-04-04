@@ -7,6 +7,7 @@
 #include "database_actions.h"
 #include "lock_free_set/lock_free_set.h"
 #include "lock_free_set/lock_free_set_hash.h"
+#include "resources_allocator/key_value_database_typedef.h"
 
 static Set* set;
 
@@ -20,7 +21,7 @@ void database_actions_free(void)
     set->free(set);
 }
 
-uint32_t database_actions_insert_v(void* value)
+uint32_t database_actions_insert_V(Value* value)
 {
     uint32_t key = set->item_hashcode(value);
     if (set->add_with_key(set, key, value))
@@ -30,17 +31,12 @@ uint32_t database_actions_insert_v(void* value)
     return NULL;
 }
 
-uint32_t database_actions_insert_int(int value)
-{
-    return 0;
-}
-
-bool database_actions_insert_kv(uint32_t key, void* value)
+bool database_actions_insert_kv(uint32_t key, Value* value)
 {
     return set->add_with_key(set,key,value);
 }
 
-void* database_actions_read_k(uint32_t key)
+Value* database_actions_read_k(uint32_t key)
 {
     return NULL;
 }
@@ -50,12 +46,12 @@ bool database_actions_contains_k(uint32_t key)
     return 0;
 }
 
-bool database_actions_contains_v(void* value)
+bool database_actions_contains_v(Value* value)
 {
     return 0;
 }
 
-bool database_actions_contains_kv(uint32_t key, void* value)
+bool database_actions_contains_kv(uint32_t key, Value* value)
 {
     return 0;
 }

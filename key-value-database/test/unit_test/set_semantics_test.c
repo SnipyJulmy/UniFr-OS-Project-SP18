@@ -94,9 +94,9 @@ CTEST(set_semantics_test, set_operation_read)
 
         char* s2 = "asd2";
         Key key2 = set->item_hashcode(&s2);
-        char* s3 = "asd2";
+        char* s3 = "asd3";
         Key key3 = set->item_hashcode(&s3);
-        char* s4 = "asd2";
+        char* s4 = "asd4";
         Key key4 = set->item_hashcode(&s4);
 
         ASSERT_TRUE(set->add_with_key(set, key2, &s2));
@@ -149,3 +149,75 @@ CTEST(set_semantics_test, free)
     free(vector);
 }
 
+#define AF(IDX) do{\
+    ASSERT_FALSE(set->contains(set,&s ## IDX)); \
+    ASSERT_FALSE(set->contains_from_key(set, set->item_hashcode(&s ## IDX))); \
+    }while(0);
+#define AT(IDX) do{\
+    ASSERT_TRUE(set->contains(set,&s ## IDX)); \
+    ASSERT_TRUE(set->contains_from_key(set, set->item_hashcode(&s ## IDX))); \
+    }while(0);
+CTEST(set_semantics_test, contains_value)
+{
+    Set* set = lock_free_data_create_set(lock_free_set_hash);
+
+    char* s1 = "asd1";
+    char* s2 = "asd2";
+    char* s3 = "asd2";
+    char* s4 = "asd2";
+    char* s5 = "asd2";
+    char* s6 = "asd2";
+
+    AF(1);
+    AF(2);
+    AF(3);
+    AF(4);
+    AF(5);
+    AF(6);
+    ASSERT_TRUE(set->add(set, &s1));
+    AT(1);
+    AF(2);
+    AF(3);
+    AF(4);
+    AF(5);
+    AF(6);
+    ASSERT_TRUE(set->add(set, &s2));
+    AT(1);
+    AT(2);
+    AF(3);
+    AF(4);
+    AF(5);
+    AF(6);
+    ASSERT_TRUE(set->add(set, &s3));
+    AT(1);
+    AT(2);
+    AT(3);
+    AF(4);
+    AF(5);
+    AF(6);
+    ASSERT_TRUE(set->add(set, &s4));
+    AT(1);
+    AT(2);
+    AT(3);
+    AT(4);
+    AF(5);
+    AF(6);
+    ASSERT_TRUE(set->add(set, &s5));
+    AT(1);
+    AT(2);
+    AT(3);
+    AT(4);
+    AT(5);
+    AF(6);
+    ASSERT_TRUE(set->add(set, &s6));
+    AT(1);
+    AT(2);
+    AT(3);
+    AT(4);
+    AT(5);
+    AT(6);
+
+    ASSERT_TRUE(set->contains_from_key(set, set->item_hashcode(&s1)));
+
+    set->free(set);
+}

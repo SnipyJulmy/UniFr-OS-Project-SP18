@@ -8,7 +8,6 @@
 #include "lock_free_set.h"
 #include "../../../debug.h"
 #include "atomic.h"
-#include "../resources_allocator/key_value_database_typedef.h"
 
 // private function
 
@@ -39,7 +38,6 @@ void* lock_free_data_read(Set* self, Key key);
 
 // utility methods
 void lock_free_data_free(Set* self);
-uint32_t lock_free_data_key(Set* self, void* data);
 
 /**
  *  Create a new lock-free set structure
@@ -293,7 +291,6 @@ bool lock_free_data_contains(Set* self, void* data)
     Node* pred;
     Node* curr;
     Node* bucket;
-    Node* tmpNext;
     Conversion next;
 
     uint32_t key = self->item_hashcode(data);
@@ -304,7 +301,7 @@ bool lock_free_data_contains(Set* self, void* data)
     {
         if (!lock_free_data_find(bucket, key, false, &pred, &curr))
             return false;
-        next.node = tmpNext = curr->next;
+        next.node = curr->next;
         if ((next.value & 0x1) == 0)
         {
             return true;

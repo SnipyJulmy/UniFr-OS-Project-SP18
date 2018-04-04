@@ -3,7 +3,7 @@
 //
 #include <stdio.h>
 #include "../lib/ctest/ctest.h"
-#include "../../src/server/lock_free_set/lock_free_set.h"
+#include "../../src/server/database/lock_free_set/lock_free_set.h"
 
 CTEST(reverse, reverse_key)
 {

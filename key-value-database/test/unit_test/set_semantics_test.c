@@ -6,8 +6,8 @@
 #include <stdlib.h>
 
 #include "../lib/ctest/ctest.h"
-#include "../../src/server/lock_free_set/lock_free_set.h"
-#include "../../src/server/lock_free_set/lock_free_set_hash.h"
+#include "../../src/server/database/lock_free_set/lock_free_set.h"
+#include "../../src/server/database/lock_free_set/lock_free_set_hash.h"
 
 #define FREE_TEST_VECTOR_LENGTH 5
 

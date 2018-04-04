@@ -9,19 +9,17 @@ if (OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 endif ()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized -Wunknown-pragmas")
 
 add_executable(Unit_Tests_run
         main_test.c
         multi_thread_access_test.c
         reverse_test.c
         set_semantics_test.c
-        ../../src/server/lock_free_set/lock_free_set.c
-        ../../src/server/lock_free_set/lock_free_set.h
-        ../../src/server/lock_free_set/lock_free_set_hash.c
-        ../../src/server/lock_free_set/lock_free_set_hash.h
-        ../../src/server/resources_allocator/key_value_database_allocator.c
-        ../../src/server/resources_allocator/key_value_database_allocator.h
-        ../../src/server/resources_allocator/stack/stack.c
-        ../../src/server/resources_allocator/stack/stack.h
+        ../../src/server/server_connection.c
+        ../../src/server/database/database_actions.c
+        ../../src/server/database/lock_free_set/lock_free_set.c
+        ../../src/server/database/lock_free_set/lock_free_set_hash.c
+        ../../src/server/database/resources_allocator/key_value_database_allocator.c
+        ../../src/server/database/resources_allocator/stack/stack.c
         )

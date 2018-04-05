@@ -52,12 +52,69 @@ static void shell_command_destroy(Command* self)
 
 static int shell_execute(Command* command)
 {
-    printf("Shell execute command :\n");
-    for (int i = 0; i < command->argc; i++)
+    printf("Shell execute command : ");
+/*    for (int i = 0; i < command->argc; i++)
     {
-        printf("%s ", command->args[i]);
+*/
+
+            if (!strcmp(command->args[0],"ls") == 0)
+            {
+                //Request for list
+                printf("ls\n");
+            }
+            else if (strcmp(command->args[0],"add") == 0)
+            {
+                //Request for list
+                printf("add\n");
+
+            }
+            else if (strcmp(command->args[0],"readkey") == 0)
+            {
+                //Request for list
+                printf("readkey\n");
+
+            }
+            else if (strcmp(command->args[0],"readval") == 0)
+            {
+                //Request for list
+                printf("readval\n");
+
+            }
+            else if (strcmp(command->args[0],"delkey") == 0)
+            {
+                //Request for list
+                printf("delkey\n");
+
+            }
+            else if (strcmp(command->args[0],"delval") == 0)
+            {
+                //Request for list
+                printf("delval\n");
+
+            }
+            else if (strcmp(command->args[0],"chgkey") == 0)
+            {
+                //Request for list
+                printf("chgkey\n");
+
+            }
+            else if (strcmp(command->args[0],"chgval") == 0)
+            {
+                //Request for list
+                printf("chgval\n");
+
+            }
+            else if (strcmp(command->args[0],"q") == 0)
+            {
+                //Request for list
+                printf("q\n");
+            }
+
+
+/*        printf("%s ", command->args[i]);
     }
     printf("\n");
+*/
 }
 
 static Command* shell_tokenize_line(char* line)

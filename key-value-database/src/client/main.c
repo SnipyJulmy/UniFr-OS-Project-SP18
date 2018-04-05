@@ -20,9 +20,7 @@
 int main(int argc, char* argv[])
 {
     shell_loop();
-    return EXIT_SUCCESS;
 
-    /*
     int sockfd = 0;
     ssize_t n = 0;
     char recvBuff[1024];
@@ -77,6 +75,5 @@ int main(int argc, char* argv[])
         log_err("Read error : %s\n", strerror(errno));
     }
 
-    return 0;
-     */
+    return EXIT_SUCCESS;
 }

@@ -5,11 +5,15 @@
 #ifndef KEY_VALUE_DATABASE_DEBUG_H
 #define KEY_VALUE_DATABASE_DEBUG_H
 
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
 /*
  * Configuration
  */
 
-#define NDEBUG
+// #define NDEBUG
 #define LOG_LEVEL LOG_LEVEL_DEBUG
 
 /*
@@ -49,7 +53,7 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_INFO)
-#define log_info(M, ...)      fprintf(stderr, "[INF]: " M "\n", ##__VA_ARGS__)
+    #define log_info(M, ...)      fprintf(stderr, "[INF]: " M "\n", ##__VA_ARGS__)
     #define log_info_full(M, ...) fprintf(stderr, "[INF] (%s:%d): " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 #else
     #define log_info(M, ...)
@@ -57,7 +61,7 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_DEBUG)
-#define debug(M, ...)      fprintf(stderr, "[DBG]: " M "\n", ##__VA_ARGS__)
+    #define debug(M, ...)      fprintf(stderr, "[DBG]: " M "\n", ##__VA_ARGS__)
     #define debug_full(M, ...) fprintf(stderr, "[DBG] %s:%d: " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 #else
     #define debug(M, ...)
@@ -66,10 +70,16 @@
 
 // Some utility macro
 
-#define check_mem(PTR, STATEMENTS) do { if((PTR) == NULL){log_err(MEM_ALLOC_ERR);STATEMENTS;} } while(0);
+#define check_mem(PTR, STATEMENTS) do {\
+    if((PTR) == NULL) {\
+        log_err(MEM_ALLOC_ERR,__LINE__, __FILE__);\
+        STATEMENTS;\
+    }} while(0);
+
+#define check_mem_and_exit(PTR) check_mem(PTR, exit(EXIT_FAILURE));
 
 // -- Some messages
 
-#define MEM_ALLOC_ERR "Can't allocate memory for the sentinel at __LINE__ in __FILE__"
+#define MEM_ALLOC_ERR "Can't allocate memory for the sentinel at line %d in file %s\n"
 
 #endif //KEY_VALUE_DATABASE_DEBUG_H

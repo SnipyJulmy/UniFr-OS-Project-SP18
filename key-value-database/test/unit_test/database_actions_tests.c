@@ -3,50 +3,37 @@
 //
 
 #include <stdio.h>
+#include <string.h>
 #include "../lib/ctest/ctest.h"
 #include "../../src/server/database/database_actions.h"
-
-#define AT(IDX) do {\
-    ASSERT_TRUE(database_actions_contains_k(k ## IDX)); \
-    ASSERT_TRUE(database_actions_contains_kv(k ## IDX,&s ## IDX)); \
-}while(0);
-
-#define AF(IDX) do {\
-    ASSERT_FALSE(database_actions_contains_k(k ## IDX)); \
-    ASSERT_FALSE(database_actions_contains_kv(k ## IDX,&s ## IDX)); \
-}while(0);
+#include "macro_utils.h"
 
 CTEST(database_action, insert_v)
 {
     database_actions_init();
-    char* s1 = "asdisadoan1";
-    char* s2 = "asdisadoan2";
-    char* s3 = "asdisadoan3";
-    char* s4 = "asdisadoan4";
-    char* s5 = "asdisadoan5";
-    char* s6 = "asdisadoan6";
-
-    Key k1 = database_actions_insert_v(&s1);
+    DEF_VAR;
+    DEF_KEY;
+    k1 = database_actions_insert_v(&s1);
     AT(1);
-    Key k2 = database_actions_insert_v(&s2);
+    k2 = database_actions_insert_v(&s2);
     AT(1);
     AT(2);
-    Key k3 = database_actions_insert_v(&s3);
+    k3 = database_actions_insert_v(&s3);
     AT(1);
     AT(2);
     AT(3);
-    Key k4 = database_actions_insert_v(&s4);
+    k4 = database_actions_insert_v(&s4);
     AT(1);
     AT(2);
     AT(3);
     AT(4);
-    Key k5 = database_actions_insert_v(&s5);
+    k5 = database_actions_insert_v(&s5);
     AT(1);
     AT(2);
     AT(3);
     AT(4);
     AT(5);
-    Key k6 = database_actions_insert_v(&s6);
+    k6 = database_actions_insert_v(&s6);
     AT(1);
     AT(2);
     AT(3);
@@ -59,18 +46,8 @@ CTEST(database_action, insert_v)
 CTEST(database_action, insert_kv)
 {
     database_actions_init();
-    char* s1 = "asdisadoan1";
-    Key k1 = 10;
-    char* s2 = "asdisadoan2";
-    Key k2 = 11;
-    char* s3 = "asdisadoan3";
-    Key k3 = 12;
-    char* s4 = "asdisadoan4";
-    Key k4 = 13;
-    char* s5 = "asdisadoan5";
-    Key k5 = 14;
-    char* s6 = "asdisadoan6";
-    Key k6 = 15;
+    DEF_VAR;
+    DEF_KEY_INIT;
 
     AF(1);
     AF(2);
@@ -127,24 +104,120 @@ CTEST(database_action, insert_kv)
 CTEST(database_action, read_k)
 {
     database_actions_init();
-    database_actions_destroy();
-}
+    DEF_VAR;
+    DEF_KEY;
+    ASSERT_TRUE(k1 = database_actions_insert_v(&s1));
+    ASSERT_TRUE(k2 = database_actions_insert_v(&s2));
+    ASSERT_TRUE(k3 = database_actions_insert_v(&s3));
+    ASSERT_TRUE(k4 = database_actions_insert_v(&s4));
+    ASSERT_TRUE(k5 = database_actions_insert_v(&s5));
+    ASSERT_TRUE(k6 = database_actions_insert_v(&s6));
+    AT(1);
+    AT(2);
+    AT(3);
+    AT(4);
+    AT(5);
+    AT(6);
 
-CTEST(database_action, contains_v)
-{
-    database_actions_init();
+    ASSERT_TRUE(database_actions_read_k(k1) == &s1);
+    ASSERT_TRUE(database_actions_read_k(k2) == &s2);
+    ASSERT_TRUE(database_actions_read_k(k3) == &s3);
+    ASSERT_TRUE(database_actions_read_k(k4) == &s4);
+    ASSERT_TRUE(database_actions_read_k(k5) == &s5);
+    ASSERT_TRUE(database_actions_read_k(k6) == &s6);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k1), *database_actions_read_k(k1)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k2), *database_actions_read_k(k2)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k3), *database_actions_read_k(k3)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k4), *database_actions_read_k(k4)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k5), *database_actions_read_k(k5)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k6), *database_actions_read_k(k6)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k1), *database_actions_read_k(k4)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k2), *database_actions_read_k(k5)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_k(k3), *database_actions_read_k(k6)) == 0);
+
     database_actions_destroy();
 }
 
 CTEST(database_action, contains_k)
 {
     database_actions_init();
+
+    DEF_VAR;
+    DEF_KEY_INIT;
+    INSERT_ALL;
+
+    CONTAINS_ALL_KEY;
+    ASSERT_TRUE(database_actions_remove_k(k1));
+    CONTAINS_KEYS_BUT(1);
+    ASSERT_TRUE(database_actions_insert_kv(k1, &s1));
+    CONTAINS_ALL_KEY;
+    ASSERT_TRUE(database_actions_remove_k(k1));
+    ASSERT_TRUE(database_actions_remove_k(k2));
+    CONTAINS_KEY_4(3, 4, 5, 6);
+    CONTAINS_NOT_KEY_2(1, 2);
+    ASSERT_TRUE(database_actions_insert_kv(k1, &s1));
+    ASSERT_TRUE(database_actions_insert_kv(k2, &s2));
+    CONTAINS_ALL_KEY;
+    REMOVE(1);
+    CONTAINS_KEY_5(2, 3, 4, 5, 6);
+    CONTAINS_NOT_KEY_1(1);
+    REMOVE(2);
+    CONTAINS_KEY_4(3, 4, 5, 6);
+    CONTAINS_NOT_KEY_2(1, 2);
+    REMOVE(3);
+    CONTAINS_KEY_3(4, 5, 6);
+    CONTAINS_NOT_KEY_3(1, 2, 3);
+    REMOVE(4);
+    CONTAINS_KEY_2(5, 6);
+    CONTAINS_NOT_KEY_4(1, 2, 3, 4);
+    REMOVE(5);
+    CONTAINS_KEY_1(6);
+    CONTAINS_NOT_KEY_5(1, 2, 3, 4, 5);
+    REMOVE(6);
+    CONTAINS_NOT_KEY_6(1, 2, 3, 4, 5, 6);
+
     database_actions_destroy();
 }
 
 CTEST(database_action, contains_kv)
 {
     database_actions_init();
+    DEF_VAR;
+    DEF_KEY_INIT;
+    INSERT_ALL;
+
+    CONTAINS_ALL_KEY_VALUE;
+    REMOVE(1);
+
+    CONTAINS_NOT_KEY_VALUE_1(1);
+    CONTAINS_KEY_VALUE_5(2, 3, 4, 5, 6);
+    INSERT_KV(1);
+    CONTAINS_ALL_KEY_VALUE;
+    REMOVE(1);
+    REMOVE(2);
+    CONTAINS_KEY_VALUE_4(3, 4, 5, 6);
+    CONTAINS_NOT_KEY_VALUE_2(1, 2);
+    INSERT_KV(1);
+    INSERT_KV(2);
+    CONTAINS_ALL_KEY_VALUE;
+    REMOVE(1);
+    CONTAINS_KEY_VALUE_5(2, 3, 4, 5, 6);
+    CONTAINS_NOT_KEY_VALUE_1(1);
+    REMOVE(2);
+    CONTAINS_KEY_VALUE_4(3, 4, 5, 6);
+    CONTAINS_NOT_KEY_VALUE_2(1, 2);
+    REMOVE(3);
+    CONTAINS_KEY_VALUE_3(4, 5, 6);
+    CONTAINS_NOT_KEY_VALUE_3(1, 2, 3);
+    REMOVE(4);
+    CONTAINS_KEY_VALUE_2(5, 6);
+    CONTAINS_NOT_KEY_VALUE_4(1, 2, 3, 4);
+    REMOVE(5);
+    CONTAINS_KEY_VALUE_1(6);
+    CONTAINS_NOT_KEY_VALUE_5(1, 2, 3, 4, 5);
+    REMOVE(6);
+    CONTAINS_NOT_KEY_VALUE_6(1, 2, 3, 4, 5, 6);
+
     database_actions_destroy();
 }
 

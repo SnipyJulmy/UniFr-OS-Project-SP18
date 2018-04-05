@@ -5,4 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(client
         main.c
-        ../debug.h)
+        ../debug.h
+        shell.c
+        shell.h
+        )

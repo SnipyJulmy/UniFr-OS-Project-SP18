@@ -58,7 +58,7 @@ static int shell_execute(Command* command)
     {
 */
 
-            if (!strcmp(command->args[0],"ls") == 0)
+            if (strcmp(command->args[0],"ls") == 0)
             {
                 //Request for list
                 printf("ls\n");

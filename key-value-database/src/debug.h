@@ -70,10 +70,16 @@
 
 // Some utility macro
 
-#define check_mem(PTR, STATEMENTS) do { if((PTR) == NULL){log_err(MEM_ALLOC_ERR);STATEMENTS;} } while(0);
+#define check_mem(PTR, STATEMENTS) do {\
+    if((PTR) == NULL) {\
+        log_err(MEM_ALLOC_ERR,__LINE__, __FILE__);\
+        STATEMENTS;\
+    }} while(0);
+
+#define check_mem_and_exit(PTR) check_mem(PTR, exit(EXIT_FAILURE));
 
 // -- Some messages
 
-#define MEM_ALLOC_ERR "Can't allocate memory for the sentinel at __LINE__ in __FILE__"
+#define MEM_ALLOC_ERR "Can't allocate memory for the sentinel at line %d in file %s\n"
 
 #endif //KEY_VALUE_DATABASE_DEBUG_H

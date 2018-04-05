@@ -13,10 +13,16 @@
 #include <stdlib.h>
 #include "../debug.h"
 
+#include "shell.h"
+
 #define BUFFER_LENGTH 1025
 
 int main(int argc, char* argv[])
 {
+    shell_loop();
+    return EXIT_SUCCESS;
+
+    /*
     int sockfd = 0;
     ssize_t n = 0;
     char recvBuff[1024];
@@ -72,4 +78,5 @@ int main(int argc, char* argv[])
     }
 
     return 0;
+     */
 }

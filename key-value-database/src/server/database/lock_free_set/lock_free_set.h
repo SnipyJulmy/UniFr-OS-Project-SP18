@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "../resources_allocator/key_value_database_typedef.h"
+#include "../key_value_database_typedef.h"
 
 #define MAX_LOAD 2
 #define INIT_SET_SIZE 2

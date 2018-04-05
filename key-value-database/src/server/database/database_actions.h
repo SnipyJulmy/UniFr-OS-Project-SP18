@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "resources_allocator/key_value_database_typedef.h"
+#include "key_value_database_typedef.h"
 
 Key database_actions_insert_v(Value* value);
 bool database_actions_insert_kv(Key key, Value* value);

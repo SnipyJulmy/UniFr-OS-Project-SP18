@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include "key_value_database_typedef.h"
+#include "../key_value_database_typedef.h"
 
 // init the value memory allocator
 bool key_value_database_init(int init_stack_size);

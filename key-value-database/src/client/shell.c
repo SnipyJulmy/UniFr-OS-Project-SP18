@@ -109,6 +109,10 @@ static int shell_execute(Command* command)
         //Request for list
         printf("q\n");
     }
+    else
+    {
+        log_info("Unknow command : %s",command->args[0]);
+    }
 
     return STATUS_OK;
 }

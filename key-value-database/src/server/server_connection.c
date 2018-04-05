@@ -9,6 +9,7 @@
 #include <string.h>
 #include "server_connection.h"
 #include "../debug.h"
+#include "tcp_shell.h"
 
 #define BUFFER_LENGTH 1025
 
@@ -25,11 +26,6 @@ ServerConnectionArgs* new_args(int connfd, pthread_t* pthread)
     args->connfd = connfd;
     args->pthread = pthread;
     return args;
-}
-
-static void parseArgs(char* string)
-{
-
 }
 
 /**
@@ -49,19 +45,8 @@ void* server_connection_handle(void* serverConnectionArgs)
 
     log_info("Thread %lu handle connection %d\n", self, args->connfd);
 
-    ssize_t n;
-    while ((n = read(args->connfd, recvBuff, sizeof(recvBuff) - 1)) > 0)
-    {
-        recvBuff[n] = 0;
-        if (fputs(recvBuff, stdout) == EOF)
-        {
-            log_err("Fupts error : %s\n",strerror(errno));
-        }
-    }
-
-    time_t ticks = time(NULL);
-    snprintf(sendBuff, sizeof(sendBuff), "Server provide you the local time: %.24s\r\n", ctime(&ticks));
-    write(args->connfd, sendBuff, strlen(sendBuff));
+    // read line
+    tcp_shell_loop(args);
 
     // close connection
     log_info("thread %lu close connection\n",self);

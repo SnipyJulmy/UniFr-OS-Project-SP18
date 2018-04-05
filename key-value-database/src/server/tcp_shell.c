@@ -25,17 +25,19 @@ void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
 
     do
     {
-        printf(PROMPT);
         line = tcp_shell_read_line(connectionArgs);
+        if (line == NULL)
+            goto end;
         command = tcp_shell_tokenize_line(line);
         status = tcp_shell_execute(command);
 
         free(line);
-        // command->destroy(command);
+        command->destroy(command);
     } while (status);
+    end:;
 }
 
-Command* shell_command_create(char** args, int argc)
+Command* tcp_shell_command_create(char** args, int argc)
 {
     Command* command = malloc(1 * sizeof(Command));
     command->args = args;
@@ -45,13 +47,13 @@ Command* shell_command_create(char** args, int argc)
     return command;
 }
 
-static void shell_command_destroy(Command* self)
+static void tcp_shell_command_destroy(Command* self)
 {
     free(self->args);
     free(self);
 }
 
-static int shell_execute(Command* command)
+static int tcp_shell_execute(Command* command)
 {
     printf("Shell execute command :\n");
     for (int i = 0; i < command->argc; i++)
@@ -59,10 +61,10 @@ static int shell_execute(Command* command)
         printf("%s ", command->args[i]);
     }
     printf("\n");
-    return 0;
+    return 1;
 }
 
-static Command* shell_tokenize_line(char* line)
+static Command* tcp_shell_tokenize_line(char* line)
 {
     int buffer_size = SHELL_BUFFER_SIZE;
     int position = 0;
@@ -85,23 +87,23 @@ static Command* shell_tokenize_line(char* line)
         token = strtok(NULL, SHELL_TOKEN_DELIMITER);
     }
     tokens[position] = NULL;
-    return shell_command_create(tokens, position);
+    return tcp_shell_command_create(tokens, position);
 }
 
 // read a line from the command line interface
-static char* shell_read_line(ServerConnectionArgs* connectionArgs)
+static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs)
 {
     ssize_t n;
     int buffer_size = SHELL_BUFFER_SIZE;
     char* buffer = malloc(buffer_size * sizeof(char));
 
-    while ((n = read(connectionArgs->connfd, buffer, sizeof(char) * (buffer_size - 1))) > 0)
-    {
-        buffer[n] = 0;
-    }
+    n = read(connectionArgs->connfd, buffer, sizeof(char) * (buffer_size - 1));
+    if (n <= 0)
+        return NULL;
+    buffer[n] = 0;
+    // TODO check n
     return buffer;
 }
-
 
 /*
 int buffer_size = SHELL_BUFFER_SIZE;

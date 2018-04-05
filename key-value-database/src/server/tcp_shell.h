@@ -8,7 +8,7 @@
 #include "server_connection.h"
 
 typedef struct Command Command;
-typedef struct Command
+struct Command
 {
     // attributes
     char** args;
@@ -19,6 +19,6 @@ typedef struct Command
 };
 
 void tcp_shell_loop(ServerConnectionArgs* connectionArgs);
-Command* shell_command_create(char** args, int argc);
+Command* tcp_shell_command_create(char** args, int argc);
 
 #endif //KEY_VALUE_DATABASE_SHELL_H

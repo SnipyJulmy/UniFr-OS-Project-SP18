@@ -12,9 +12,9 @@
 // init the value memory allocator
 bool key_value_database_init(int init_stack_size);
 // allocate a string on the stack
-K* key_value_database_allocate(size_t size);
+Key* key_value_database_allocate(size_t size);
 // deallocate the string
-void key_value_database_deallocate(K* string);
+void key_value_database_deallocate(Key* key);
 // free the whole structure
 void key_value_database_destroy(void);
 

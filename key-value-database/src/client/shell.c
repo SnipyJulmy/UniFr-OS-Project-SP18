@@ -47,7 +47,8 @@ Command* shell_command_create(char** args, int argc)
 
 static void shell_command_destroy(Command* self)
 {
-
+    free(self->args);
+    free(self);
 }
 
 static int shell_execute(Command* command)

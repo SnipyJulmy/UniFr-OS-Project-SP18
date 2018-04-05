@@ -19,8 +19,6 @@
 
 int main(int argc, char* argv[])
 {
-    shell_loop();
-
     int sockfd = 0;
     ssize_t n = 0;
     char recvBuff[1024];
@@ -56,6 +54,8 @@ int main(int argc, char* argv[])
         log_err("Connection failed : %s\n", strerror(errno));
         return EXIT_FAILURE;
     }
+
+    shell_loop(sockfd, &serv_addr);
 
     char sendBuff[BUFFER_LENGTH];
     snprintf(sendBuff, sizeof(sendBuff), "insert 1 \"AD\"\n");

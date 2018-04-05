@@ -6,7 +6,7 @@
 #define KEY_VALUE_DATABASE_SHELL_H
 
 typedef struct Command Command;
-typedef struct Command
+struct Command
 {
     // attributes
     char** args;
@@ -16,7 +16,7 @@ typedef struct Command
     void (* destroy)(Command* self);
 };
 
-void shell_loop();
 Command* shell_command_create(char** args, int argc);
+void shell_loop(int socket_fd, struct sockaddr_in* socket_addr);
 
 #endif //KEY_VALUE_DATABASE_SHELL_H

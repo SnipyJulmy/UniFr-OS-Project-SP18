@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "shell.h"
 #include "../debug.h"
@@ -17,10 +20,10 @@
 
 static char* shell_read_line();
 static Command* shell_tokenize_line(char* line);
-static int shell_execute(Command* command);
+static int shell_execute(Command* command, int socket_fd);
 static void shell_command_destroy(Command* self);
 
-void shell_loop()
+void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
 {
     char* line;
     Command* command;
@@ -31,7 +34,7 @@ void shell_loop()
         printf("> ");
         line = shell_read_line();
         command = shell_tokenize_line(line);
-        status = shell_execute(command);
+        status = shell_execute(command, socket_fd);
 
         free(line);
         command->destroy(command);
@@ -54,10 +57,8 @@ static void shell_command_destroy(Command* self)
     free(self);
 }
 
-static int shell_execute(Command* command)
+static int shell_execute(Command* command, int socket_fd)
 {
-    printf("Shell execute command : ");
-
     if (strcmp(command->args[0], "ls") == 0)
     {
         //Request for list
@@ -109,9 +110,16 @@ static int shell_execute(Command* command)
         //Request for list
         printf("q\n");
     }
+    else if (strcmp(command->args[0], "cmd") == 0)
+    {
+        char sendBuff[1000];
+        snprintf(sendBuff, sizeof(sendBuff), "cmd %s\n", command->args[1]);
+        write(socket_fd, sendBuff, strlen(sendBuff));
+        printf("Shell execute command : cmd %s\n",command->args[1]);
+    }
     else
     {
-        log_info("Unknow command : %s",command->args[0]);
+        log_info("Unknow command : %s", command->args[0]);
     }
 
     return STATUS_OK;

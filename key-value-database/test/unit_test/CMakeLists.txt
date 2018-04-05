@@ -22,4 +22,4 @@ add_executable(Unit_Tests_run
         ../../src/server/database/lock_free_set/lock_free_set_hash.c
         ../../src/server/database/resources_allocator/key_value_database_allocator.c
         ../../src/server/database/resources_allocator/stack/stack.c
-        )
+        database_actions_tests.c)

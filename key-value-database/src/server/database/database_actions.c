@@ -7,23 +7,29 @@
 #include "database_actions.h"
 #include "lock_free_set/lock_free_set.h"
 #include "lock_free_set/lock_free_set_hash.h"
-#include "resources_allocator/key_value_database_typedef.h"
+#include "../../debug.h"
 
 static Set* set;
 
+// init the database
 void database_actions_init(void)
 {
     set = lock_free_data_create_set(lock_free_set_hash);
+    check_mem(set, {
+        log_err("Unable to init a lock-free-set at the database init phase");
+        exit(EXIT_FAILURE);
+    });
 }
 
-void database_actions_free(void)
+// free all the ressources used by the database
+void database_actions_destroy(void)
 {
     set->free(set);
 }
 
-uint32_t database_actions_insert_V(Value* value)
+Key database_actions_insert_v(Value* value)
 {
-    uint32_t key = set->item_hashcode(value);
+    Key key = set->item_hashcode(value);
     if (set->add_with_key(set, key, value))
     {
         return key;
@@ -31,29 +37,36 @@ uint32_t database_actions_insert_V(Value* value)
     return NULL;
 }
 
-bool database_actions_insert_kv(uint32_t key, Value* value)
+bool database_actions_insert_kv(Key key, Value* value)
 {
-    return set->add_with_key(set,key,value);
+    return set->add_with_key(set, key, value);
 }
 
-Value* database_actions_read_k(uint32_t key)
+Value* database_actions_read_k(Key key)
 {
-    return NULL;
+    return set->read(set, key);
 }
 
-bool database_actions_contains_k(uint32_t key)
+bool database_actions_contains_k(Key key)
 {
-    return 0;
+    return set->contains_from_key(set, key);
 }
 
-bool database_actions_contains_v(Value* value)
+bool database_actions_contains_kv(Key key, Value* value)
 {
-    return 0;
+    Value* res = set->read(set, key);
+    return res == value;
 }
 
-bool database_actions_contains_kv(uint32_t key, Value* value)
+bool database_actions_remove_k(Key key)
 {
-    return 0;
+    return set->remove_from_key(set,key);
 }
 
-
+bool database_actions_remove_kv(Key key, Value* value)
+{
+    Value* res = set->read(set,key);
+    if(value == res)
+        return set->remove_from_key(set,key);
+    return false;
+}

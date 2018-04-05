@@ -22,12 +22,14 @@
 #include <stdbool.h>
 #include "resources_allocator/key_value_database_typedef.h"
 
-Key database_actions_insert_V(Value* value);
+Key database_actions_insert_v(Value* value);
 bool database_actions_insert_kv(Key key, Value* value);
 Value* database_actions_read_k(Key key);
 bool database_actions_contains_k(Key key);
-bool database_actions_contains_v(Value* value);
 bool database_actions_contains_kv(Key key, Value* value);
+bool database_actions_remove_k(Key key);
+bool database_actions_remove_kv(Key key, Value* value);
 void database_actions_init(void);
+void database_actions_destroy(void);
 
 #endif //KEY_VALUE_DATABASE_DATABASE_ACTIONS_H

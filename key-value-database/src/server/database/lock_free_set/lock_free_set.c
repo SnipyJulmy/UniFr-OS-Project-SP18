@@ -309,7 +309,6 @@ bool lock_free_data_contains(Set* self, void* data)
     }
 }
 
-
 bool lock_free_data_remove_from_key(Set* self, uint32_t key)
 {
     Node* pred;

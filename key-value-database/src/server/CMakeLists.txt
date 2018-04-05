@@ -17,6 +17,8 @@ add_executable(server
         database/resources_allocator/key_value_database_allocator.h
         database/resources_allocator/stack/stack.c
         database/resources_allocator/stack/stack.h
+        database/lock_free_set/lock_free_set.c
+        database/lock_free_set/lock_free_set_hash.c
         database/resources_allocator/key_value_database_typedef.h)
 
 target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})

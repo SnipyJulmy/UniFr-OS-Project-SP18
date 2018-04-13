@@ -4,7 +4,7 @@ project(${CMAKE_PROJECT_NAME}_server)
 find_package(Threads)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized -Wunknown-pragmas")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wunknown-pragmas")
 
 add_executable(server
         main.c

@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <assert.h>
 
 #include "database_actions.h"
 #include "lock_free_set/lock_free_set.h"
@@ -29,9 +30,10 @@ Key database_actions_insert_v(Value* value)
     Key key = set->item_hashcode(value);
     if (set->add_with_key(set, key, value))
     {
+        assert(key != 0);
         return key;
     }
-    return NULL;
+    return 0;
 }
 
 bool database_actions_insert_kv(Key key, Value* value)
@@ -57,13 +59,13 @@ bool database_actions_contains_kv(Key key, Value* value)
 
 bool database_actions_remove_k(Key key)
 {
-    return set->remove_from_key(set,key);
+    return set->remove_from_key(set, key);
 }
 
 bool database_actions_remove_kv(Key key, Value* value)
 {
-    Value* res = set->read(set,key);
-    if(value == res)
-        return set->remove_from_key(set,key);
+    Value* res = set->read(set, key);
+    if (value == res)
+        return set->remove_from_key(set, key);
     return false;
 }

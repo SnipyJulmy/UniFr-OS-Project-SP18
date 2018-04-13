@@ -54,14 +54,14 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_INFO)
-    #define log_info(M, ...)         fprintf(stderr, BLUE "[INF]: " M "\n", ##__VA_ARGS__)
-    #define log_info_full(M, ...)    fprintf(stderr, BLUE "[INF] (%s:%d): " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
+    #define log_info(M, ...)         fprintf(stdout, BLUE "[INF]: " M "\n", ##__VA_ARGS__)
+    #define log_info_full(M, ...)    fprintf(stdout, BLUE "[INF] (%s:%d): " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
     #define log_info_mul(io_statements) do {\
-                                fprintf(stderr, BLUE "[INF] ");\
+                                fprintf(stdout, BLUE "[INF] ");\
                                 io_statements\
-                                fprintf(stderr, COLOR_X);\
+                                fprintf(stdout, COLOR_X);\
                                 } while(0);
-    #define log_info_print(M, ...)    fprintf(stderr, GREEN M COLOR_X, ##__VA_ARGS__)
+    #define log_info_print(M, ...)    fprintf(stdout, BLUE M COLOR_X, ##__VA_ARGS__)
     #define log_info_nl log_info("\n");
 #else
     #define log_info(M, ...)
@@ -72,11 +72,15 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_DEBUG)
-    #define debug(M, ...)      fprintf(stderr, GREEN "[DBG]: " M "\n" COLOR_X, ##__VA_ARGS__)
-    #define debug_full(M, ...) fprintf(stderr, GREEN "[DBG] %s:%d: " M "\n" COLOR_X, __FILE__, __LINE__, ##__VA_ARGS__)
+    #define debug(M, ...)      fprintf(stdout, GREEN "[DBG]: " M "\n" COLOR_X, ##__VA_ARGS__)
+    #define debug_full(M, ...) fprintf(stdout, GREEN "[DBG] %s:%d: " M "\n" COLOR_X, __FILE__, __LINE__, ##__VA_ARGS__)
+    #define debug_print(M, ...)fprintf(stdout, GREEN M COLOR_X, ##__VA_ARGS__)
+    #define debug_nl           debug_print("\n")
 #else
     #define debug(M, ...)
     #define debug_full(M, ...)
+    #define debug_print(M, ...)
+    #define debug_nl
 #endif
 
 
@@ -93,6 +97,6 @@ __LINE__, __FILE__);
     }} while(0);
 
 #define check_mem_and_exit(PTR) check_mem(PTR, exit(EXIT_FAILURE));
-#define check_mem_and_return(PTR,VALUE) check_mem(PTR, return (VALUE));
+#define check_mem_and_return(PTR, VALUE) check_mem(PTR, return (VALUE));
 
 #endif //KEY_VALUE_DATABASE_DEBUG_H

@@ -16,6 +16,7 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
+
 int main(void)
 {
     int listenfd = 0, connfd = 0;

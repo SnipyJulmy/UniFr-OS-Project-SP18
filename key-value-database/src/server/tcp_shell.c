@@ -59,7 +59,7 @@ static int tcp_shell_execute(Command* command)
     log_info_mul(
             for (int i = 0; i < command->argc; i++)
             {
-                printf("%s ", command->args[i]);
+                log_info_print("%s ", command->args[i]);
             }
     );
     log_info_nl;

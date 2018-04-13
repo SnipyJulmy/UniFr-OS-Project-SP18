@@ -60,11 +60,12 @@ static void shell_command_destroy(Command* self)
 static int shell_execute(Command* command, int socket_fd)
 {
     log_info_mul(
-            log_info_print("Receive command : ");
+            debug("Receive command : ");
             for (int i = 0; i < command->argc; i++)
             {
-                log_info_print("%s",command->args[i]);
+                debug_print(" %s", command->args[i]);
             }
+            debug_nl;
     );
 
     if (strcmp(command->args[0], "ls") == 0)
@@ -120,14 +121,28 @@ static int shell_execute(Command* command, int socket_fd)
     }
     else if (strcmp(command->args[0], "cmd") == 0)
     {
+        // TODO extract sendBuff as a global static buffer and clear it each time...
         char sendBuff[1000];
         snprintf(sendBuff, sizeof(sendBuff), "cmd %s\n", command->args[1]);
+
+        char* init = "cmd";
+        size_t size_used = strlen(init);
+        snprintf(sendBuff, sizeof(sendBuff), init);
+        for (int i = 1; i < command->argc; i++)
+        {
+            snprintf(
+                    &(sendBuff[size_used]),
+                    sizeof(sendBuff) - size_used,
+                    " %s",
+                    command->args[i]
+            );
+            size_used = size_used + strlen(command->args[i]) + 1;
+        }
         write(socket_fd, sendBuff, strlen(sendBuff));
-        printf("Shell execute command : cmd %s\n", command->args[1]);
     }
     else
     {
-        log_info("Unknow command : %s", command->args[0]);
+        log_info("Unknow command : %s\n", command->args[0]);
     }
 
     return STATUS_OK;

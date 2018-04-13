@@ -61,9 +61,13 @@
                                 fprintf(stderr, COLOR_X);\
                                 }while(0);
     #define log_info_print(M, ...)    fprintf(stderr, M, ##__VA_ARGS__)
+    #define log_info_nl log_info("\n");
 #else
     #define log_info(M, ...)
     #define log_info_full(M, ...)
+    #define log_info_mul(io_statements)
+    #define log_info_print(M, ...)
+    #define log_info_nl
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_DEBUG)

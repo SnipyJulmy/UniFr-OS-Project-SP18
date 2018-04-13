@@ -15,10 +15,7 @@ static Set* set;
 void database_actions_init(void)
 {
     set = lock_free_data_create_set(lock_free_set_hash);
-    check_mem(set, {
-        log_err("Unable to init a lock-free-set at the database init phase");
-        exit(EXIT_FAILURE);
-    });
+    check_mem_and_exit(set);
 }
 
 // free all the ressources used by the database

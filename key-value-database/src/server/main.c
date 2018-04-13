@@ -14,6 +14,8 @@
 #include "server_connection.h"
 #include "../debug.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
 int main(void)
 {
     int listenfd = 0, connfd = 0;
@@ -34,14 +36,13 @@ int main(void)
 
     listen(listenfd, 10);
 
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wmissing-noreturn"
     while (1)
     {
         // accept a connection
-        printf("Waiting on a connection on port %d\n", ntohs(serv_addr.sin_port));
+        log_info("Waiting on a connection on port %d\n", ntohs(serv_addr.sin_port));
         connfd = accept(listenfd, (struct sockaddr*) NULL, NULL);
-        printf("Connection accepted !\n");
+        log_info("Connection accepted !\n");
+
         // create a thread that will take care of the connection
         pthread_t* pthread = malloc(sizeof(pthread_t));
         ServerConnectionArgs* args = new_args(connfd, pthread);
@@ -57,5 +58,6 @@ int main(void)
          *  to stop the server manually if needed
          */
     }
-    #pragma clang diagnostic pop
 }
+
+#pragma clang diagnostic pop

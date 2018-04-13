@@ -129,10 +129,7 @@ static Node* lock_free_data_initialize_bucket(Set* self, uint32_t key)
     sentinel = malloc(1 * sizeof(Node));
 
     // TODO adjust behavior if memory alloc fail ? --> resources to free !
-    check_mem(sentinel, {
-        log_err(MEM_ALLOC_ERR);
-        exit(0);
-    });
+    check_mem_and_exit(sentinel);
 
     sentinel->sentinel = true;
     sentinel->reversed_key = key = lock_free_data_reverse(key);
@@ -164,8 +161,7 @@ static Node* lock_free_data_get_secondary_bucket(Set* self, uint32_t key)
     if (self->first_bucket[i] == NULL)
     {
         secondary = (Node**) calloc(self->size >> 1, sizeof(Node*));
-        check_mem(secondary,
-                  return NULL);
+        check_mem_and_return(secondary, NULL);
         if (!(compare_and_swap(&(self->first_bucket[i]), NULL, secondary)))
             free(secondary);
     }

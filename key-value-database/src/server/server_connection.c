@@ -40,8 +40,8 @@ void* server_connection_handle(void* serverConnectionArgs)
 {
     ServerConnectionArgs* args = serverConnectionArgs;
     pthread_t self = pthread_self();
-    char sendBuff[BUFFER_LENGTH];
-    char recvBuff[BUFFER_LENGTH];
+    // char sendBuff[BUFFER_LENGTH];
+    // char recvBuff[BUFFER_LENGTH];
 
     log_info("Thread %lu handle connection %d\n", self, args->connfd);
 

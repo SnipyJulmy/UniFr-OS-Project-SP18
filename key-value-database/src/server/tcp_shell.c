@@ -55,12 +55,14 @@ static void tcp_shell_command_destroy(Command* self)
 
 static int tcp_shell_execute(Command* command)
 {
-    printf("Shell execute command :\n");
-    for (int i = 0; i < command->argc; i++)
-    {
-        printf("%s ", command->args[i]);
-    }
-    printf("\n");
+    log_info("Shell execute command :\n");
+    log_info_mul(
+            for (int i = 0; i < command->argc; i++)
+            {
+                printf("%s ", command->args[i]);
+            }
+    );
+    log_info_nl;
     return 1;
 }
 

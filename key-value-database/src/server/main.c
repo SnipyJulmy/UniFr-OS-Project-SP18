@@ -22,7 +22,6 @@ int main(void)
     struct sockaddr_in serv_addr;
 
     char sendBuff[1025];
-    time_t ticks;
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     memset(&serv_addr, '0', sizeof(serv_addr));

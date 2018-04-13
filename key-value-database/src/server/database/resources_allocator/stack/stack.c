@@ -44,7 +44,7 @@ Stack* allocator_stack_create(int init_size, size_t elt_size)
 
 static void stack_double_size(Stack* stack)
 {
-    debug("stack -- doubling the size of stack at %u\n", stack);
+    debug("stack -- doubling the size of stack");
     stack->max_size = stack->max_size * 2;
     void** data = stack->data;
     stack->data = malloc(stack->max_size * stack->elt_ptr_size);

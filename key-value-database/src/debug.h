@@ -31,6 +31,7 @@
 #define RED    "\e[31m"
 #define GREEN  "\e[32m"
 #define YELLOW "\e[33m"
+#define BLUE  "\e[34m"
 #define WHITE  "\e[1m"
 
 // reset color
@@ -53,14 +54,14 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_INFO)
-    #define log_info(M, ...)         fprintf(stderr, GREEN "[INF]: " M "\n", ##__VA_ARGS__)
-    #define log_info_full(M, ...)    fprintf(stderr, GREEN "[INF] (%s:%d): " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
+    #define log_info(M, ...)         fprintf(stderr, BLUE "[INF]: " M "\n", ##__VA_ARGS__)
+    #define log_info_full(M, ...)    fprintf(stderr, BLUE "[INF] (%s:%d): " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
     #define log_info_mul(io_statements) do {\
-                                fprintf(stderr, GREEN "[INF] ");\
+                                fprintf(stderr, BLUE "[INF] ");\
                                 io_statements\
                                 fprintf(stderr, COLOR_X);\
-                                }while(0);
-    #define log_info_print(M, ...)    fprintf(stderr, M, ##__VA_ARGS__)
+                                } while(0);
+    #define log_info_print(M, ...)    fprintf(stderr, GREEN M COLOR_X, ##__VA_ARGS__)
     #define log_info_nl log_info("\n");
 #else
     #define log_info(M, ...)
@@ -71,25 +72,27 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_DEBUG)
-    #define debug(M, ...)      fprintf(stderr, "[DBG]: " M "\n", ##__VA_ARGS__)
-    #define debug_full(M, ...) fprintf(stderr, "[DBG] %s:%d: " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
+    #define debug(M, ...)      fprintf(stderr, GREEN "[DBG]: " M "\n" COLOR_X, ##__VA_ARGS__)
+    #define debug_full(M, ...) fprintf(stderr, GREEN "[DBG] %s:%d: " M "\n" COLOR_X, __FILE__, __LINE__, ##__VA_ARGS__)
 #else
     #define debug(M, ...)
     #define debug_full(M, ...)
 #endif
 
-// Some utility macro
 
+// -- Some messages
+#define MEM_ALLOC_ERR_FULL \
+log_err("Can't allocate memory at line %d in file %s\n",\
+__LINE__, __FILE__);
+
+// Some utility macro
 #define check_mem(PTR, STATEMENTS) do {\
     if((PTR) == NULL) {\
-        log_err(MEM_ALLOC_ERR,__LINE__, __FILE__);\
+        MEM_ALLOC_ERR_FULL;\
         STATEMENTS;\
     }} while(0);
 
 #define check_mem_and_exit(PTR) check_mem(PTR, exit(EXIT_FAILURE));
-
-// -- Some messages
-
-#define MEM_ALLOC_ERR "Can't allocate memory for the sentinel at line %d in file %s\n"
+#define check_mem_and_return(PTR,VALUE) check_mem(PTR, return (VALUE));
 
 #endif //KEY_VALUE_DATABASE_DEBUG_H

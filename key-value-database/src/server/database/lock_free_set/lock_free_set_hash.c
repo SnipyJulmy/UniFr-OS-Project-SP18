@@ -6,6 +6,7 @@
 
 uint32_t lock_free_set_hash(void* s)
 {
+    // TODO
     // ok...
     return (uint32_t) s;
 }

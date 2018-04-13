@@ -8,6 +8,7 @@
 #define MAX_LOAD 2
 #define INIT_SET_SIZE 2
 
+// TODO change data from void* to Value*
 typedef struct Node Node;
 struct Node
 {

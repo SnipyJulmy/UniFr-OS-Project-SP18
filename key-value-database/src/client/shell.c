@@ -59,6 +59,14 @@ static void shell_command_destroy(Command* self)
 
 static int shell_execute(Command* command, int socket_fd)
 {
+    log_info_mul(
+            log_info_print("Receive command : ");
+            for (int i = 0; i < command->argc; i++)
+            {
+                log_info_print("%s",command->args[i]);
+            }
+    );
+
     if (strcmp(command->args[0], "ls") == 0)
     {
         //Request for list
@@ -115,7 +123,7 @@ static int shell_execute(Command* command, int socket_fd)
         char sendBuff[1000];
         snprintf(sendBuff, sizeof(sendBuff), "cmd %s\n", command->args[1]);
         write(socket_fd, sendBuff, strlen(sendBuff));
-        printf("Shell execute command : cmd %s\n",command->args[1]);
+        printf("Shell execute command : cmd %s\n", command->args[1]);
     }
     else
     {

@@ -6,7 +6,6 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <string.h>
 #include "server_connection.h"
 #include "../debug.h"
 #include "tcp_shell.h"

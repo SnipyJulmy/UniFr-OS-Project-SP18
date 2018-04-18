@@ -16,10 +16,12 @@ add_executable(Unit_Tests_run
         multi_thread_access_test.c
         reverse_test.c
         set_semantics_test.c
+        database_actions_tests.c
         ../../src/server/server_connection.c
         ../../src/server/database/database_actions.c
         ../../src/server/database/lock_free_set/lock_free_set.c
         ../../src/server/database/lock_free_set/lock_free_set_hash.c
         ../../src/server/database/resources_allocator/key_value_database_allocator.c
         ../../src/server/database/resources_allocator/stack/stack.c
-        database_actions_tests.c)
+        ../../src/server/tcp_shell.c
+        )

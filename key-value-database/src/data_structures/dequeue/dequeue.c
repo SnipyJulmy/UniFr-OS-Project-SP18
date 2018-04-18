@@ -7,6 +7,7 @@
 
 #include "dequeue.h"
 #include "../../debug.h"
+#include "../../server/database/key_value_database_typedef.h"
 
 /************************************************************************************/
 /*                                START PRIVATE DECLARATION                         */
@@ -90,6 +91,11 @@ static bool __is_empty(Dequeue* dequeue);
  */
 static void __destroy(Dequeue* self);
 
+/**
+ * Display the dequeue... for debug
+ */
+static void __display(Dequeue* self);
+
 /************************************************************************************/
 /*                                  END DECLARATION                                 */
 /************************************************************************************/
@@ -128,6 +134,7 @@ Dequeue* key_value_database_dequeue_create(size_t elt_ptr_size,
     res->move_n_last_to_end = __move_n_last_to_end;
     res->peek_first = __peek_first;
     res->peek_last = __peek_last;
+    res->display = __display;
 
     res->elt_ptr_size = elt_ptr_size;
     res->item_compare = fn_item_compare;
@@ -409,4 +416,17 @@ static void* __peek_last(Dequeue* self)
         return NULL;
     }
     return self->last->prev->data;
+}
+
+void __display(Dequeue* self)
+{
+    DequeueNode* node = self->first;
+    while (node->next != self->last)
+    {
+        node = node->next;
+        KV* kv = node->data;
+        debug_nl;
+        debug("(%d,%s)\n", kv->key, kv->value);
+        debug_nl;
+    }
 }

@@ -119,35 +119,3 @@ static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs)
     // TODO check n
     return buffer;
 }
-
-/*
-int buffer_size = SHELL_BUFFER_SIZE;
-int position = 0;
-int c;
-
-char* buffer = malloc(buffer_size * sizeof(char));
-check_mem_and_exit(buffer);
-
-while (true)
-{
-    c = getchar();
-    if (c == EOF || c == '\n')
-    {
-        buffer[position] = '\0';
-        return buffer;
-    }
-    else
-    {
-        buffer[position] = (char) c;
-    }
-    position++;
-
-    // double buffer size if we exceed
-    if (position >= buffer_size)
-    {
-        buffer_size = buffer_size + SHELL_BUFFER_SIZE;
-        buffer = realloc(buffer, buffer_size * sizeof(char));
-        check_mem_and_exit(buffer);
-    }
-}
- */

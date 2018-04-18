@@ -9,5 +9,10 @@
 
 typedef uint32_t Key;
 typedef char* Value;
+typedef struct
+{
+    Key key;
+    Value value;
+} KV;
 
 #endif //KEY_VALUE_DATABASE_KEY_VALUE_DATABASE_TYPEDEF_H

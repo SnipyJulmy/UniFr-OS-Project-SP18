@@ -22,12 +22,6 @@
 #include <stdbool.h>
 #include "key_value_database_typedef.h"
 
-typedef struct
-{
-    Key key;
-    Value value;
-} KV;
-
 Key database_actions_insert_v(Value* value);
 bool database_actions_insert_kv(Key key, Value* value);
 Value* database_actions_read_k(Key key);

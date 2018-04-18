@@ -23,7 +23,18 @@
     char* s3 = "asdisadoan3";\
     char* s4 = "asdisadoan1";\
     char* s5 = "asdisadoan2";\
-    char* s6 = "asdisadoan3";
+    char* s6 = "asdisadoan3";\
+    char* s7 = "asdisadoan4"; \
+    char* s8 = "asdisadoan4"; \
+    char* s9 = "asdisadoan4"; \
+    char* s10 = "asdisadoan4";\
+    char* s11 = "asdisadoan4";\
+    char* s12 = "asdisadoan4";\
+    char* s13 = "asdisadoan4";\
+    char* s14 = "asdisadoan4";\
+    char* s15 = "asdisadoan4";\
+    char* s16 = "asdisadoan4";\
+    char* s17 = "asdisadoan4";\
 
 #define DEF_KEY \
     Key k1; \
@@ -31,7 +42,18 @@
     Key k3; \
     Key k4; \
     Key k5; \
-    Key k6;
+    Key k6; \
+    Key k7; \
+    Key k8; \
+    Key k9; \
+    Key k10; \
+    Key k11; \
+    Key k12; \
+    Key k13; \
+    Key k14; \
+    Key k15; \
+    Key k16; \
+    Key k17; \
 
 #define DEF_KEY_INIT \
     Key k1 = 10; \
@@ -39,7 +61,18 @@
     Key k3 = 12; \
     Key k4 = 13; \
     Key k5 = 14; \
-    Key k6 = 15;
+    Key k6 = 15; \
+    Key k7 = 16; \
+    Key k8 = 17; \
+    Key k9 = 18; \
+    Key k10 = 19; \
+    Key k11 = 20; \
+    Key k12 = 21; \
+    Key k13 = 22; \
+    Key k14 = 23; \
+    Key k15 = 24; \
+    Key k16 = 25; \
+    Key k17 = 26; \
 
 #define INSERT_ALL \
     ASSERT_TRUE(k1 = database_actions_insert_v(&s1)); \

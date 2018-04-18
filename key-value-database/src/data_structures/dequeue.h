@@ -52,6 +52,6 @@ struct DequeueNode
 
 Dequeue* key_value_database_dequeue_create(size_t elt_ptr_size,
                                            int (* fn_item_compare)(void*, void*),
-                                           void (* fn_item_destroy)(void*))
+                                           void (* fn_item_destroy)(void*));
 
 #endif //KEY_VALUE_DATABASE_DEQUEUE_H

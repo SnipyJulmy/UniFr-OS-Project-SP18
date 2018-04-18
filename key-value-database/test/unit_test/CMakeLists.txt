@@ -9,7 +9,7 @@ if (OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 endif ()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized -Wunknown-pragmas")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Wuninitialized")
 
 add_executable(Unit_Tests_run
         main_test.c
@@ -17,6 +17,8 @@ add_executable(Unit_Tests_run
         reverse_test.c
         set_semantics_test.c
         database_actions_tests.c
+        data_structures_test/dequeue_test.c
+
         ../../src/server/server_connection.c
         ../../src/server/database/database_actions.c
         ../../src/server/database/lock_free_set/lock_free_set.c
@@ -24,4 +26,5 @@ add_executable(Unit_Tests_run
         ../../src/server/database/resources_allocator/key_value_database_allocator.c
         ../../src/server/database/resources_allocator/stack/stack.c
         ../../src/server/tcp_shell.c
+        ../../src/data_structures/dequeue.c
         )

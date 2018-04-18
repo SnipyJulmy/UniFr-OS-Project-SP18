@@ -62,7 +62,7 @@
                                 fprintf(stdout, COLOR_X);\
                                 } while(0);
     #define log_info_print(M, ...)    fprintf(stdout, BLUE M COLOR_X, ##__VA_ARGS__)
-    #define log_info_nl log_info("\n");
+    #define log_info_nl fprintf(stdout,"\n");
 #else
     #define log_info(M, ...)
     #define log_info_full(M, ...)

@@ -8,7 +8,6 @@
 #include "lock_free_set.h"
 #include "../../../debug.h"
 #include "../atomic.h"
-#include "../../../server/database/database_actions.h"
 
 // private function
 
@@ -429,14 +428,42 @@ void* lock_free_data_read(Set* self, uint32_t key)
 
 Dequeue* lock_free_ls(Set* set)
 {
-    Dequeue* dequeue = key_value_database_dequeue_create(sizeof(KV),set->dequeue_item_compare,free);
+    Dequeue* dequeue = key_value_database_dequeue_create(sizeof(KV), set->dequeue_item_compare, free);
     Node*** firstBucket = set->first_bucket;
-    Node** buckets = firstBucket[0];
+    Node** secondBucket;
+    Node* node;
+    int i = 0, j = 0, k = 0;
 
-    while(buckets != NULL)
+    while (*firstBucket != NULL)
     {
-        buckets++;
+        secondBucket = *firstBucket;
+        while (*secondBucket != NULL)
+        {
+            node = *secondBucket;
+            while (node != NULL)
+            {
+                if (!node->sentinel)
+                {
+                    debug_nl;
+                    debug("key : %u\nvalue : %s\n",
+                          lock_free_data_reverse(node->reversed_key),
+                          *(char**) node->data);
+                    debug_nl;
+                    Key key = lock_free_data_reverse(node->reversed_key);
+                    Value* value = node->data;
+                    dequeue->add(dequeue, key_value_database_KV_create(key, *value));
+                    debug("Add item on (%d,%d,%d)\n", i, j, k);
+                }
+                node = node->next;
+                k++;
+            }
+            goto end; // ok...
+            j++;
+        }
+        firstBucket++;
+        i++;
     }
 
+    end:
     return dequeue;
 }

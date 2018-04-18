@@ -16,3 +16,11 @@ void key_value_database_KV_free(void* kv)
     free(kv);
 }
 
+
+KV* key_value_database_KV_create(Key key, Value value)
+{
+    KV* kv = malloc(1 * sizeof(KV));
+    kv->value = value;
+    kv->key = key;
+    return kv;
+}

@@ -16,8 +16,8 @@ typedef struct
     Value value;
 } KV;
 
+KV* key_value_database_KV_create(Key key, Value value);
 int key_value_database_KV_compare(void* a, void* b);
-
 void key_value_database_KV_free(void* kv);
 
 #endif //KEY_VALUE_DATABASE_KEY_VALUE_DATABASE_TYPEDEF_H

@@ -12,6 +12,10 @@
 #define SHELL_TOKEN_DELIMITER " \t\n\r\a"
 #define PROMPT "$> "
 
+#define STATUS_FAILURE 2
+#define STATUS_OK 1
+#define STATUS_EXIT 0
+
 static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs);
 static Command* tcp_shell_tokenize_line(char* line);
 static int tcp_shell_execute(Command* command);
@@ -33,7 +37,7 @@ void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
 
         free(line);
         command->destroy(command);
-    } while (status);
+    } while (status != STATUS_EXIT);
     end:;
 }
 
@@ -55,6 +59,15 @@ static void tcp_shell_command_destroy(Command* self)
 
 static int tcp_shell_execute(Command* command)
 {
+    if (command->argc <= 0)
+        return STATUS_EXIT;
+
+    // TODO
+    if (strcmp(command->args[0], "ls") == 0)
+    {
+        // TODO ls
+    }
+
     log_info("Shell execute command :\n");
     log_info_mul(
             for (int i = 0; i < command->argc; i++)
@@ -63,7 +76,7 @@ static int tcp_shell_execute(Command* command)
             }
     );
     log_info_nl;
-    return 1;
+    return STATUS_OK;
 }
 
 static Command* tcp_shell_tokenize_line(char* line)

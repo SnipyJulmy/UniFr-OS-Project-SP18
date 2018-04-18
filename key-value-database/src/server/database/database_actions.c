@@ -19,7 +19,7 @@ void database_actions_init(void)
     check_mem_and_exit(set);
 }
 
-// free all the ressources used by the database
+// free all the resources used by the database
 void database_actions_destroy(void)
 {
     set->free(set);

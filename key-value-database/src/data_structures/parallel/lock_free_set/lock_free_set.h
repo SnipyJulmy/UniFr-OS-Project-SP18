@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "../../../server/database/key_value_database_typedef.h"
+#include "../../dequeue/dequeue.h"
 
 #define MAX_LOAD 2
 #define INIT_SET_SIZE 2
@@ -37,9 +38,14 @@ struct Set
     bool (* contains_from_key)(Set* self, uint32_t key);
     bool (* remove_from_key)(Set* self, uint32_t key);
     void* (* read)(Set* self, uint32_t key);
+    Dequeue* (* ls)(Set* self);
 
     // private
     uint32_t (* item_hashcode)(void*);  // hashcode for the item to store
+
+    // for the dequeue
+    int (* dequeue_item_compare)(void*,void*);  // to compare two item
+    void (* dequeue_item_destroy)(void*);
 };
 
 // use in order to manipulate the pointer value without

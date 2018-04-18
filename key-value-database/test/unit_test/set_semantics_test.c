@@ -8,6 +8,8 @@
 #include "../lib/ctest/ctest.h"
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set.h"
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.h"
+#include "macro_utils.h"
+#include "../../src/server/database/database_actions.h"
 
 #define FREE_TEST_VECTOR_LENGTH 5
 
@@ -225,8 +227,33 @@ CTEST(set_semantics_test, contains_value)
 CTEST(set_semantics_test, ls)
 {
     Set* set = lock_free_data_create_set(lock_free_set_hash);
+
+    DEF_VAR;
+    DEF_KEY_INIT;
+
+    ASSERT_TRUE(set->add_with_key(set,k1,&s1));
+    ASSERT_TRUE(set->add_with_key(set,k2,&s2));
+    ASSERT_TRUE(set->add_with_key(set,k3,&s3));
+    ASSERT_TRUE(set->add_with_key(set,k4,&s4));
+    ASSERT_TRUE(set->add_with_key(set,k5,&s5));
+    ASSERT_TRUE(set->add_with_key(set,k6,&s6));
+    ASSERT_TRUE(set->add_with_key(set,k7,&s7));
+    ASSERT_TRUE(set->add_with_key(set,k8,&s8));
+    ASSERT_TRUE(set->add_with_key(set,k9,&s9));
+    ASSERT_TRUE(set->add_with_key(set,k10,&s10));
+    ASSERT_TRUE(set->add_with_key(set,k11,&s11));
+    ASSERT_TRUE(set->add_with_key(set,k12,&s12));
+    ASSERT_TRUE(set->add_with_key(set,k13,&s13));
+    ASSERT_TRUE(set->add_with_key(set,k14,&s14));
+    ASSERT_TRUE(set->add_with_key(set,k15,&s15));
+    ASSERT_TRUE(set->add_with_key(set,k16,&s16));
+    ASSERT_TRUE(set->add_with_key(set,k17,&s17));
+
     Dequeue* dequeue = set->ls(set);
 
+    ASSERT_TRUE(dequeue->size == 17);
+
+    dequeue->display(dequeue);
     dequeue->destroy(dequeue);
     set->destroy(set);
 }

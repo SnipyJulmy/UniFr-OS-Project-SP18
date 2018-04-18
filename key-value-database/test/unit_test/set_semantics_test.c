@@ -51,7 +51,7 @@ CTEST(set_semantics_test, simple_int)
     ASSERT_TRUE(set->item_count == 1);
     ASSERT_TRUE(set->remove(set, &c));
     ASSERT_TRUE(set->item_count == 0);
-    set->free(set);
+    set->destroy(set);
 }
 
 CTEST(set_semantics_test, user_key)
@@ -71,7 +71,7 @@ CTEST(set_semantics_test, user_key)
     ASSERT_TRUE(set->contains_from_key(set, 12));
     ASSERT_TRUE(set->remove_from_key(set, 12));
 
-    set->free(set);
+    set->destroy(set);
 }
 
 CTEST(set_semantics_test, set_operation_read)
@@ -128,7 +128,7 @@ CTEST(set_semantics_test, set_operation_read)
         ASSERT_FALSE(set->read(set, key3) == &s3);
         ASSERT_FALSE(set->read(set, key4) == &s4);
     }
-    set->free(set);
+    set->destroy(set);
 }
 
 CTEST(set_semantics_test, free)
@@ -143,7 +143,7 @@ CTEST(set_semantics_test, free)
         ASSERT_TRUE(set->add(set, &(vector[i])));
     }
 
-    set->free(set);
+    set->destroy(set);
 
     // free resources
     free(vector);
@@ -219,5 +219,14 @@ CTEST(set_semantics_test, contains_value)
 
     ASSERT_TRUE(set->contains_from_key(set, set->item_hashcode(&s1)));
 
-    set->free(set);
+    set->destroy(set);
+}
+
+CTEST(set_semantics_test, ls)
+{
+    Set* set = lock_free_data_create_set(lock_free_set_hash);
+    Dequeue* dequeue = set->ls(set);
+
+    dequeue->destroy(dequeue);
+    set->destroy(set);
 }

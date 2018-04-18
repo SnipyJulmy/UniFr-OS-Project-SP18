@@ -7,7 +7,8 @@
 
 #include "lock_free_set.h"
 #include "../../../debug.h"
-#include "atomic.h"
+#include "../atomic.h"
+#include "../../../server/database/database_actions.h"
 
 // private function
 
@@ -36,6 +37,9 @@ bool lock_free_data_contains_from_key(Set* self, uint32_t key);
 // read
 void* lock_free_data_read(Set* self, Key key);
 
+// ls
+Dequeue* lock_free_ls(Set* set);
+
 // utility methods
 void lock_free_data_free(Set* self);
 
@@ -59,10 +63,15 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->contains = lock_free_data_contains;
     set->remove = lock_free_data_remove;
     set->item_hashcode = fn_hashcode;
-    set->free = lock_free_data_free;
+    set->destroy = lock_free_data_free;
     set->remove_from_key = lock_free_data_remove_from_key;
     set->contains_from_key = lock_free_data_contains_from_key;
     set->read = lock_free_data_read;
+    set->ls = lock_free_ls;
+
+    // dequeue related
+    set->dequeue_item_compare = key_value_database_KV_compare;
+    set->dequeue_item_destroy = key_value_database_KV_free;
 
     set->first_bucket = (Node***) calloc(48, sizeof(Node**));
     check_mem(set->first_bucket, {
@@ -416,4 +425,18 @@ void* lock_free_data_read(Set* self, uint32_t key)
             return (curr->data);
         }
     }
+}
+
+Dequeue* lock_free_ls(Set* set)
+{
+    Dequeue* dequeue = key_value_database_dequeue_create(sizeof(KV),set->dequeue_item_compare,free);
+    Node*** firstBucket = set->first_bucket;
+    Node** buckets = firstBucket[0];
+
+    while(buckets != NULL)
+    {
+        buckets++;
+    }
+
+    return dequeue;
 }

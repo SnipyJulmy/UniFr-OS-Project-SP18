@@ -22,7 +22,7 @@ void database_actions_init(void)
 // free all the resources used by the database
 void database_actions_destroy(void)
 {
-    set->free(set);
+    set->destroy(set);
 }
 
 Key database_actions_insert_v(Value* value)

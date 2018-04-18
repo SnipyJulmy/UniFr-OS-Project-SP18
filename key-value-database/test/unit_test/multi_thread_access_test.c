@@ -116,5 +116,5 @@ CTEST(multi_thread_test, simple_add_from_key_remove_from_key)
         }
         free(p);
     }
-    set->free(set);
+    set->destroy(set);
 }

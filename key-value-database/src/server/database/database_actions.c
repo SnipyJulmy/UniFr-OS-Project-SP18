@@ -69,3 +69,8 @@ bool database_actions_remove_kv(Key key, Value* value)
         return set->remove_from_key(set, key);
     return false;
 }
+
+Dequeue* database_actions_ls(void)
+{
+    return set->ls(set);
+}

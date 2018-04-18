@@ -5,8 +5,8 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include "../lib/ctest/ctest.h"
-#include "../../src/server/database/lock_free_set/lock_free_set.h"
-#include "../../src/server/database/lock_free_set/lock_free_set_hash.h"
+#include "../../src/data_structures/parallel/lock_free_set/lock_free_set.h"
+#include "../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.h"
 
 #define ARRAY_LENGTH 10
 #define NB_LOOP_ITERATION 10000

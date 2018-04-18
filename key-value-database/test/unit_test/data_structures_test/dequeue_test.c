@@ -3,7 +3,7 @@
 //
 
 #include "../../lib/ctest/ctest.h"
-#include "../../../src/data_structures/dequeue.h"
+#include "../../../src/data_structures/dequeue/dequeue.h"
 
 #define VALUE(ID_INT) int v##ID_INT = ID_INT; int* p##ID_INT = &v##ID_INT;
 

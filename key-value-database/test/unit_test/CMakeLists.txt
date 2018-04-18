@@ -21,10 +21,10 @@ add_executable(Unit_Tests_run
 
         ../../src/server/server_connection.c
         ../../src/server/database/database_actions.c
-        ../../src/server/database/lock_free_set/lock_free_set.c
-        ../../src/server/database/lock_free_set/lock_free_set_hash.c
+        ../../src/data_structures/parallel/lock_free_set/lock_free_set.c
+        ../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.c
         ../../src/server/database/resources_allocator/key_value_database_allocator.c
         ../../src/server/database/resources_allocator/stack/stack.c
         ../../src/server/tcp_shell.c
-        ../../src/data_structures/dequeue.c
+        ../../src/data_structures/dequeue/dequeue.c
         )

@@ -6,9 +6,9 @@
 #include <assert.h>
 
 #include "database_actions.h"
-#include "lock_free_set/lock_free_set.h"
-#include "lock_free_set/lock_free_set_hash.h"
 #include "../../debug.h"
+#include "../../data_structures/parallel/lock_free_set/lock_free_set.h"
+#include "../../data_structures/parallel/lock_free_set/lock_free_set_hash.h"
 
 static Set* set;
 

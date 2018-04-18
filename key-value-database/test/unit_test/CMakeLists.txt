@@ -27,4 +27,4 @@ add_executable(Unit_Tests_run
         ../../src/server/database/resources_allocator/stack/stack.c
         ../../src/server/tcp_shell.c
         ../../src/data_structures/dequeue/dequeue.c
-        )
+        ../../src/server/database/key_value_database_typedef.c)

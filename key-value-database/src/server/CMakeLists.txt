@@ -22,6 +22,6 @@ add_executable(server
         database/key_value_database_typedef.h
         tcp_shell.c
         tcp_shell.h
-        )
+        database/key_value_database_typedef.c)
 
 target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})

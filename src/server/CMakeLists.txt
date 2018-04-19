@@ -24,6 +24,7 @@ add_executable(server
         tcp_shell.h
         database/key_value_database_typedef.c
         ../data_structures/dequeue/dequeue.c
+        ../data_structures/parallel/atomic.h
         )
 
 target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})

@@ -7,6 +7,8 @@
 
 
 typedef struct Stack Stack;
+typedef struct StackNode StackNode;
+
 struct Stack
 {
     /* Attributes */
@@ -23,7 +25,12 @@ struct Stack
     bool (* is_empty)(Stack* self);
 };
 
-Stack* allocator_stack_create(int init_size, size_t elt_size);
+struct StackNode
+{
+    bool is_free;
+    void* data;
+};
 
+Stack* allocator_stack_create(int init_size, size_t elt_size);
 
 #endif //KEY_VALUE_DATABASE_STACK_H

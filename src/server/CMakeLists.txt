@@ -15,8 +15,6 @@ add_executable(server
         database/database_actions.h
         database/resources_allocator/key_value_database_allocator.c
         database/resources_allocator/key_value_database_allocator.h
-        database/resources_allocator/stack/stack.c
-        database/resources_allocator/stack/stack.h
         ../data_structures/parallel/lock_free_set/lock_free_set.c
         ../data_structures/parallel/lock_free_set/lock_free_set_hash.c
         database/key_value_database_typedef.h
@@ -24,6 +22,7 @@ add_executable(server
         tcp_shell.h
         database/key_value_database_typedef.c
         ../data_structures/dequeue/dequeue.c
+        ../data_structures/stack/stack.c
         ../data_structures/parallel/atomic.h
         )
 

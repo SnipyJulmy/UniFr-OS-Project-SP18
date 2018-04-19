@@ -4,21 +4,62 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "tcp_shell.h"
 #include "../debug.h"
 
 #define SHELL_BUFFER_SIZE 1024
 #define SHELL_TOKEN_DELIMITER " \t\n\r\a"
-#define PROMPT "$> "
 
 #define STATUS_FAILURE 2
 #define STATUS_OK 1
 #define STATUS_EXIT 0
 
+#define COMMAND_ERROR "__command_error"
+#define COMMAND_OK "__command_ok"
+
+/* Macros */
+
+// echo on command->args[0]
+#define ECHO() \
+    do {\
+    snprintf(sendBuff, sizeof(sendBuff), "echo %s", command->args[0]); \
+    write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
+    return STATUS_OK; \
+    } while(0);
+
+// -- For argc control
+
+#define CHECK_ARGC(NB, COMMAND_NAME)\
+                        do {\
+                        log_info("check argc for " COMMAND_NAME); \
+                        if(command->argc != (NB)) \
+                        { \
+                            log_warn("Invalid number of argument for : " COMMAND_NAME);\
+                            snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
+                            write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
+                            return STATUS_OK;\
+                        }} while(0);
+
+#define CHECK_ARGC_2(A, B, COMMAND_NAME)\
+                        do {\
+                        log_info("check argc for " COMMAND_NAME); \
+                        if(command->argc != (A) && command->argc != (B)) \
+                        { \
+                            log_warn("Invalid number of argument for : " COMMAND_NAME);\
+                            snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
+                            write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
+                            return STATUS_OK;\
+                        }} while(0);
+/* Macros End */
+
+// server buffer to send back information to the client
+char sendBuff[1000];
+
 static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs);
 static Command* tcp_shell_tokenize_line(char* line);
-static int tcp_shell_execute(Command* command);
+static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs);
 static void tcp_shell_command_destroy(Command* self);
 
 void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
@@ -33,7 +74,7 @@ void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
         if (line == NULL)
             goto end;
         command = tcp_shell_tokenize_line(line);
-        status = tcp_shell_execute(command);
+        status = tcp_shell_execute(command, connectionArgs);
 
         free(line);
         command->destroy(command);
@@ -57,25 +98,49 @@ static void tcp_shell_command_destroy(Command* self)
     free(self);
 }
 
-static int tcp_shell_execute(Command* command)
+static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
 {
     if (command->argc <= 0)
-        return STATUS_EXIT;
-
-    // TODO
-    if (strcmp(command->args[0], "ls") == 0)
     {
-        // TODO ls
+        debug("No command to execute");
+        return STATUS_OK;
     }
 
-    log_info("Shell execute command :\n");
-    log_info_mul(
-            for (int i = 0; i < command->argc; i++)
-            {
-                log_info_print("%s ", command->args[i]);
-            }
-    );
-    log_info_nl;
+    if (strcmp(command->args[0], "ls") == 0) // display the database
+    {
+        CHECK_ARGC(1, "ls");
+        ECHO();
+    }
+    else if (strcmp(command->args[0], "add") == 0) // add a <k,v> to the database
+    {
+        CHECK_ARGC_2(2, 3, "add");
+        ECHO();
+    }
+    else if (strcmp(command->args[0], "read") == 0) // read a value from a key
+    {
+        CHECK_ARGC(2, "read");
+        ECHO();
+    }
+    else if (strcmp(command->args[0], "delete") == 0) // delete a <k,v> from a key
+    {
+        CHECK_ARGC(2, "delete");
+        ECHO();
+    }
+    else if (strcmp(command->args[0], "update") == 0) // update a <k,v> from a key
+    {
+        CHECK_ARGC(3, "update");
+        ECHO();
+    }
+    else if (strcmp(command->args[0], "q") == 0) // shutdown the server
+    {
+        CHECK_ARGC(1, "q");
+        ECHO();
+    }
+    else
+    {
+        log_info("Unknow command : %s\n", command->args[0]);
+    }
+
     return STATUS_OK;
 }
 

@@ -5,6 +5,15 @@
 * Sami Veillard
 * Sylvain Julmy
 
+## Database operations
+- `ls` display the content of the database
+- `add <key> <value>` add the specified *value*, related to the specified *key*, to the database
+- `add <value>` add the specified *value* to the database and return the associated key 
+- `read <key>` return the value of the associated *key*
+- `delete <key>` delete the database entry specified by *key* 
+- `update <key> <value>` update the value specified by *key*, if *key* don't exist, the behavior is similar to `add <key> <value>` 
+- `q` terminate the server process
+
 ## Project specifications
 
 The goal of the Mini-Project Lab is to implement a simple In-Memory Key-Value store with simultaneous access via TCP in Linux.

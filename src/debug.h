@@ -42,7 +42,7 @@
 
 // -- Logging
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_ERR)
-    #define log_err(M, ...) fprintf(stderr, "[ERR] (%s:%d: errno: %s): " M "\n", __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+    #define log_err(M, ...) fprintf(stderr,RED "[ERR] (%s:%d: errno: %s): " M "\n" COLOR_X, __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
 #else
     #define log_err(M, ...)
 #endif

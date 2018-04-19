@@ -54,8 +54,8 @@
 #endif
 
 #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_INFO)
-    #define log_info(M, ...)         fprintf(stdout, BLUE "[INF]: " M "\n", ##__VA_ARGS__)
-    #define log_info_full(M, ...)    fprintf(stdout, BLUE "[INF] (%s:%d): " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
+    #define log_info(M, ...)         fprintf(stdout, BLUE "[INF]: " M "\n" COLOR_X, ##__VA_ARGS__)
+    #define log_info_full(M, ...)    fprintf(stdout, BLUE "[INF] (%s:%d): " M "\n" COLOR_X, __FILE__, __LINE__, ##__VA_ARGS__)
     #define log_info_mul(io_statements) do {\
                                 fprintf(stdout, BLUE "[INF] ");\
                                 io_statements\
@@ -82,7 +82,6 @@
     #define debug_print(M, ...)
     #define debug_nl
 #endif
-
 
 // -- Some messages
 #define MEM_ALLOC_ERR_FULL \

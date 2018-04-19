@@ -411,13 +411,13 @@ void* lock_free_data_read(Set* self, uint32_t key)
     if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
     {
         // TODO set ERRNO
-        return false;
+        return NULL;
     }
     key = lock_free_data_reverse(key);
     while (true)
     {
         if (!lock_free_data_find(bucket, key, false, &pred, &curr))
-            return false;
+            return NULL;
         next.node = curr->next;
         if ((next.value & 0x1) == 0)
         {

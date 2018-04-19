@@ -109,8 +109,6 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         return STATUS_OK;
     }
 
-    int status;
-
     if (strcmp(command->args[0], "ls") == 0) // display the database
     {
         CHECK_ARGC(1, "ls");
@@ -136,21 +134,37 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     else if (strcmp(command->args[0], "add") == 0) // add a <k,v> to the database
     {
         CHECK_ARGC_2(2, 3, "add");
+
+
+        Key key;
+
         if (command->argc == 2)
         {
             // allocate memory for the value
-            char** pValue = malloc(1 * sizeof(char*));
-            pValue[0] = malloc(strlen(command->args[1]) * sizeof(char));
-            strcpy(pValue[0], command->args[1]);
-            Key key = database_actions_insert_v(pValue);
+            char** value = malloc(1 * sizeof(char*));
+            value[0] = malloc(strlen(command->args[1]) * sizeof(char));
+            strcpy(value[0], command->args[1]);
+            key = database_actions_insert_v(value);
             snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
-            write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
-            return STATUS_OK;
         }
         else // command->argc == 3
         {
-
+            char** value = malloc(1 * sizeof(char*));
+            value[0] = malloc(strlen(command->args[2]) * sizeof(char));
+            strcpy(value[0], command->args[2]);
+            key = (Key) strtoul(command->args[1], NULL, 10);
+            bool status = database_actions_insert_kv(key, value);
+            if (!status)
+                snprintf(sendBuff,
+                         sizeof(sendBuff),
+                         COMMAND_ERROR " : unable to add <%u,%s>",
+                         key, *value);
+            else
+                snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
         }
+
+        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
+        return STATUS_OK;
     }
     else if (strcmp(command->args[0], "read") == 0) // read a value from a key
     {

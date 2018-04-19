@@ -66,7 +66,6 @@ void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
         line = shell_read_line();
         command = shell_tokenize_line(line);
         status = shell_execute(command, socket_fd);
-
         free(line);
         command->destroy(command);
     } while (status != STATUS_EXIT);
@@ -90,23 +89,16 @@ static void shell_command_destroy(Command* self)
 
 static int shell_execute(Command* command, int socket_fd)
 {
-
-    char* init = "cmd";
-    size_t size_used = strlen(init);
-    snprintf(sendBuff, sizeof(sendBuff), init);
-    for (int i = 1; i < command->argc; i++)
+    if (command->argc <= 0)
     {
-        snprintf(
-                &(sendBuff[size_used]),
-                sizeof(sendBuff) - size_used,
-                " %s",
-                command->args[i]
-        );
-        size_used = size_used + strlen(command->args[i]) + 1;
+        debug("No command to execute");
+        return STATUS_OK;
     }
-
-
-    if (strcmp(command->args[0], "ls") == 0)
+    if (strcmp(command->args[0], "exit") == 0)
+    {
+        return STATUS_EXIT;
+    }
+    else if (strcmp(command->args[0], "ls") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(1, "ls");
     }

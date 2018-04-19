@@ -54,6 +54,8 @@ static int shell_execute(Command* command, int socket_fd);
 static void shell_command_destroy(Command* self);
 static void mkSendBuffer(Command* command);
 
+static char* fetchTcpLine(int socket_fd);
+
 void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
 {
     char* line;
@@ -101,26 +103,44 @@ static int shell_execute(Command* command, int socket_fd)
     else if (strcmp(command->args[0], "ls") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(1, "ls");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
     }
     else if (strcmp(command->args[0], "add") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND2(2, 3, "add");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
     }
     else if (strcmp(command->args[0], "read") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(2, "read");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
     }
     else if (strcmp(command->args[0], "delete") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(2, "delete");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
     }
     else if (strcmp(command->args[0], "update") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(3, "update");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
     }
     else if (strcmp(command->args[0], "q") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(1, "q");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
+    }
+    else if (strcmp(command->args[0], "debug") == 0)
+    {
+        CHECK_ARGC_AND_SEND_COMMAND(1, "debug");
+        char* line = fetchTcpLine(socket_fd);
+        printf("Receive\n\t%s\nfrom the server\n",line);
     }
     else
     {
@@ -128,6 +148,20 @@ static int shell_execute(Command* command, int socket_fd)
     }
 
     return STATUS_OK;
+}
+
+static char* fetchTcpLine(int socket_fd)
+{
+    ssize_t n;
+    int buffer_size = SHELL_BUFFER_SIZE;
+    char* buffer = malloc(buffer_size * sizeof(char));
+
+    n = read(socket_fd, buffer, sizeof(char) * (buffer_size - 1));
+    if (n <= 0)
+        return NULL;
+    buffer[n] = 0;
+    // TODO check n
+    return buffer;
 }
 
 // side effect : modify the global variable sendBuff

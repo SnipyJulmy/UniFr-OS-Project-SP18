@@ -109,6 +109,8 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         return STATUS_OK;
     }
 
+    int status;
+
     if (strcmp(command->args[0], "ls") == 0) // display the database
     {
         CHECK_ARGC(1, "ls");
@@ -116,23 +118,39 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
 
         size_t size_used = 0;
 
-        if (!dequeue->is_empty)
-            while (!dequeue->is_empty)
+        if (!dequeue->is_empty(dequeue))
+            while (!dequeue->is_empty(dequeue))
             {
-                char* elt = *(char**) dequeue->remove_first(dequeue);
-                snprintf(sendBuff + size_used, sizeof(sendBuff), "%s", elt);
-                size_used += strlen(elt);
+                KV* elt = dequeue->remove_first(dequeue);
+                size_used += snprintf(sendBuff + size_used,
+                                      sizeof(sendBuff),
+                                      "<%u,%s>",
+                                      elt->key, elt->value);
             }
         else
-            snprintf(sendBuff, sizeof(sendBuff),COMMAND_EMPTY)
-        debug("send following command to the server :\n\t%s\n", sendBuff);
+            snprintf(sendBuff, sizeof(sendBuff), COMMAND_EMPTY)
+                    debug("send following command to the server :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
         return STATUS_OK;
     }
     else if (strcmp(command->args[0], "add") == 0) // add a <k,v> to the database
     {
         CHECK_ARGC_2(2, 3, "add");
-        ECHO();
+        if (command->argc == 2)
+        {
+            // allocate memory for the value
+            char** pValue = malloc(1 * sizeof(char*));
+            pValue[0] = malloc(strlen(command->args[1]) * sizeof(char));
+            strcpy(pValue[0], command->args[1]);
+            Key key = database_actions_insert_v(pValue);
+            snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
+            write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
+            return STATUS_OK;
+        }
+        else // command->argc == 3
+        {
+
+        }
     }
     else if (strcmp(command->args[0], "read") == 0) // read a value from a key
     {

@@ -64,6 +64,11 @@ void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
 
     do
     {
+
+        printf("Usage:\n");
+        printf("ls: list table | add: add element | read: read element \n");
+        printf("delete: delete element | update: update element | exit: quit\n");
+        printf("To get more information about function type help -FUNCTION \n");
         printf("> ");
         line = shell_read_line();
         command = shell_tokenize_line(line);
@@ -127,12 +132,6 @@ static int shell_execute(Command* command, int socket_fd)
     else if (strcmp(command->args[0], "update") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(3, "update");
-        char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
-    }
-    else if (strcmp(command->args[0], "q") == 0)
-    {
-        CHECK_ARGC_AND_SEND_COMMAND(1, "q");
         char* line = fetchTcpLine(socket_fd);
         printf("Receive\n\t%s\nfrom the server\n",line);
     }

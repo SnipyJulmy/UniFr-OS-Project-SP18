@@ -13,12 +13,16 @@
 #include <stdio.h>
 #include "server_connection.h"
 #include "../debug.h"
+#include "database/database_actions.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 
 int main(void)
 {
+    // init
+    database_actions_init();
+
     int listenfd = 0, connfd = 0;
     struct sockaddr_in serv_addr;
 

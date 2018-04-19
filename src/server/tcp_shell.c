@@ -8,14 +8,17 @@
 
 #include "tcp_shell.h"
 #include "../debug.h"
+#include "../data_structures/dequeue/dequeue.h"
+#include "database/database_actions.h"
 
-#define SHELL_BUFFER_SIZE 1024
+#define SHELL_BUFFER_SIZE 4096
 #define SHELL_TOKEN_DELIMITER " \t\n\r\a"
 
 #define STATUS_FAILURE 2
 #define STATUS_OK 1
 #define STATUS_EXIT 0
 
+#define COMMAND_EMPTY "__command_empty"
 #define COMMAND_ERROR "__command_error"
 #define COMMAND_OK "__command_ok"
 
@@ -55,7 +58,7 @@
 /* Macros End */
 
 // server buffer to send back information to the client
-char sendBuff[1000];
+char sendBuff[SHELL_BUFFER_SIZE];
 
 static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs);
 static Command* tcp_shell_tokenize_line(char* line);
@@ -109,7 +112,22 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     if (strcmp(command->args[0], "ls") == 0) // display the database
     {
         CHECK_ARGC(1, "ls");
-        ECHO();
+        Dequeue* dequeue = database_actions_ls();
+
+        size_t size_used = 0;
+
+        if (!dequeue->is_empty)
+            while (!dequeue->is_empty)
+            {
+                char* elt = *(char**) dequeue->remove_first(dequeue);
+                snprintf(sendBuff + size_used, sizeof(sendBuff), "%s", elt);
+                size_used += strlen(elt);
+            }
+        else
+            snprintf(sendBuff, sizeof(sendBuff),COMMAND_EMPTY)
+        debug("send following command to the server :\n\t%s\n", sendBuff);
+        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
+        return STATUS_OK;
     }
     else if (strcmp(command->args[0], "add") == 0) // add a <k,v> to the database
     {
@@ -139,6 +157,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     else
     {
         log_info("Unknow command : %s\n", command->args[0]);
+        ECHO();
     }
 
     return STATUS_OK;

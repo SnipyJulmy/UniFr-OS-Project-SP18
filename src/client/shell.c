@@ -12,16 +12,47 @@
 #include "shell.h"
 #include "../debug.h"
 
+/* Macros */
+
+#define MAKE_AND_SEND do {\
+                    mkSendBuffer(command);\
+                    debug("send following command to the server :\n\t%s\n", sendBuff);\
+                    write(socket_fd, sendBuff, strlen(sendBuff));\
+                } while(0);
+
+#define CHECK_ARGC_AND_SEND_COMMAND(NB, COMMAND_NAME) do {\
+        if(command->argc != (NB)) \
+        {\
+            log_warn("Invalid number of argument for : COMMAND_NAME" COMMAND_NAME);\
+            return STATUS_FAILURE;\
+        }}while(0);\
+        MAKE_AND_SEND;
+
+#define CHECK_ARGC_AND_SEND_COMMAND2(A, B, COMMAND_NAME) do {\
+        if(command->argc != (A) && command->argc != (B)) \
+        {\
+            log_warn("Invalid number of argument for : COMMAND_NAME" COMMAND_NAME);\
+            return STATUS_FAILURE;\
+        }}while(0);\
+        MAKE_AND_SEND;
+
+
+/* Constant */
 #define SHELL_BUFFER_SIZE 1024
 #define SHELL_TOKEN_DELIMITER " \t\n\r\a"
 
+#define STATUS_FAILURE 2
 #define STATUS_OK 1
 #define STATUS_EXIT 0
+
+// client buffer to send command to the server
+char sendBuff[1000];
 
 static char* shell_read_line();
 static Command* shell_tokenize_line(char* line);
 static int shell_execute(Command* command, int socket_fd);
 static void shell_command_destroy(Command* self);
+static void mkSendBuffer(Command* command);
 
 void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
 {
@@ -59,86 +90,45 @@ static void shell_command_destroy(Command* self)
 
 static int shell_execute(Command* command, int socket_fd)
 {
-    log_info_mul(
-            debug("Receive command : ");
-            for (int i = 0; i < command->argc; i++)
-            {
-                debug_print(" %s", command->args[i]);
-            }
-            debug_nl;
-    );
+
+    char* init = "cmd";
+    size_t size_used = strlen(init);
+    snprintf(sendBuff, sizeof(sendBuff), init);
+    for (int i = 1; i < command->argc; i++)
+    {
+        snprintf(
+                &(sendBuff[size_used]),
+                sizeof(sendBuff) - size_used,
+                " %s",
+                command->args[i]
+        );
+        size_used = size_used + strlen(command->args[i]) + 1;
+    }
+
 
     if (strcmp(command->args[0], "ls") == 0)
     {
-        //Request for list
-        printf("ls\n");
+        CHECK_ARGC_AND_SEND_COMMAND(1, "ls");
     }
     else if (strcmp(command->args[0], "add") == 0)
     {
-        //Request for list
-        printf("add\n");
-
+        CHECK_ARGC_AND_SEND_COMMAND2(2, 3, "add");
     }
-    else if (strcmp(command->args[0], "readkey") == 0)
+    else if (strcmp(command->args[0], "read") == 0)
     {
-        //Request for list
-        printf("readkey\n");
-
+        CHECK_ARGC_AND_SEND_COMMAND(2, "read");
     }
-    else if (strcmp(command->args[0], "readval") == 0)
+    else if (strcmp(command->args[0], "delete") == 0)
     {
-        //Request for list
-        printf("readval\n");
+        CHECK_ARGC_AND_SEND_COMMAND(2, "delete");
     }
-    else if (strcmp(command->args[0], "delkey") == 0)
+    else if (strcmp(command->args[0], "update") == 0)
     {
-        //Request for list
-        printf("delkey\n");
-
-    }
-    else if (strcmp(command->args[0], "delval") == 0)
-    {
-        //Request for list
-        printf("delval\n");
-
-    }
-    else if (strcmp(command->args[0], "chgkey") == 0)
-    {
-        //Request for list
-        printf("chgkey\n");
-
-    }
-    else if (strcmp(command->args[0], "chgval") == 0)
-    {
-        //Request for list
-        printf("chgval\n");
-
+        CHECK_ARGC_AND_SEND_COMMAND(3, "update");
     }
     else if (strcmp(command->args[0], "q") == 0)
     {
-        //Request for list
-        printf("q\n");
-    }
-    else if (strcmp(command->args[0], "cmd") == 0)
-    {
-        // TODO extract sendBuff as a global static buffer and clear it each time...
-        char sendBuff[1000];
-        snprintf(sendBuff, sizeof(sendBuff), "cmd %s\n", command->args[1]);
-
-        char* init = "cmd";
-        size_t size_used = strlen(init);
-        snprintf(sendBuff, sizeof(sendBuff), init);
-        for (int i = 1; i < command->argc; i++)
-        {
-            snprintf(
-                    &(sendBuff[size_used]),
-                    sizeof(sendBuff) - size_used,
-                    " %s",
-                    command->args[i]
-            );
-            size_used = size_used + strlen(command->args[i]) + 1;
-        }
-        write(socket_fd, sendBuff, strlen(sendBuff));
+        CHECK_ARGC_AND_SEND_COMMAND(1, "q");
     }
     else
     {
@@ -146,6 +136,25 @@ static int shell_execute(Command* command, int socket_fd)
     }
 
     return STATUS_OK;
+}
+
+// side effect : modify the global variable sendBuff
+static void mkSendBuffer(Command* command)
+{
+    // write the command name inside the buffer with a whitespace
+    snprintf(sendBuff, sizeof(sendBuff), "%s", command->args[0]);
+    size_t size_used = strlen(command->args[0]);
+
+    for (int i = 1; i < command->argc; i++)
+    {
+        snprintf(
+                &(sendBuff[size_used]),
+                sizeof(sendBuff) - size_used,
+                " %s",
+                command->args[i]
+        );
+        size_used = size_used + strlen(command->args[i]) + 1;
+    }
 }
 
 static Command* shell_tokenize_line(char* line)

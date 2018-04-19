@@ -23,7 +23,7 @@
 #define CHECK_ARGC_AND_SEND_COMMAND(NB, COMMAND_NAME) do {\
         if(command->argc != (NB)) \
         {\
-            log_warn("Invalid number of argument for : COMMAND_NAME" COMMAND_NAME);\
+            log_warn("Invalid number of argument for : " COMMAND_NAME);\
             return STATUS_FAILURE;\
         }}while(0);\
         MAKE_AND_SEND;
@@ -31,7 +31,7 @@
 #define CHECK_ARGC_AND_SEND_COMMAND2(A, B, COMMAND_NAME) do {\
         if(command->argc != (A) && command->argc != (B)) \
         {\
-            log_warn("Invalid number of argument for : COMMAND_NAME" COMMAND_NAME);\
+            log_warn("Invalid number of argument for : " COMMAND_NAME);\
             return STATUS_FAILURE;\
         }}while(0);\
         MAKE_AND_SEND;

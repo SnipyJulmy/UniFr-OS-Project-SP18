@@ -10,6 +10,7 @@
 #include "../debug.h"
 #include "../data_structures/dequeue/dequeue.h"
 #include "database/database_actions.h"
+#include "tcp_shell_macros.h"
 
 #define SHELL_BUFFER_SIZE 4096
 #define SHELL_TOKEN_DELIMITER " \t\n\r\a"
@@ -21,47 +22,6 @@
 #define COMMAND_EMPTY "__command_empty"
 #define COMMAND_ERROR "__command_error"
 #define COMMAND_OK "__command_ok"
-
-/* Macros */
-
-// echo on command->args[0]
-#define ECHO() \
-    do {\
-    snprintf(sendBuff, sizeof(sendBuff), "echo %s", command->args[0]); \
-    write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
-    return STATUS_OK; \
-    } while(0);
-
-// -- For argc control
-
-#define CHECK_ARGC(NB, COMMAND_NAME)\
-                        do {\
-                        log_info("check argc for " COMMAND_NAME); \
-                        if(command->argc != (NB)) \
-                        { \
-                            log_warn("Invalid number of argument for : " COMMAND_NAME);\
-                            snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
-                            write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
-                            return STATUS_OK;\
-                        }} while(0);
-
-#define CHECK_ARGC_2(A, B, COMMAND_NAME)\
-                        do {\
-                        log_info("check argc for " COMMAND_NAME); \
-                        if(command->argc != (A) && command->argc != (B)) \
-                        { \
-                            log_warn("Invalid number of argument for : " COMMAND_NAME);\
-                            snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
-                            write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
-                            return STATUS_OK;\
-                        }} while(0);
-/* Macros End */
-
-#define RETURN_COMMAND_ERROR(M, ...) do {\
-                        snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR " : " M, ##__VA_ARGS__);\
-                        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
-                        return STATUS_OK;\
-                    }while(0);
 
 // server buffer to send back information to the client
 char sendBuff[SHELL_BUFFER_SIZE];
@@ -132,8 +92,8 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
                                       elt->key, elt->value);
             }
         else
-            snprintf(sendBuff, sizeof(sendBuff), COMMAND_EMPTY)
-                    debug("send following command to the server :\n\t%s\n", sendBuff);
+            RETURN_COMMAND_EMPTY();
+        debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
         return STATUS_OK;
     }
@@ -167,6 +127,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
                 RETURN_COMMAND_ERROR("unable to add <%u,%s>", key, *value);
             snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
         }
+        debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
         return STATUS_OK;
     }
@@ -181,12 +142,22 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
             RETURN_COMMAND_ERROR("unable to read <%u>", key);
         }
         snprintf(sendBuff, sizeof(sendBuff), "read : <%u,%s>", key, *value);
+        debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
     }
     else if (strcmp(command->args[0], "delete") == 0) // delete a <k,v> from a key
     {
-        CHECK_ARGC(2, "delete");
-        ECHO();
+        CHECK_ARGC_2(2, 3, "delete");
+        Key key = (Key) strtoul(command->args[1], NULL, 10);
+        Value value = command->argc == 2 ?
+                      "\0" :
+                      command->args[2];
+        bool status = command->argc == 2 ?
+                      database_actions_remove_k(key) :
+                      database_actions_remove_kv(key, &value);
+        if (!status)
+            RETURN_COMMAND_ERROR("unable to delete <%u,%s>", key, value);
+        RETURN_COMMAND_OK();
     }
     else if (strcmp(command->args[0], "update") == 0) // update a <k,v> from a key
     {

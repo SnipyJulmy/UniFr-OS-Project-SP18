@@ -29,6 +29,9 @@ bool lock_free_data_add_with_key(Set* self, uint32_t key, void* data);
 bool lock_free_data_remove(Set* self, void* data);
 bool lock_free_data_remove_from_key(Set* self, uint32_t key);
 
+// update
+bool lock_free_data_update(Set* self, uint32_t key, void* data);
+
 // contains
 bool lock_free_data_contains(Set* self, void* data);
 bool lock_free_data_contains_from_key(Set* self, uint32_t key);
@@ -67,6 +70,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->contains_from_key = lock_free_data_contains_from_key;
     set->read = lock_free_data_read;
     set->ls = lock_free_ls;
+    set->update = lock_free_data_update;
 
     // dequeue related
     set->dequeue_item_compare = key_value_database_KV_compare;
@@ -289,7 +293,7 @@ bool lock_free_data_remove(Set* self, void* data)
     }
 }
 
-
+// TODO don't work !!!!
 bool lock_free_data_contains(Set* self, void* data)
 {
     Node* pred;
@@ -466,4 +470,28 @@ Dequeue* lock_free_ls(Set* set)
 
     end:
     return dequeue;
+}
+
+bool lock_free_data_update(Set* self, uint32_t key, void* data)
+{
+    Node* pred;
+    Node* curr;
+    Node* bucket;
+    Node* tmpNext;
+    Conversion next;
+
+    if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
+        return false;
+    key = lock_free_data_reverse(key);
+    while (true)
+    {
+        if (!lock_free_data_find(bucket, key, false, &pred, &curr))
+            return false;
+        next.node = curr->next;
+        if ((next.value & 0x1) == 0)
+        {
+            bool res = compare_and_swap(&curr->data,curr->data,data);
+            return res;
+        }
+    }
 }

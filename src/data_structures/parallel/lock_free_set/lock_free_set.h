@@ -36,6 +36,7 @@ struct Set
     bool (* remove)(Set* self, void* data);
     bool (* contains)(Set* self, void* data);
     bool (* contains_from_key)(Set* self, uint32_t key);
+    bool (* update)(Set* self, uint32_t key, void* data);
     bool (* remove_from_key)(Set* self, uint32_t key);
     void* (* read)(Set* self, uint32_t key);
     Dequeue* (* ls)(Set* self);

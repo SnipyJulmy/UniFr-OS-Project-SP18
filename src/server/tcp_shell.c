@@ -57,6 +57,12 @@
                         }} while(0);
 /* Macros End */
 
+#define RETURN_COMMAND_ERROR(M, ...) do {\
+                        snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR " : " M, ##__VA_ARGS__);\
+                        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
+                        return STATUS_OK;\
+                    }while(0);
+
 // server buffer to send back information to the client
 char sendBuff[SHELL_BUFFER_SIZE];
 
@@ -135,7 +141,6 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     {
         CHECK_ARGC_2(2, 3, "add");
 
-
         Key key;
 
         if (command->argc == 2)
@@ -145,6 +150,10 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
             value[0] = malloc(strlen(command->args[1]) * sizeof(char));
             strcpy(value[0], command->args[1]);
             key = database_actions_insert_v(value);
+            if (key == 0)
+            {
+                RETURN_COMMAND_ERROR("unable to insert value <%s>", *value);
+            }
             snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
         }
         else // command->argc == 3
@@ -155,21 +164,24 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
             key = (Key) strtoul(command->args[1], NULL, 10);
             bool status = database_actions_insert_kv(key, value);
             if (!status)
-                snprintf(sendBuff,
-                         sizeof(sendBuff),
-                         COMMAND_ERROR " : unable to add <%u,%s>",
-                         key, *value);
-            else
-                snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
+                RETURN_COMMAND_ERROR("unable to add <%u,%s>", key, *value);
+            snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
         }
-
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
         return STATUS_OK;
     }
     else if (strcmp(command->args[0], "read") == 0) // read a value from a key
     {
         CHECK_ARGC(2, "read");
-        ECHO();
+
+        Key key = (Key) strtoul(command->args[1], NULL, 10);
+        Value* value = database_actions_read_k(key);
+        if (value == NULL)
+        {
+            RETURN_COMMAND_ERROR("unable to read <%u>", key);
+        }
+        snprintf(sendBuff, sizeof(sendBuff), "read : <%u,%s>", key, *value);
+        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
     }
     else if (strcmp(command->args[0], "delete") == 0) // delete a <k,v> from a key
     {

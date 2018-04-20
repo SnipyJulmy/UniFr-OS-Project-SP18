@@ -13,8 +13,6 @@ add_executable(server
         ../debug.h
         database/database_actions.c
         database/database_actions.h
-        database/resources_allocator/key_value_database_allocator.c
-        database/resources_allocator/key_value_database_allocator.h
         ../data_structures/parallel/lock_free_set/lock_free_set.c
         ../data_structures/parallel/lock_free_set/lock_free_set_hash.c
         database/key_value_database_typedef.h

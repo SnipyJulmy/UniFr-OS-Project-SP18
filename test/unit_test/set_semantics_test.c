@@ -248,3 +248,17 @@ CTEST(set_semantics_test, ls)
     dequeue->destroy(dequeue);
     set->destroy(set);
 }
+
+CTEST(set_semantics_test, update)
+{
+    Set* set = lock_free_data_create_set(lock_free_set_hash);
+    DEF_VAR;
+    DEF_KEY_INIT;
+    ASSERT_TRUE(set->add_with_key(set,k1,&s1));
+    ASSERT_TRUE(set->update(set,k1,&s2));
+
+    Dequeue* dequeue = set->ls(set);
+    ASSERT_TRUE(dequeue->size == 1);
+
+    set->destroy(set);
+}

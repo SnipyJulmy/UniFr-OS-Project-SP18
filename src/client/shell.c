@@ -45,11 +45,6 @@
 #define STATUS_OK 1
 #define STATUS_EXIT 0
 
-#define UP "\027[A"
-#define DOWN "\027[B"
-#define LEFT "\027[D"
-#define RIGHT "\027[C"
-
 // client buffer to send command to the server
 char sendBuff[1000];
 

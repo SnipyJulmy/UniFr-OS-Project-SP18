@@ -54,6 +54,14 @@
         return STATUS_OK;\
     } while(0);
 
+#define RETURN_COMMAND_EXIT()\
+    do{\
+        snprintf(sendBuff, sizeof(sendBuff), COMMAND_OK);\
+        debug("send following to the client :\n\t%s\n", sendBuff);\
+        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
+        return STATUS_EXIT;\
+    } while(0);
+
 #define RETURN_COMMAND_EMPTY()\
     do{\
     snprintf(sendBuff, sizeof(sendBuff), COMMAND_EMPTY);\

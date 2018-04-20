@@ -167,7 +167,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     else if (strcmp(command->args[0], "q") == 0) // shutdown the server
     {
         CHECK_ARGC(1, "q");
-        ECHO();
+        RETURN_COMMAND_EXIT();
     }
     else
     {

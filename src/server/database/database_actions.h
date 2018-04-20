@@ -30,6 +30,7 @@ bool database_actions_contains_k(Key key);
 bool database_actions_contains_kv(Key key, Value* value);
 bool database_actions_remove_k(Key key);
 bool database_actions_remove_kv(Key key, Value* value);
+bool database_actions_update_kv(Key key, Value* value);
 void database_actions_init(void);
 void database_actions_destroy(void);
 Dequeue* database_actions_ls(void);

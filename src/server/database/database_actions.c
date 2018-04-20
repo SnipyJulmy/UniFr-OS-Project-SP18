@@ -74,3 +74,8 @@ Dequeue* database_actions_ls(void)
 {
     return set->ls(set);
 }
+
+bool database_actions_update_kv(Key key, Value* value)
+{
+    return set->update(set,key,value);
+}

@@ -16,11 +16,6 @@ static int nextInt()
     return rand();
 };
 
-static int nextIntBound(int max)
-{
-    return rand() % max;
-}
-
 static uint32_t nextIdx()
 {
     return (uint32_t) (rand() % ARRAY_LENGTH);

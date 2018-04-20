@@ -9,7 +9,6 @@
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set.h"
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.h"
 #include "macro_utils.h"
-#include "../../src/server/database/database_actions.h"
 
 #define FREE_TEST_VECTOR_LENGTH 5
 
@@ -151,14 +150,6 @@ CTEST(set_semantics_test, free)
     free(vector);
 }
 
-#define AF(IDX) do{\
-    ASSERT_FALSE(set->contains(set,&s ## IDX)); \
-    ASSERT_FALSE(set->contains_from_key(set, set->item_hashcode(&s ## IDX))); \
-    }while(0);
-#define AT(IDX) do{\
-    ASSERT_TRUE(set->contains(set,&s ## IDX)); \
-    ASSERT_TRUE(set->contains_from_key(set, set->item_hashcode(&s ## IDX))); \
-    }while(0);
 CTEST(set_semantics_test, contains_value)
 {
     Set* set = lock_free_data_create_set(lock_free_set_hash);
@@ -170,54 +161,54 @@ CTEST(set_semantics_test, contains_value)
     char* s5 = "asd2";
     char* s6 = "asd2";
 
-    AF(1);
-    AF(2);
-    AF(3);
-    AF(4);
-    AF(5);
-    AF(6);
+    AF_SET(1);
+    AF_SET(2);
+    AF_SET(3);
+    AF_SET(4);
+    AF_SET(5);
+    AF_SET(6);
     ASSERT_TRUE(set->add(set, &s1));
-    AT(1);
-    AF(2);
-    AF(3);
-    AF(4);
-    AF(5);
-    AF(6);
+    AT_SET(1);
+    AF_SET(2);
+    AF_SET(3);
+    AF_SET(4);
+    AF_SET(5);
+    AF_SET(6);
     ASSERT_TRUE(set->add(set, &s2));
-    AT(1);
-    AT(2);
-    AF(3);
-    AF(4);
-    AF(5);
-    AF(6);
+    AT_SET(1);
+    AT_SET(2);
+    AF_SET(3);
+    AF_SET(4);
+    AF_SET(5);
+    AF_SET(6);
     ASSERT_TRUE(set->add(set, &s3));
-    AT(1);
-    AT(2);
-    AT(3);
-    AF(4);
-    AF(5);
-    AF(6);
+    AT_SET(1);
+    AT_SET(2);
+    AT_SET(3);
+    AF_SET(4);
+    AF_SET(5);
+    AF_SET(6);
     ASSERT_TRUE(set->add(set, &s4));
-    AT(1);
-    AT(2);
-    AT(3);
-    AT(4);
-    AF(5);
-    AF(6);
+    AT_SET(1);
+    AT_SET(2);
+    AT_SET(3);
+    AT_SET(4);
+    AF_SET(5);
+    AF_SET(6);
     ASSERT_TRUE(set->add(set, &s5));
-    AT(1);
-    AT(2);
-    AT(3);
-    AT(4);
-    AT(5);
-    AF(6);
+    AT_SET(1);
+    AT_SET(2);
+    AT_SET(3);
+    AT_SET(4);
+    AT_SET(5);
+    AF_SET(6);
     ASSERT_TRUE(set->add(set, &s6));
-    AT(1);
-    AT(2);
-    AT(3);
-    AT(4);
-    AT(5);
-    AT(6);
+    AT_SET(1);
+    AT_SET(2);
+    AT_SET(3);
+    AT_SET(4);
+    AT_SET(5);
+    AT_SET(6);
 
     ASSERT_TRUE(set->contains_from_key(set, set->item_hashcode(&s1)));
 
@@ -231,23 +222,23 @@ CTEST(set_semantics_test, ls)
     DEF_VAR;
     DEF_KEY_INIT;
 
-    ASSERT_TRUE(set->add_with_key(set,k1,&s1));
-    ASSERT_TRUE(set->add_with_key(set,k2,&s2));
-    ASSERT_TRUE(set->add_with_key(set,k3,&s3));
-    ASSERT_TRUE(set->add_with_key(set,k4,&s4));
-    ASSERT_TRUE(set->add_with_key(set,k5,&s5));
-    ASSERT_TRUE(set->add_with_key(set,k6,&s6));
-    ASSERT_TRUE(set->add_with_key(set,k7,&s7));
-    ASSERT_TRUE(set->add_with_key(set,k8,&s8));
-    ASSERT_TRUE(set->add_with_key(set,k9,&s9));
-    ASSERT_TRUE(set->add_with_key(set,k10,&s10));
-    ASSERT_TRUE(set->add_with_key(set,k11,&s11));
-    ASSERT_TRUE(set->add_with_key(set,k12,&s12));
-    ASSERT_TRUE(set->add_with_key(set,k13,&s13));
-    ASSERT_TRUE(set->add_with_key(set,k14,&s14));
-    ASSERT_TRUE(set->add_with_key(set,k15,&s15));
-    ASSERT_TRUE(set->add_with_key(set,k16,&s16));
-    ASSERT_TRUE(set->add_with_key(set,k17,&s17));
+    ASSERT_TRUE(set->add_with_key(set, k1, &s1));
+    ASSERT_TRUE(set->add_with_key(set, k2, &s2));
+    ASSERT_TRUE(set->add_with_key(set, k3, &s3));
+    ASSERT_TRUE(set->add_with_key(set, k4, &s4));
+    ASSERT_TRUE(set->add_with_key(set, k5, &s5));
+    ASSERT_TRUE(set->add_with_key(set, k6, &s6));
+    ASSERT_TRUE(set->add_with_key(set, k7, &s7));
+    ASSERT_TRUE(set->add_with_key(set, k8, &s8));
+    ASSERT_TRUE(set->add_with_key(set, k9, &s9));
+    ASSERT_TRUE(set->add_with_key(set, k10, &s10));
+    ASSERT_TRUE(set->add_with_key(set, k11, &s11));
+    ASSERT_TRUE(set->add_with_key(set, k12, &s12));
+    ASSERT_TRUE(set->add_with_key(set, k13, &s13));
+    ASSERT_TRUE(set->add_with_key(set, k14, &s14));
+    ASSERT_TRUE(set->add_with_key(set, k15, &s15));
+    ASSERT_TRUE(set->add_with_key(set, k16, &s16));
+    ASSERT_TRUE(set->add_with_key(set, k17, &s17));
 
     Dequeue* dequeue = set->ls(set);
 

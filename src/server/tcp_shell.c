@@ -88,7 +88,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
                 KV* elt = dequeue->remove_first(dequeue);
                 size_used += snprintf(sendBuff + size_used,
                                       sizeof(sendBuff),
-                                      "<%u,%s>",
+                                      "<%u,%s>\n",
                                       elt->key, elt->value);
             }
         else

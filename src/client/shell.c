@@ -45,6 +45,11 @@
 #define STATUS_OK 1
 #define STATUS_EXIT 0
 
+#define UP "\027[A"
+#define DOWN "\027[B"
+#define LEFT "\027[D"
+#define RIGHT "\027[C"
+
 // client buffer to send command to the server
 char sendBuff[1000];
 
@@ -64,11 +69,7 @@ void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
 
     do
     {
-
-        printf("Usage:\n");
-        printf("ls: list table | add: add element | read: read element \n");
-        printf("delete: delete element | update: update element | exit: quit\n");
-        printf("To get more information about function type help -FUNCTION \n");
+        // TODO should do this only on help command... not every time
         printf("> ");
         line = shell_read_line();
         command = shell_tokenize_line(line);
@@ -99,47 +100,56 @@ static int shell_execute(Command* command, int socket_fd)
     if (command->argc <= 0)
     {
         debug("No command to execute");
+        printf("type help for the usage\n");
         return STATUS_OK;
     }
     if (strcmp(command->args[0], "exit") == 0)
     {
         return STATUS_EXIT;
     }
+    else if (strcmp(command->args[0], "help") == 0)
+    {
+        printf("Usage:\n");
+        printf("ls: list table | add: add element | read: read element \n");
+        printf("delete: delete element | update: update element | exit: quit\n");
+        printf("To get more information about function type help -FUNCTION \n");
+        return STATUS_OK;
+    }
     else if (strcmp(command->args[0], "ls") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(1, "ls");
         char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
+        printf("%s\n", line);
     }
     else if (strcmp(command->args[0], "add") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND2(2, 3, "add");
         char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
+        printf("%s\n", line);
     }
     else if (strcmp(command->args[0], "read") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(2, "read");
         char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
+        printf("%s\n", line);
     }
     else if (strcmp(command->args[0], "delete") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(2, "delete");
         char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
+        printf("%s\n", line);
     }
     else if (strcmp(command->args[0], "update") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(3, "update");
         char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
+        printf("%s\n", line);
     }
     else if (strcmp(command->args[0], "debug") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(1, "debug");
         char* line = fetchTcpLine(socket_fd);
-        printf("Receive\n\t%s\nfrom the server\n",line);
+        printf("%s\n", line);
     }
     else
     {

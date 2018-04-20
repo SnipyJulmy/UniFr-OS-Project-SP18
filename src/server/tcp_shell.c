@@ -118,7 +118,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         }
         else // command->argc == 3
         {
-            char** value = malloc(1 * sizeof(char*));
+            Value* value = malloc(1 * sizeof(char*));
             value[0] = malloc(strlen(command->args[2]) * sizeof(char));
             strcpy(value[0], command->args[2]);
             key = (Key) strtoul(command->args[1], NULL, 10);
@@ -162,7 +162,15 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     else if (strcmp(command->args[0], "update") == 0) // update a <k,v> from a key
     {
         CHECK_ARGC(3, "update");
-        ECHO();
+        Key key = (Key) strtoul(command->args[1], NULL, 10);
+        Value* value = malloc(1 * sizeof(value));
+        value[0] = malloc(strlen(command->args[2]) * sizeof(char));
+        strcpy(*value,command->args[2]);
+        debug("value on update is %s",*value);
+        bool status = database_actions_update_kv(key, value);
+        if (!status)
+            RETURN_COMMAND_ERROR("unable to update <%u,%s>", key, value);
+        RETURN_COMMAND_OK();
     }
     else if (strcmp(command->args[0], "q") == 0) // shutdown the server
     {

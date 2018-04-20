@@ -3,7 +3,7 @@ project(${CMAKE_PROJECT_NAME}_test)
 
 set(CTEST_DIR ${CMAKE_SOURCE_DIR}/test/lib/ctest)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -std=c11  -Wunused-variable")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11  -Wunused-variable")
 
 set(CTEST_DIR ${CMAKE_SOURCE_DIR}/test/lib/ctest)
 if(NOT EXISTS ${CTEST_DIR})

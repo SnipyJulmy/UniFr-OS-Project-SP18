@@ -9,7 +9,7 @@ if (OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 endif ()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -std=c11 -Wunused-variable")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wunused-variable")
 
 add_executable(Unit_Tests_run
         main_test.c

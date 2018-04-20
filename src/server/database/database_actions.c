@@ -54,7 +54,7 @@ bool database_actions_contains_k(Key key)
 bool database_actions_contains_kv(Key key, Value* value)
 {
     Value* res = set->read(set, key);
-    return res == value;
+    return strcmp(*value,*res) == 0;
 }
 
 bool database_actions_remove_k(Key key)

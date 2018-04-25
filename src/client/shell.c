@@ -105,9 +105,8 @@ static int shell_execute(Command* command, int socket_fd)
     else if (strcmp(command->args[0], "help") == 0)
     {
         printf("Usage:\n");
-        printf("ls: list table | add: add element | read: read element \n");
-        printf("delete: delete element | update: update element | exit: quit\n");
-        printf("To get more information about function type help -FUNCTION \n");
+        printf("ls: list table \n add <value>, add <key, value>: add element \n read <key>: read element \n");
+        printf("delete <key>: delete element \n update <key, newvalue>: update element \n exit: quit\n");
         return STATUS_OK;
     }
     else if (strcmp(command->args[0], "ls") == 0)
@@ -149,6 +148,7 @@ static int shell_execute(Command* command, int socket_fd)
     else
     {
         log_info("Unknow command : %s\n", command->args[0]);
+        log_info("Type help to get the list of available command and usage");
     }
 
     return STATUS_OK;

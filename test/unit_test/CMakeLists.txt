@@ -26,4 +26,4 @@ add_executable(Unit_Tests_run
         ../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.c
         ../../src/server/tcp_shell.c
         ../../src/data_structures/dequeue/dequeue.c
-        ../../src/server/database/key_value_database_typedef.c)
+        ../../src/server/database/key_value_database_typedef.c data_structures_test/dequeue_test_macro.h)

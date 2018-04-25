@@ -54,7 +54,8 @@ bool database_actions_contains_k(Key key)
 bool database_actions_contains_kv(Key key, Value* value)
 {
     Value* res = set->read(set, key);
-    return strcmp(*value,*res) == 0;
+    if (res == NULL) return false;
+    return strcmp(*value, *res) == 0;
 }
 
 bool database_actions_remove_k(Key key)
@@ -77,5 +78,5 @@ Dequeue* database_actions_ls(void)
 
 bool database_actions_update_kv(Key key, Value* value)
 {
-    return set->update(set,key,value);
+    return set->update(set, key, value);
 }

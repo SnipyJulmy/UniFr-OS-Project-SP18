@@ -7,7 +7,6 @@
 
 #include "dequeue.h"
 #include "../../debug.h"
-#include "../../server/database/key_value_database_typedef.h"
 
 /************************************************************************************/
 /*                                START PRIVATE DECLARATION                         */
@@ -420,6 +419,7 @@ static void* __peek_last(Dequeue* self)
 
 void __display(Dequeue* self)
 {
+    #if !defined(NDEBUG) && (LOG_LEVEL >= LOG_LEVEL_DEBUG)
     DequeueNode* node = self->first;
     while (node->next != self->last)
     {
@@ -429,4 +429,5 @@ void __display(Dequeue* self)
         debug("(%d,%s)\n", kv->key, kv->value);
         debug_nl;
     }
+    #endif
 }

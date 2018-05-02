@@ -161,6 +161,36 @@ CTEST(dequeue, contains)
 {
     Dequeue* dequeue = key_value_database_dequeue_create(sizeof(int), int_cmp, int_destroy);
     check_mem_and_exit(dequeue);
+
+    VALUES_1_6;
+
+    ASSERT_SIZE(0);
+    CONT_0_6;
+
+    ADD(1);
+    ASSERT_SIZE(1);
+    CONT_1_6;
+
+    ADD(2);
+    ASSERT_SIZE(2);
+    CONT_2_6;
+
+    ADD(3);
+    ASSERT_SIZE(3);
+    CONT_3_6;
+
+    ADD(4);
+    ASSERT_SIZE(4);
+    CONT_4_6;
+
+    ADD(5);
+    ASSERT_SIZE(5);
+    CONT_5_6;
+    
+    ADD(6);
+    ASSERT_SIZE(6);
+    CONT_6_6;
+
     dequeue->destroy(dequeue);
 }
 

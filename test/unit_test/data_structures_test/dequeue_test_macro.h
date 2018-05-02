@@ -11,6 +11,80 @@
 #define AT_FIRST_P(ID_INT) ASSERT_TRUE(dequeue->peek_first(dequeue) == p##ID_INT);
 #define AT_FIRST(ID_INT) do {AT_FIRST_P(ID_INT); AT_FIRST_V(ID_INT);}while(0);
 
+#define CONTAINS(ID_INT) ASSERT_TRUE(dequeue->contains(dequeue,p##ID_INT));
+#define CONTAINS_NOT(ID_INT) ASSERT_FALSE(dequeue->contains(dequeue,p##ID_INT));
+
+#define CONT_0_6 CONTAINS_0_6(1,2,3,4,5,6);
+#define CONT_1_6 CONTAINS_1_6(1,2,3,4,5,6);
+#define CONT_2_6 CONTAINS_2_6(1,2,3,4,5,6);
+#define CONT_3_6 CONTAINS_3_6(1,2,3,4,5,6);
+#define CONT_4_6 CONTAINS_4_6(1,2,3,4,5,6);
+#define CONT_5_6 CONTAINS_5_6(1,2,3,4,5,6);
+#define CONT_6_6 CONTAINS_6_6(1,2,3,4,5,6);
+
+#define CONTAINS_0_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS_NOT(I1);\
+    CONTAINS_NOT(I2);\
+    CONTAINS_NOT(I3);\
+    CONTAINS_NOT(I4);\
+    CONTAINS_NOT(I5);\
+    CONTAINS_NOT(I6);\
+    }while(0);
+
+#define CONTAINS_1_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS(I1);\
+    CONTAINS_NOT(I2);\
+    CONTAINS_NOT(I3);\
+    CONTAINS_NOT(I4);\
+    CONTAINS_NOT(I5);\
+    CONTAINS_NOT(I6);\
+    }while(0);
+
+#define CONTAINS_2_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS(I1);\
+    CONTAINS(I2);\
+    CONTAINS_NOT(I3);\
+    CONTAINS_NOT(I4);\
+    CONTAINS_NOT(I5);\
+    CONTAINS_NOT(I6);\
+    }while(0);
+
+#define CONTAINS_3_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS(I1);\
+    CONTAINS(I2);\
+    CONTAINS(I3);\
+    CONTAINS_NOT(I4);\
+    CONTAINS_NOT(I5);\
+    CONTAINS_NOT(I6);\
+    }while(0);
+
+#define CONTAINS_4_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS(I1);\
+    CONTAINS(I2);\
+    CONTAINS(I3);\
+    CONTAINS(I4);\
+    CONTAINS_NOT(I5);\
+    CONTAINS_NOT(I6);\
+    }while(0);
+
+#define CONTAINS_5_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS(I1);\
+    CONTAINS(I2);\
+    CONTAINS(I3);\
+    CONTAINS(I4);\
+    CONTAINS(I5);\
+    CONTAINS_NOT(I6);\
+    }while(0);
+
+#define CONTAINS_6_6(I1, I2, I3, I4, I5, I6) do {\
+    CONTAINS(I1);\
+    CONTAINS(I2);\
+    CONTAINS(I3);\
+    CONTAINS(I4);\
+    CONTAINS(I5);\
+    CONTAINS(I6);\
+    }while(0);
+
 #define ADD(ID_INT) do {dequeue->add(dequeue,p##ID_INT);} while(0);
 #define ADD_FIRST(ID_INT) do {dequeue->add_first(dequeue,p##ID_INT);} while(0);
 // add 1,2,3,4,5,6... so the stack should be 6->5->4->3->2->1

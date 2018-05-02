@@ -15,38 +15,41 @@
 /* Macros */
 
 #define MAKE_AND_SEND do {\
-                    mkSendBuffer(command);\
-                    debug("send following command to the server :\n\t%s\n", sendBuff);\
-                    write(socket_fd, sendBuff, strlen(sendBuff));\
-                } while(0);
+            mkSendBuffer(command);\
+            debug("send following command to the server :\n\t%s\n", sendBuff);\
+            write(socket_fd, sendBuff, strlen(sendBuff));\
+        } while(0);
 
 #define CHECK_ARGC_AND_SEND_COMMAND(NB, COMMAND_NAME) do {\
-        if(command->argc != (NB)) \
-        {\
-            log_warn("Invalid number of argument for : " COMMAND_NAME);\
-            return STATUS_FAILURE;\
-        }}while(0);\
+            if(command->argc != (NB)) \
+            {\
+                log_warn("Invalid number of argument for : " COMMAND_NAME);\
+                return STATUS_FAILURE;\
+            }\
+        } while(0);\
         MAKE_AND_SEND;
 
 #define CHECK_ARGC_AND_SEND_COMMAND2(A, B, COMMAND_NAME) do {\
-        if(command->argc != (A) && command->argc != (B)) \
-        {\
-            log_warn("Invalid number of argument for : " COMMAND_NAME);\
-            return STATUS_FAILURE;\
-        }}while(0);\
+            if(command->argc != (A) && command->argc != (B)) \
+            {\
+                log_warn("Invalid number of argument for : " COMMAND_NAME);\
+                return STATUS_FAILURE;\
+            }\
+        }while(0);\
         MAKE_AND_SEND;
 
 
 /* Constant */
 #define SHELL_BUFFER_SIZE 1024
 #define SHELL_TOKEN_DELIMITER " \t\n\r\a"
+#define BUFFER_SEND_SIZE 1000
 
 #define STATUS_FAILURE 2
 #define STATUS_OK 1
 #define STATUS_EXIT 0
 
 // client buffer to send command to the server
-char sendBuff[1000];
+char sendBuff[BUFFER_SEND_SIZE];
 
 static char* shell_read_line();
 static Command* shell_tokenize_line(char* line);

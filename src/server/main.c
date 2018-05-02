@@ -15,9 +15,6 @@
 #include "../debug.h"
 #include "database/database_actions.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
-
 int main(void)
 {
     // init
@@ -40,6 +37,8 @@ int main(void)
 
     listen(listenfd, 10);
 
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wmissing-noreturn"
     while (1)
     {
         // accept a connection
@@ -62,6 +61,5 @@ int main(void)
          *  to stop the server manually if needed
          */
     }
+    #pragma clang diagnostic pop
 }
-
-#pragma clang diagnostic pop

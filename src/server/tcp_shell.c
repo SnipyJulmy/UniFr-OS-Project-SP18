@@ -169,7 +169,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         debug("value on update is %s",*value);
         bool status = database_actions_update_kv(key, value);
         if (!status)
-            RETURN_COMMAND_ERROR("unable to update <%u,%s>", key, value);
+            RETURN_COMMAND_ERROR("unable to update <%u,%s>", key, *value);
         RETURN_COMMAND_OK();
     }
     else if (strcmp(command->args[0], "q") == 0) // shutdown the server

@@ -448,15 +448,9 @@ Dequeue* lock_free_ls(Set* set)
             {
                 if (!node->sentinel)
                 {
-                    debug_nl;
-                    debug("key : %u\nvalue : %s\n",
-                          lock_free_data_reverse(node->reversed_key),
-                          *(char**) node->data);
-                    debug_nl;
                     Key key = lock_free_data_reverse(node->reversed_key);
                     Value* value = node->data;
                     dequeue->add(dequeue, key_value_database_KV_create(key, *value));
-                    debug("Add item on (%d,%d,%d)\n", i, j, k);
                 }
                 node = node->next;
                 k++;

@@ -244,7 +244,6 @@ CTEST(set_semantics_test, ls)
 
     ASSERT_TRUE(dequeue->size == 17);
 
-    dequeue->display(dequeue);
     dequeue->destroy(dequeue);
     set->destroy(set);
 }

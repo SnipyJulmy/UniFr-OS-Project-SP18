@@ -7,6 +7,7 @@
 
 #include "dequeue.h"
 #include "../../debug.h"
+#include "../../server/database/key_value_database_typedef.h"
 
 /************************************************************************************/
 /*                                START PRIVATE DECLARATION                         */
@@ -426,7 +427,7 @@ void __display(Dequeue* self)
         node = node->next;
         KV* kv = node->data;
         debug_nl;
-        debug("(%d,%s)\n", kv->key, kv->value);
+        debug("(%u,%s)\n", kv->key, kv->value);
         debug_nl;
     }
     #endif

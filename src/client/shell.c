@@ -91,12 +91,13 @@ static void shell_command_destroy(Command* self)
 
 static int shell_execute(Command* command, int socket_fd)
 {
-    if (command->argc <= 0)
+    // Commented this in order to make test as repeatedely printf
+    /*if (command->argc <= 0)
     {
         debug("No command to execute");
         printf("type help for the usage\n");
         return STATUS_OK;
-    }
+    }*/
     if (strcmp(command->args[0], "exit") == 0)
     {
         return STATUS_EXIT;

@@ -9,11 +9,12 @@
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.h"
 #include "../../src/debug.h"
 #include "utils/random.h"
+#include "../../src/server/database/key_value_database_typedef.h"
 
 #define ARRAY_LENGTH 10
-#define NB_LOOP_ITERATION 1000000
+#define NB_LOOP_ITERATION 100//0000
 #define RND_CHAR_SIZE 100
-#define NB_ITEMS_TO_INSERT 100000
+#define NB_ITEMS_TO_INSERT 100//0000
 
 static int nextInt()
 {
@@ -163,10 +164,10 @@ CTEST(multi_thread_test, add_read)
             inserted_items->add(inserted_items, key_value_database_KV_create(key, rnd_string_cpy[0]));
         }
 
-
         while (!inserted_items->is_empty(inserted_items))
         {
             KV* kv = inserted_items->remove_first(inserted_items);
+            ASSERT_TRUE(set->contains_from_key(set,kv->key));
             ASSERT_TRUE(strcmp(kv->value, *(char**) set->read(set, kv->key)) == 0);
         }
 

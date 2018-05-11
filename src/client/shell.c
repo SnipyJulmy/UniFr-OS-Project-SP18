@@ -64,7 +64,6 @@ void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
 
     do
     {
-        // TODO should do this only on help command... not every time
         printf("> ");
         line = shell_read_line();
         command = shell_tokenize_line(line);
@@ -105,8 +104,8 @@ static int shell_execute(Command* command, int socket_fd)
     else if (strcmp(command->args[0], "help") == 0)
     {
         printf("Usage:\n");
-        printf("ls: list table \n add <value>, add <key, value>: add element \n read <key>: read element \n");
-        printf("delete <key>: delete element \n update <key, newvalue>: update element \n exit: quit\n");
+        printf(" ls: \t\t\t\t\tlist table \n add <value>, add <key, value>: \tadd element \n read <key>: \t\t\t\tread element \n");
+        printf(" delete <key>: \t\t\t\tdelete element \n update <key, newvalue>: \t\tupdate element \n exit: \t\t\t\t\tquit\n");
         return STATUS_OK;
     }
     else if (strcmp(command->args[0], "ls") == 0)
@@ -164,7 +163,8 @@ static char* fetchTcpLine(int socket_fd)
     if (n <= 0)
         return NULL;
     buffer[n] = 0;
-    // TODO check n
+    //printf("this is n %d",n);
+    // TODO check n ::at set is x and at read is x+5 seems ok
     return buffer;
 }
 

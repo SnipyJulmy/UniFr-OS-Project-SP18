@@ -7,7 +7,6 @@
 
 #include "dequeue.h"
 #include "../../debug.h"
-#include "../../server/database/key_value_database_typedef.h"
 
 /************************************************************************************/
 /*                                START PRIVATE DECLARATION                         */
@@ -86,6 +85,12 @@ static bool __contains(Dequeue* dequeue, void* data);
 static bool __is_empty(Dequeue* dequeue);
 
 /**
+ * Execute a function for each element in the dequeue
+ * function f is of type void* -> void like in most functional programming language
+ */
+static void __foreach(Dequeue* dequeue, void(* f)(void*));
+
+/**
  * Free a list but do not free
  * The matrix that has been added to
  */
@@ -135,6 +140,7 @@ Dequeue* key_value_database_dequeue_create(size_t elt_ptr_size,
     res->peek_first = __peek_first;
     res->peek_last = __peek_last;
     res->display = __display;
+    res->foreach = __foreach;
 
     res->elt_ptr_size = elt_ptr_size;
     res->item_compare = fn_item_compare;
@@ -431,4 +437,13 @@ void __display(Dequeue* self)
         debug_nl;
     }
     #endif
+}
+
+void __foreach(Dequeue* dequeue, void (* f)(void*))
+{
+    DequeueNode* crt = dequeue->first;
+    while (crt->next != dequeue->last)
+    {
+        f(crt->data);
+    }
 }

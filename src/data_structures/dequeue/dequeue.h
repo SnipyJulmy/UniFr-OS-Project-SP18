@@ -35,6 +35,7 @@ struct Dequeue
     void (* move_n_last_to_front)(Dequeue*, Dequeue*, int);
     void (* move_n_first_to_end)(Dequeue*, Dequeue*, int);
     void (* move_n_last_to_end)(Dequeue*, Dequeue*, int);
+    void (* foreach)(Dequeue*, void(*)(void*));
     void* (* peek_first)(Dequeue*);
     void* (* peek_last)(Dequeue*);
 

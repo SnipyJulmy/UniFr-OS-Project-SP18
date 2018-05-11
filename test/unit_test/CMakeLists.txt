@@ -1,5 +1,3 @@
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
 if (UNIX)
     link_libraries(m)
 endif (UNIX)
@@ -9,21 +7,17 @@ if (OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 endif ()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wunused-variable")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wno-unused-variable -Wno-pointer-to-int-cast -Wno-unknown-pragmas")
+
+file(GLOB_RECURSE "TEST_SOURCE" ./*.c ./*.h)
+file(GLOB_RECURSE "SOURCE"
+        ../../src/server/database/*.c
+        ../../src/server/database/*.h
+        ../../src/data_structures/*.c
+        ../../src/data_structures/*.h
+        )
 
 add_executable(Unit_Tests_run
-        main_test.c
-        multi_thread_access_test.c
-        reverse_test.c
-        set_semantics_test.c
-        database_actions_tests.c
-        data_structures_test/dequeue_test.c
-        macro_utils.h
-
-        ../../src/server/server_connection.c
-        ../../src/server/database/database_actions.c
-        ../../src/data_structures/parallel/lock_free_set/lock_free_set.c
-        ../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.c
-        ../../src/server/tcp_shell.c
-        ../../src/data_structures/dequeue/dequeue.c
-        ../../src/server/database/key_value_database_typedef.c data_structures_test/dequeue_test_macro.h)
+        ${TEST_SOURCE}
+        ${SOURCE}
+        )

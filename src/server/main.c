@@ -15,6 +15,8 @@
 #include "../debug.h"
 #include "database/database_actions.h"
 
+int iSetOption =1; // added options for socket connection
+
 int main(void)
 {
     // init
@@ -26,6 +28,11 @@ int main(void)
     char sendBuff[1025];
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    //This line allow to reconnect without delai and probably sort the connection problem
+    // while starting and closing server multiple times and bad port issue (MP)
+    setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, (char*)&iSetOption, sizeof(iSetOption));
+
     memset(&serv_addr, '0', sizeof(serv_addr));
     memset(sendBuff, '0', sizeof(sendBuff));
 

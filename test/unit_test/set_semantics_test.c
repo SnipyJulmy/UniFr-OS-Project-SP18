@@ -17,9 +17,9 @@
 
 CTEST(set_semantics_test, simple_int)
 {
-    int a = 8;
-    int b = 9;
-    int c = 10;
+    char* a = "a";
+    char* b = "b";
+    char* c = "c";
 
     Set* set = lock_free_data_create_set(lock_free_set_hash);
     ASSERT_NOT_NULL(set);
@@ -156,10 +156,10 @@ CTEST(set_semantics_test, contains_value)
 
     char* s1 = "asd1";
     char* s2 = "asd2";
-    char* s3 = "asd2";
-    char* s4 = "asd2";
-    char* s5 = "asd2";
-    char* s6 = "asd2";
+    char* s3 = "asd3";
+    char* s4 = "asd4";
+    char* s5 = "asd5";
+    char* s6 = "asd6";
 
     AF_SET(1);
     AF_SET(2);

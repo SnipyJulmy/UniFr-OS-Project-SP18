@@ -42,9 +42,10 @@ CTEST(multi_thread_test, simple_add_remove)
         for (int i = 0; i < NB_LOOP_ITERATION; i++)
         {
             idx = nextIdx();
-            if (set->add(set, &(p[idx])))
+            Key key = set->item_hashcode(&(p[idx]));
+            if (set->add_with_key(set, key, &(p[idx])))
             {
-                ASSERT_TRUE(set->contains(set, &(p[idx])));
+                ASSERT_TRUE(set->contains_from_key(set, key));
                 ASSERT_TRUE(set->remove(set, &(p[idx])));
             }
             else

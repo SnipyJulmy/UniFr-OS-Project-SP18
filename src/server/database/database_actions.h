@@ -28,6 +28,7 @@ bool database_actions_insert_kv(Key key, Value* value);
 Value* database_actions_read_k(Key key);
 bool database_actions_contains_k(Key key);
 bool database_actions_contains_kv(Key key, Value* value);
+bool database_actions_contains_v(Value* value);
 bool database_actions_remove_k(Key key);
 bool database_actions_remove_kv(Key key, Value* value);
 bool database_actions_update_kv(Key key, Value* value);

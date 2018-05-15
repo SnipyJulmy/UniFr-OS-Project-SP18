@@ -63,7 +63,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     // Methods binding
     set->add = lock_free_data_add;
     set->add_with_key = lock_free_data_add_with_key;
-    set->contains = lock_free_data_contains_from_value;
+    set->contains_from_value = lock_free_data_contains_from_value;
     set->remove = lock_free_data_remove;
     set->item_hashcode = fn_hashcode;
     set->destroy = lock_free_data_free;

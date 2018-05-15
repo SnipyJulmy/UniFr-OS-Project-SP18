@@ -158,8 +158,8 @@ CTEST(multi_thread_test, add_read)
             // insert the random string into the database
             Key key = set->item_hashcode(rnd_string);
             ASSERT_TRUE(set->add_with_key(set, key, rnd_string));
-            ASSERT_TRUE(set->contains(set,rnd_string));
-            ASSERT_TRUE(set->contains(set,rnd_string_cpy));
+            ASSERT_TRUE(set->contains_from_value(set,rnd_string));
+            ASSERT_TRUE(set->contains_from_value(set,rnd_string_cpy));
             ASSERT_TRUE(set->contains_from_key(set, key));
             ASSERT_TRUE(set->read(set, key) == rnd_string);
             ASSERT_TRUE(strcmp(rnd_string[0], *(char**) set->read(set, key)) == 0);
@@ -169,7 +169,7 @@ CTEST(multi_thread_test, add_read)
         while (!inserted_items->is_empty(inserted_items))
         {
             KV* kv = inserted_items->remove_first(inserted_items);
-            ASSERT_TRUE(set->contains(set, &kv->value));
+            ASSERT_TRUE(set->contains_from_value(set, &kv->value));
             ASSERT_TRUE(set->contains_from_key(set, kv->key));
             ASSERT_TRUE(strcmp(kv->value, *(char**) set->read(set, kv->key)) == 0);
         }

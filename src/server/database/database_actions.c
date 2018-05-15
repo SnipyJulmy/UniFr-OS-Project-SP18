@@ -80,3 +80,8 @@ bool database_actions_update_kv(Key key, Value* value)
 {
     return set->update(set, key, value);
 }
+
+bool database_actions_contains_v(Value* value)
+{
+    return set->contains_from_value(set,value);
+}

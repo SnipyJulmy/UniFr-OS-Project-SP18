@@ -18,11 +18,11 @@
 }while(0);
 
 #define AF_SET(IDX) do{\
-    ASSERT_FALSE(set->contains(set,&s ## IDX)); \
+    ASSERT_FALSE(set->contains_from_value(set,&s ## IDX)); \
     ASSERT_FALSE(set->contains_from_key(set, set->item_hashcode(&s ## IDX))); \
     }while(0);
 #define AT_SET(IDX) do{\
-    ASSERT_TRUE(set->contains(set,&s ## IDX)); \
+    ASSERT_TRUE(set->contains_from_value(set,&s ## IDX)); \
     ASSERT_TRUE(set->contains_from_key(set, set->item_hashcode(&s ## IDX))); \
     }while(0);
 

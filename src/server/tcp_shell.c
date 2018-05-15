@@ -148,7 +148,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     else if (strcmp(command->args[0], "read_key") == 0) // read a key from a value
     {
         CHECK_ARGC(2, "read_key");
-        Value value = command->args[2];
+        Value value = command->args[1];
         Key key = database_actions_read_k_from_v(&value);
         if (key == NULL)
             RETURN_COMMAND_ERROR("unable to find a key for the value %s", value);
@@ -159,7 +159,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     else if (strcmp(command->args[0], "delete_value") == 0) // delete a <k,v> given a value
     {
         CHECK_ARGC(2, "delete_value");
-        Value value = command->args[2];
+        Value value = command->args[1];
         bool status = database_actions_remove_from_v(&value);
         if (!status)
             RETURN_COMMAND_ERROR("unable to delete a entry given the value %s", value);

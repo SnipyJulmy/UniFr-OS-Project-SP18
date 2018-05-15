@@ -34,7 +34,7 @@ bool lock_free_data_remove_from_value(Set* self, void* data);
 bool lock_free_data_update(Set* self, uint32_t key, void* data);
 
 // contains
-bool lock_free_data_contains(Set* self, void* data);
+bool lock_free_data_contains_from_value(Set* self, void* data);
 bool lock_free_data_contains_from_key(Set* self, uint32_t key);
 
 // read
@@ -63,7 +63,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     // Methods binding
     set->add = lock_free_data_add;
     set->add_with_key = lock_free_data_add_with_key;
-    set->contains = lock_free_data_contains;
+    set->contains = lock_free_data_contains_from_value;
     set->remove = lock_free_data_remove;
     set->item_hashcode = fn_hashcode;
     set->destroy = lock_free_data_free;
@@ -300,7 +300,7 @@ bool lock_free_data_remove(Set* self, void* data)
 // we can't access it with the key.
 // We have to search in the whole data structure
 // We know that the data is a Value* (char**)...
-bool lock_free_data_contains(Set* self, void* data)
+bool lock_free_data_contains_from_value(Set* self, void* data)
 {
     Node*** firstBucket = self->first_bucket;
     Node** secondBucket;

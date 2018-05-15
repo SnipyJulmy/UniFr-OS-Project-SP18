@@ -14,6 +14,7 @@
 #define NB_LOOP_ITERATION 100//0000
 #define RND_CHAR_SIZE 100
 #define NB_ITEMS_TO_INSERT 100//0000
+#define NB_UPDATE_LOOP 100
 
 static int nextInt()
 {
@@ -223,6 +224,85 @@ CTEST(multi_thread_test, add_read_delete)
             ASSERT_TRUE(set->contains_from_key(set, key));
             ASSERT_TRUE(set->read(set, key) == rnd_string);
             ASSERT_TRUE(strcmp(rnd_string[0], *(char**) set->read(set, key)) == 0);
+            inserted_items->add(inserted_items, key_value_database_KV_create(key, rnd_string_cpy[0]));
+        }
+
+        while (!inserted_items->is_empty(inserted_items))
+        {
+            KV* kv = inserted_items->remove_first(inserted_items);
+            ASSERT_TRUE(set->contains_from_key(set, kv->key));
+            ASSERT_TRUE(strcmp(kv->value, *(char**) set->read(set, kv->key)) == 0);
+            ASSERT_TRUE(set->remove_from_key(set, kv->key));
+            ASSERT_FALSE(set->contains_from_key(set, kv->key));
+        }
+
+        inserted_items->destroy(inserted_items);
+        end:;
+    }
+
+    set->destroy(set);
+}
+
+CTEST(multi_thread_test, add_read_delete_update)
+{
+    Set* set = lock_free_data_create_set(lock_free_set_hash);
+    check_mem_and_exit(set);
+
+    // each thread would add the same value, store the key and retrieve their own values
+    #pragma omp parallel default(none) num_threads(8) shared(set, stderr)
+    {
+        // Dequeue to track inserted item
+        Dequeue* inserted_items = key_value_database_dequeue_create(
+                sizeof(KV),
+                key_value_database_KV_compare,
+                key_value_database_KV_free
+        );
+
+        check_mem(inserted_items, {
+            goto end;
+        });
+
+        for (int i = 0; i < NB_ITEMS_TO_INSERT; i++)
+        {
+            // allocate memory for random string and a dequeue
+            char** rnd_string = malloc(1 * sizeof(char*));
+            ASSERT_NOT_NULL(rnd_string);
+            rnd_string[0] = malloc(RND_CHAR_SIZE * sizeof(char));
+            ASSERT_NOT_NULL(rnd_string[0]);
+
+            char** rnd_string_cpy = malloc(1 * sizeof(char*));
+            ASSERT_NOT_NULL(rnd_string_cpy);
+            rnd_string_cpy[0] = malloc(RND_CHAR_SIZE * sizeof(char));
+            ASSERT_NOT_NULL(rnd_string_cpy[0]);
+
+            // generate random char and copy it
+            gen_random(rnd_string[0], RND_CHAR_SIZE - 1);
+            strcpy(rnd_string_cpy[0], rnd_string[0]);
+
+            // insert the random string into the database
+            Key key = set->item_hashcode(rnd_string);
+            ASSERT_TRUE(set->add_with_key(set, key, rnd_string));
+            ASSERT_TRUE(set->contains_from_key(set, key));
+            ASSERT_TRUE(set->read(set, key) == rnd_string);
+            ASSERT_TRUE(strcmp(rnd_string[0], *(char**) set->read(set, key)) == 0);
+
+            gen_random(rnd_string[0], RND_CHAR_SIZE - 1);
+            strcpy(rnd_string_cpy[0], rnd_string[0]);
+            ASSERT_TRUE(set->update(set,key,rnd_string));
+            ASSERT_TRUE(set->contains_from_key(set, key));
+            ASSERT_TRUE(set->read(set, key) == rnd_string);
+            ASSERT_TRUE(strcmp(rnd_string[0], *(char**) set->read(set, key)) == 0);
+
+            for (int j = 0; j < NB_UPDATE_LOOP; j++)
+            {
+                gen_random(rnd_string[0], RND_CHAR_SIZE - 1);
+                strcpy(rnd_string_cpy[0], rnd_string[0]);
+                ASSERT_TRUE(set->update(set,key,rnd_string));
+                ASSERT_TRUE(set->contains_from_key(set, key));
+                ASSERT_TRUE(set->read(set, key) == rnd_string);
+                ASSERT_TRUE(strcmp(rnd_string[0], *(char**) set->read(set, key)) == 0);
+            }
+
             inserted_items->add(inserted_items, key_value_database_KV_create(key, rnd_string_cpy[0]));
         }
 

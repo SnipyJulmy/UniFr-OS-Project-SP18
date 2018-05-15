@@ -145,6 +145,26 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
     }
+    else if (strcmp(command->args[0], "read_key") == 0) // read a key from a value
+    {
+        CHECK_ARGC(2, "read_key");
+        Value value = command->args[2];
+        Key key = database_actions_read_k_from_v(&value);
+        if (key == NULL)
+            RETURN_COMMAND_ERROR("unable to find a key for the value %s", value);
+        snprintf(sendBuff, sizeof(sendBuff), "read : <%u,%s>", key, value);
+        debug("send following to the client :\n\t%s\n", sendBuff);
+        write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
+    }
+    else if (strcmp(command->args[0], "delete_value") == 0) // delete a <k,v> given a value
+    {
+        CHECK_ARGC(2, "delete_value");
+        Value value = command->args[2];
+        bool status = database_actions_remove_from_v(&value);
+        if (!status)
+            RETURN_COMMAND_ERROR("unable to delete a entry given the value %s", value);
+        RETURN_COMMAND_OK();
+    }
     else if (strcmp(command->args[0], "delete") == 0) // delete a <k,v> from a key
     {
         CHECK_ARGC_2(2, 3, "delete");
@@ -165,8 +185,8 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         Key key = (Key) strtoul(command->args[1], NULL, 10);
         Value* value = malloc(1 * sizeof(value));
         value[0] = malloc(strlen(command->args[2]) * sizeof(char));
-        strcpy(*value,command->args[2]);
-        debug("value on update is %s",*value);
+        strcpy(*value, command->args[2]);
+        debug("value on update is %s", *value);
         bool status = database_actions_update_kv(key, value);
         if (!status)
             RETURN_COMMAND_ERROR("unable to update <%u,%s>", key, *value);

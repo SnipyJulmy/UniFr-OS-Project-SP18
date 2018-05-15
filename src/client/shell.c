@@ -139,6 +139,18 @@ static int shell_execute(Command* command, int socket_fd)
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }
+    else if (strcmp(command->args[0], "delete_value") == 0)
+    {
+        CHECK_ARGC_AND_SEND_COMMAND(2, "delete_value");
+        char* line = fetchTcpLine(socket_fd);
+        printf("%s\n", line);
+    }
+    else if (strcmp(command->args[0], "read_key") == 0)
+    {
+        CHECK_ARGC_AND_SEND_COMMAND(2, "read_key");
+        char* line = fetchTcpLine(socket_fd);
+        printf("%s\n", line);
+    }
     else if (strcmp(command->args[0], "debug") == 0)
     {
         CHECK_ARGC_AND_SEND_COMMAND(1, "debug");

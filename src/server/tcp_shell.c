@@ -136,7 +136,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
         CHECK_ARGC(2, "read");
 
         Key key = (Key) strtoul(command->args[1], NULL, 10);
-        Value* value = database_actions_read_k(key);
+        Value* value = database_actions_read_v_from_key(key);
         if (value == NULL)
         {
             RETURN_COMMAND_ERROR("unable to read <%u>", key);
@@ -153,8 +153,8 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
                       "\0" :
                       command->args[2];
         bool status = command->argc == 2 ?
-                      database_actions_remove_k(key) :
-                      database_actions_remove_kv(key, &value);
+                      database_actions_remove_from_k(key) :
+                      database_actions_remove_from_kv(key, &value);
         if (!status)
             RETURN_COMMAND_ERROR("unable to delete <%u,%s>", key, value);
         RETURN_COMMAND_OK();

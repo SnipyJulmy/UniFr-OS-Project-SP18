@@ -119,21 +119,21 @@ CTEST(database_action, read_k)
     AT(5);
     AT(6);
 
-    ASSERT_TRUE(database_actions_read_k(k1) == &s1);
-    ASSERT_TRUE(database_actions_read_k(k2) == &s2);
-    ASSERT_TRUE(database_actions_read_k(k3) == &s3);
-    ASSERT_TRUE(database_actions_read_k(k4) == &s4);
-    ASSERT_TRUE(database_actions_read_k(k5) == &s5);
-    ASSERT_TRUE(database_actions_read_k(k6) == &s6);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k1), *database_actions_read_k(k1)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k2), *database_actions_read_k(k2)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k3), *database_actions_read_k(k3)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k4), *database_actions_read_k(k4)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k5), *database_actions_read_k(k5)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k6), *database_actions_read_k(k6)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k1), *database_actions_read_k(k4)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k2), *database_actions_read_k(k5)) == 0);
-    ASSERT_TRUE(strcmp(*database_actions_read_k(k3), *database_actions_read_k(k6)) == 0);
+    ASSERT_TRUE(database_actions_read_v_from_key(k1) == &s1);
+    ASSERT_TRUE(database_actions_read_v_from_key(k2) == &s2);
+    ASSERT_TRUE(database_actions_read_v_from_key(k3) == &s3);
+    ASSERT_TRUE(database_actions_read_v_from_key(k4) == &s4);
+    ASSERT_TRUE(database_actions_read_v_from_key(k5) == &s5);
+    ASSERT_TRUE(database_actions_read_v_from_key(k6) == &s6);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k1), *database_actions_read_v_from_key(k1)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k2), *database_actions_read_v_from_key(k2)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k3), *database_actions_read_v_from_key(k3)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k4), *database_actions_read_v_from_key(k4)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k5), *database_actions_read_v_from_key(k5)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k6), *database_actions_read_v_from_key(k6)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k1), *database_actions_read_v_from_key(k4)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k2), *database_actions_read_v_from_key(k5)) == 0);
+    ASSERT_TRUE(strcmp(*database_actions_read_v_from_key(k3), *database_actions_read_v_from_key(k6)) == 0);
 
     database_actions_destroy();
 }
@@ -147,12 +147,12 @@ CTEST(database_action, contains_k)
     INSERT_ALL;
 
     CONTAINS_ALL_KEY;
-    ASSERT_TRUE(database_actions_remove_k(k1));
+    ASSERT_TRUE(database_actions_remove_from_k(k1));
     CONTAINS_KEYS_BUT(1);
     ASSERT_TRUE(database_actions_insert_kv(k1, &s1));
     CONTAINS_ALL_KEY;
-    ASSERT_TRUE(database_actions_remove_k(k1));
-    ASSERT_TRUE(database_actions_remove_k(k2));
+    ASSERT_TRUE(database_actions_remove_from_k(k1));
+    ASSERT_TRUE(database_actions_remove_from_k(k2));
     CONTAINS_KEY_4(3, 4, 5, 6);
     CONTAINS_NOT_KEY_2(1, 2);
     ASSERT_TRUE(database_actions_insert_kv(k1, &s1));

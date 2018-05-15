@@ -41,7 +41,7 @@ bool database_actions_insert_kv(Key key, Value* value)
     return set->add_with_key(set, key, value);
 }
 
-Value* database_actions_read_k(Key key)
+Value* database_actions_read_v_from_key(Key key)
 {
     return set->read(set, key);
 }
@@ -58,12 +58,12 @@ bool database_actions_contains_kv(Key key, Value* value)
     return strcmp(*value, *res) == 0;
 }
 
-bool database_actions_remove_k(Key key)
+bool database_actions_remove_from_k(Key key)
 {
     return set->remove_from_key(set, key);
 }
 
-bool database_actions_remove_kv(Key key, Value* value)
+bool database_actions_remove_from_kv(Key key, Value* value)
 {
     Value* res = set->read(set, key);
     if (value == res)
@@ -83,5 +83,15 @@ bool database_actions_update_kv(Key key, Value* value)
 
 bool database_actions_contains_v(Value* value)
 {
-    return set->contains_from_value(set,value);
+    return set->contains_from_value(set, value);
+}
+
+Key database_actions_read_k_from_v(Value* value)
+{
+    return set->read_key_from_value(set, value);
+}
+
+bool database_actions_remove_from_v(Value* value)
+{
+    return set->remove_from_value(set, value);
 }

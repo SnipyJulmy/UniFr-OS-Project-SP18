@@ -39,6 +39,7 @@ bool lock_free_data_contains_from_key(Set* self, uint32_t key);
 
 // read
 void* lock_free_data_read(Set* self, Key key);
+uint32_t lock_free_data_read_key_from_value(Set* self, void* data);
 
 // ls
 Dequeue* lock_free_ls(Set* set);
@@ -73,6 +74,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->ls = lock_free_ls;
     set->update = lock_free_data_update;
     set->remove_from_value = lock_free_data_remove_from_value;
+    set->read_key_from_value = lock_free_data_read_key_from_value;
 
     // dequeue related
     set->dequeue_item_compare = key_value_database_KV_compare;
@@ -546,4 +548,35 @@ bool lock_free_data_update(Set* self, uint32_t key, void* data)
             return res;
         }
     }
+}
+
+uint32_t lock_free_data_read_key_from_value(Set* self, void* data)
+{
+    Node*** firstBucket = self->first_bucket;
+    Node** secondBucket;
+    Node* node;
+
+    while (*firstBucket != NULL)
+    {
+        secondBucket = *firstBucket;
+        while (*secondBucket != NULL)
+        {
+            node = *secondBucket;
+            while (node != NULL)
+            {
+                if (!node->sentinel)
+                {
+                    if (strcmp(*(char**) node->data, *(char**) data) == 0)
+                    {
+                        return lock_free_data_reverse(node->reversed_key);
+                    }
+                }
+                node = node->next;
+            }
+            goto end;
+        }
+        firstBucket++;
+    }
+    end:
+    return NULL;
 }

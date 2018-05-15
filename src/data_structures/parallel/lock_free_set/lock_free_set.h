@@ -40,6 +40,7 @@ struct Set
     bool (* remove_from_key)(Set* self, uint32_t key);
     bool (* remove_from_value)(Set* self, void* data); // only works when data is a char**
     void* (* read)(Set* self, uint32_t key);
+    uint32_t (* read_key_from_value)(Set* self, void* data); // only works when data is a char**
     Dequeue* (* ls)(Set* self);
 
     // private

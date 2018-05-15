@@ -222,7 +222,7 @@ ASSERT_FALSE(database_actions_contains_k(k ## K6));\
 )
 
 #define REMOVE(K) PROTECT(\
-ASSERT_TRUE(database_actions_remove_k(k ## K));\
+ASSERT_TRUE(database_actions_remove_from_k(k ## K));\
 )
 
 #define INSERT_KV(K) PROTECT(\

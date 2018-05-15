@@ -253,11 +253,72 @@ CTEST(set_semantics_test, update)
     Set* set = lock_free_data_create_set(lock_free_set_hash);
     DEF_VAR;
     DEF_KEY_INIT;
-    ASSERT_TRUE(set->add_with_key(set,k1,&s1));
-    ASSERT_TRUE(set->update(set,k1,&s2));
+    ASSERT_TRUE(set->add_with_key(set, k1, &s1));
+    ASSERT_TRUE(set->update(set, k1, &s2));
 
     Dequeue* dequeue = set->ls(set);
     ASSERT_TRUE(dequeue->size == 1);
+
+    set->destroy(set);
+}
+
+CTEST(set_semantics_test, remove_string_value)
+{
+    Set* set = lock_free_data_create_set(lock_free_set_hash);
+
+    char* a = "asd1";
+    Key keyA = set->item_hashcode(&a);
+    char* b = "asd2";
+    Key keyB = set->item_hashcode(&b);
+    char* c = "asd1";
+    Key keyC = set->item_hashcode(&c);
+    char* d = "asd2";
+    Key keyD = set->item_hashcode(&d);
+
+    ASSERT_TRUE(set->add_with_key(set, keyA, &a));
+    ASSERT_TRUE(set->add_with_key(set, keyB, &b));
+    ASSERT_TRUE(set->contains_from_key(set, keyA));
+    ASSERT_TRUE(set->contains_from_key(set, keyB));
+    ASSERT_TRUE(set->contains(set, &a));
+    ASSERT_TRUE(set->contains(set, &b));
+    ASSERT_FALSE(set->contains_from_key(set, keyC));
+    ASSERT_FALSE(set->contains_from_key(set, keyD));
+    ASSERT_TRUE(set->contains(set, &c));
+    ASSERT_TRUE(set->contains(set, &d));
+    ASSERT_TRUE(set->remove_from_key(set,keyA));
+    ASSERT_FALSE(set->contains(set, &a));
+    ASSERT_FALSE(set->contains(set, &c));
+    ASSERT_FALSE(set->contains_from_key(set, keyA));
+    ASSERT_FALSE(set->contains_from_key(set, keyC));
+    ASSERT_FALSE(set->contains_from_key(set, keyD));
+    ASSERT_TRUE(set->remove_from_value(set,&d));
+    ASSERT_FALSE(set->contains_from_key(set, keyA));
+    ASSERT_FALSE(set->contains_from_key(set, keyB));
+    ASSERT_FALSE(set->contains_from_key(set, keyC));
+    ASSERT_FALSE(set->contains_from_key(set, keyD));
+
+    ASSERT_TRUE(set->item_count == 0);
+
+    ASSERT_TRUE(set->add_with_key(set, keyA, &a));
+    ASSERT_TRUE(set->add_with_key(set, keyB, &b));
+    ASSERT_TRUE(set->contains_from_key(set, keyA));
+    ASSERT_TRUE(set->contains_from_key(set, keyB));
+    ASSERT_TRUE(set->remove_from_value(set,&c));
+    ASSERT_TRUE(set->remove_from_value(set,&d));
+    ASSERT_FALSE(set->contains_from_key(set, keyA));
+    ASSERT_FALSE(set->contains_from_key(set, keyB));
+    ASSERT_FALSE(set->contains_from_key(set, keyC));
+    ASSERT_FALSE(set->contains_from_key(set, keyD));
+    ASSERT_TRUE(set->add_with_key(set, keyA, &a));
+    ASSERT_TRUE(set->add_with_key(set, keyB, &b));
+    ASSERT_TRUE(set->contains_from_key(set, keyA));
+    ASSERT_TRUE(set->contains_from_key(set, keyB));
+    ASSERT_TRUE(set->remove_from_value(set,&a));
+    ASSERT_TRUE(set->remove_from_value(set,&b));
+    ASSERT_FALSE(set->contains_from_key(set, keyA));
+    ASSERT_FALSE(set->contains_from_key(set, keyB));
+    ASSERT_FALSE(set->contains_from_key(set, keyC));
+    ASSERT_FALSE(set->contains_from_key(set, keyD));
 
     set->destroy(set);
 }

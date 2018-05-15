@@ -28,6 +28,7 @@ bool lock_free_data_add_with_key(Set* self, uint32_t key, void* data);
 // remove
 bool lock_free_data_remove(Set* self, void* data);
 bool lock_free_data_remove_from_key(Set* self, uint32_t key);
+bool lock_free_data_remove_from_value(Set* self, void* data);
 
 // update
 bool lock_free_data_update(Set* self, uint32_t key, void* data);
@@ -71,6 +72,7 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->read = lock_free_data_read;
     set->ls = lock_free_ls;
     set->update = lock_free_data_update;
+    set->remove_from_value = lock_free_data_remove_from_value;
 
     // dequeue related
     set->dequeue_item_compare = key_value_database_KV_compare;
@@ -262,7 +264,7 @@ bool lock_free_data_add(Set* self, void* data)
     return true;
 }
 
-
+// TODO don't work as expected...
 bool lock_free_data_remove(Set* self, void* data)
 {
     Node* pred;
@@ -293,28 +295,84 @@ bool lock_free_data_remove(Set* self, void* data)
     }
 }
 
-// TODO don't work !!!!
+// We have to search for a data depending on its value only
+// Because the key is depending only on the address of the data
+// we can't access it with the key.
+// We have to search in the whole data structure
+// We know that the data is a Value* (char**)...
 bool lock_free_data_contains(Set* self, void* data)
 {
-    Node* pred;
-    Node* curr;
-    Node* bucket;
-    Conversion next;
+    Node*** firstBucket = self->first_bucket;
+    Node** secondBucket;
+    Node* node;
 
-    uint32_t key = self->item_hashcode(data);
-    if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
-        return false;
-    key = lock_free_data_reverse(key);
-    while (true)
+    while (*firstBucket != NULL)
     {
-        if (!lock_free_data_find(bucket, key, false, &pred, &curr))
-            return false;
-        next.node = curr->next;
-        if ((next.value & 0x1) == 0)
+        secondBucket = *firstBucket;
+        while (*secondBucket != NULL)
         {
-            return true;
+            node = *secondBucket;
+            while (node != NULL)
+            {
+                if (!node->sentinel)
+                {
+                    if (strcmp(*(char**) node->data, *(char**) data) == 0)
+                    {
+                        return true;
+                    }
+                }
+                node = node->next;
+            }
+            goto end;
         }
+        firstBucket++;
     }
+    end:
+    return false;
+}
+
+
+// TODO don't work
+bool lock_free_data_remove_from_value(Set* self, void* data)
+{
+    Node*** firstBucket = self->first_bucket;
+    Node** secondBucket;
+    Node* curr = NULL;
+    Node* pred = NULL;
+
+    while (*firstBucket != NULL)
+    {
+        secondBucket = *firstBucket;
+        while (*secondBucket != NULL)
+        {
+            curr = *secondBucket;
+            while (curr != NULL)
+            {
+                if (!curr->sentinel)
+                {
+                    if (strcmp(*(char**) curr->data, *(char**) data) == 0)
+                    {
+                        Node* next = curr->next;
+                        Node* tmpNext = curr->next;
+
+                        if (compare_and_swap(&curr->next, tmpNext, next))
+                        {
+                            compare_and_swap(&pred->next, curr, tmpNext);
+                            fetch_and_decrement(&(self->item_count));
+                            return true;
+                        }
+
+                    }
+                }
+                pred = curr;
+                curr = curr->next;
+            }
+            goto end;
+        }
+        firstBucket++;
+    }
+    end:
+    return false;
 }
 
 bool lock_free_data_remove_from_key(Set* self, uint32_t key)
@@ -484,7 +542,7 @@ bool lock_free_data_update(Set* self, uint32_t key, void* data)
         next.node = curr->next;
         if ((next.value & 0x1) == 0)
         {
-            bool res = compare_and_swap(&curr->data,curr->data,data);
+            bool res = compare_and_swap(&curr->data, curr->data, data);
             return res;
         }
     }

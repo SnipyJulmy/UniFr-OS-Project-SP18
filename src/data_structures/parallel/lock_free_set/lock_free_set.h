@@ -38,6 +38,7 @@ struct Set
     bool (* contains_from_key)(Set* self, uint32_t key);
     bool (* update)(Set* self, uint32_t key, void* data);
     bool (* remove_from_key)(Set* self, uint32_t key);
+    bool (* remove_from_value)(Set* self, void* data); // only works when data is a char**
     void* (* read)(Set* self, uint32_t key);
     Dequeue* (* ls)(Set* self);
 
@@ -45,7 +46,7 @@ struct Set
     uint32_t (* item_hashcode)(void*);  // hashcode for the item to store
 
     // for the dequeue
-    int (* dequeue_item_compare)(void*,void*);  // to compare two item
+    int (* dequeue_item_compare)(void*, void*);  // to compare two item
     void (* dequeue_item_destroy)(void*);
 };
 

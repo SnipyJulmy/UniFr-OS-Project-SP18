@@ -16,9 +16,9 @@
 
 int main(int argc, char* argv[])
 {
-    int sockfd = 0;
-    char recvBuff[1024];
-    struct sockaddr_in serv_addr;
+    int socket_fd = 0;
+    char receive_buffer[1024];
+    struct sockaddr_in server_addr;
 
     if (argc != 2)
     {
@@ -26,31 +26,31 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    memset(recvBuff, '0', sizeof(recvBuff));
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    memset(receive_buffer, '0', sizeof(receive_buffer));
+    if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         log_err("\n Error : Could not create socket \n");
         return 1;
     }
 
-    memset(&serv_addr, '\0', sizeof(serv_addr));
+    memset(&server_addr, '\0', sizeof(server_addr));
 
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(5000);
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(5000);
 
-    if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0)
+    if (inet_pton(AF_INET, argv[1], &server_addr.sin_addr) <= 0)
     {
         log_err("Errno error : %s\n", strerror(errno));
-        log_err("\n inet_pton error occured\n");
+        log_err("\n inet_pton error occurred\n");
         return 1;
     }
 
-    if (connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
+    if (connect(socket_fd, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0)
     {
         log_err("Connection failed : %s\n", strerror(errno));
         return EXIT_FAILURE;
     }
 
-    shell_loop(sockfd, &serv_addr);
+    shell_loop(socket_fd, &server_addr);
     return EXIT_SUCCESS;
 }

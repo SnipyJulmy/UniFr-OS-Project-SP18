@@ -6,7 +6,7 @@
 
 uint32_t lock_free_set_hash(void* s)
 {
-    // TODO
-    // ok...
+    // obviously the most thoughtful implementation
+    // of an hash function
     return (uint32_t) s;
 }

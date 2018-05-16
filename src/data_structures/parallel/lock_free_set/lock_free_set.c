@@ -142,7 +142,6 @@ static Node* lock_free_data_initialize_bucket(Set* self, uint32_t key)
 
     sentinel = malloc(1 * sizeof(Node));
 
-    // TODO adjust behavior if memory alloc fail ? --> resources to free !
     check_mem_and_exit(sentinel);
 
     sentinel->sentinel = true;

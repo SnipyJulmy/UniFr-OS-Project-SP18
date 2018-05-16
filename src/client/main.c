@@ -14,8 +14,6 @@
 
 #include "shell.h"
 
-#define BUFFER_LENGTH 1025
-
 int main(int argc, char* argv[])
 {
     int sockfd = 0;
@@ -35,7 +33,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    memset(&serv_addr, '0', sizeof(serv_addr));
+    memset(&serv_addr, '\0', sizeof(serv_addr));
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(5000);

@@ -4,7 +4,7 @@
 
 #include "../../lib/ctest/ctest.h"
 #include "../../../src/data_structures/dequeue/dequeue.h"
-#include "../../../src/debug.h"
+#include "../../../src/utils/debug.h"
 #include "dequeue_test_macro.h"
 
 

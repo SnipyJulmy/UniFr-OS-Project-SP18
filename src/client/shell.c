@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #include "shell.h"
-#include "../debug.h"
+#include "../utils/debug.h"
 
 /* Macros */
 

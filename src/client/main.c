@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "../debug.h"
+#include "../utils/debug.h"
 
 #include "shell.h"
 

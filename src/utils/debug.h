@@ -2,8 +2,8 @@
 // Created by snipy on 27.03.18.
 //
 
-#ifndef KEY_VALUE_DATABASE_DEBUG_H
-#define KEY_VALUE_DATABASE_DEBUG_H
+#ifndef KEY_VALUE_DATABASE_UTILS_DEBUG_H
+#define KEY_VALUE_DATABASE_UTILS_DEBUG_H
 
 #include <stdio.h>
 #include <errno.h>
@@ -98,4 +98,4 @@ __LINE__, __FILE__);
 #define check_mem_and_exit(PTR) check_mem(PTR, exit(EXIT_FAILURE));
 #define check_mem_and_return(PTR, VALUE) check_mem(PTR, return (VALUE));
 
-#endif //KEY_VALUE_DATABASE_DEBUG_H
+#endif //KEY_VALUE_DATABASE_UTILS_DEBUG_H

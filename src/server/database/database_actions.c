@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include "database_actions.h"
-#include "../../debug.h"
+#include "../../utils/debug.h"
 #include "../../data_structures/parallel/lock_free_set/lock_free_set.h"
 #include "../../data_structures/parallel/lock_free_set/lock_free_set_hash.h"
 

@@ -10,7 +10,7 @@ add_executable(server
         main.c
         server_connection.c
         server_connection.h
-        ../debug.h
+        ../utils/debug.h
         database/database_actions.c
         database/database_actions.h
         ../data_structures/parallel/lock_free_set/lock_free_set.c

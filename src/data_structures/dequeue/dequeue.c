@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #include "dequeue.h"
-#include "../../debug.h"
+#include "../../utils/debug.h"
 
 /************************************************************************************/
 /*                                START PRIVATE DECLARATION                         */

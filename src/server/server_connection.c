@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "server_connection.h"
-#include "../debug.h"
+#include "../utils/debug.h"
 #include "tcp_shell.h"
 
 #define BUFFER_LENGTH 1025

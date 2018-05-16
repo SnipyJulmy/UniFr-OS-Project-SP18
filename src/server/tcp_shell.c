@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "tcp_shell.h"
-#include "../debug.h"
+#include "../utils/debug.h"
 #include "../data_structures/dequeue/dequeue.h"
 #include "database/database_actions.h"
 #include "tcp_shell_macros.h"

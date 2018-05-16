@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #include "lock_free_set.h"
-#include "../../../debug.h"
+#include "../../../utils/debug.h"
 #include "../atomic.h"
 
 // private function

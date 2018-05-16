@@ -3,7 +3,7 @@
 //
 
 #include "key_value_database_allocator.h"
-#include "../../../debug.h"
+#include "../../../utils/debug.h"
 #include "../../../data_structures/stack/stack.h"
 
 static Stack* stack;

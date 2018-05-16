@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include "server_connection.h"
-#include "../debug.h"
+#include "../utils/debug.h"
 #include "database/database_actions.h"
 
 int iSetOption =1; // added options for socket connection

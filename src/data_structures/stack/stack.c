@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include "stack.h"
-#include "../../debug.h"
+#include "../../utils/debug.h"
 
 #define ALLOCATOR_STACK_INIT_SIZE 100
 

@@ -7,7 +7,7 @@
 #include "../lib/ctest/ctest.h"
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set.h"
 #include "../../src/data_structures/parallel/lock_free_set/lock_free_set_hash.h"
-#include "../../src/debug.h"
+#include "../../src/utils/debug.h"
 #include "utils/random.h"
 
 #define ARRAY_LENGTH 10

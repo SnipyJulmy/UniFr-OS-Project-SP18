@@ -15,10 +15,10 @@
 /* Macros */
 
 #define MAKE_AND_SEND do {\
-                    mkSendBuffer(command);\
-                    debug("send following command to the server :\n\t%s\n", sendBuff);\
-                    write(socket_fd, sendBuff, strlen(sendBuff));\
-                } while(0);
+        mkSendBuffer(command);\
+        debug("send following command to the server :\n\t%s\n", sendBuff);\
+        write(socket_fd, sendBuff, strlen(sendBuff));\
+        } while(0);
 
 #define CHECK_ARGC_AND_SEND_COMMAND(NB, COMMAND_NAME) do {\
         if(command->argc != (NB)) \
@@ -56,7 +56,7 @@ static void mkSendBuffer(Command* command);
 
 static char* fetchTcpLine(int socket_fd);
 
-void shell_loop(int socket_fd, struct sockaddr_in* socket_addr)
+void shell_loop(int socket_fd)
 {
     char* line;
     Command* command;
@@ -91,7 +91,7 @@ static void shell_command_destroy(Command* self)
 
 static int shell_execute(Command* command, int socket_fd)
 {
-    // Commented this in order to make test as repeatedely printf
+    // Commented this in order to make test as repeated printf
     /*if (command->argc <= 0)
     {
         debug("No command to execute");
@@ -106,7 +106,7 @@ static int shell_execute(Command* command, int socket_fd)
     {
         printf("Usage:\n");
         printf(" ls: \t\t\t\t\tlist table \n add <value>, add <key, value>: \tadd element \n read <key>: \t\t\t\tread element \n");
-        printf(" delete <key>: \t\t\t\tdelete element \n update <key, newvalue>: \t\tupdate element \n exit: \t\t\t\t\tquit\n");
+        printf(" delete <key>: \t\t\t\tdelete element \n update <key, new_value>: \t\tupdate element \n exit: \t\t\t\t\tquit\n");
         return STATUS_OK;
     }
     else if (strcmp(command->args[0], "ls") == 0)
@@ -159,7 +159,7 @@ static int shell_execute(Command* command, int socket_fd)
     }
     else
     {
-        log_info("Unknow command : %s\n", command->args[0]);
+        log_info("Unknown command : %s\n", command->args[0]);
         log_info("Type help to get the list of available command and usage");
     }
 

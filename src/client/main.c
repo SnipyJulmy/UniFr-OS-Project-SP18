@@ -51,6 +51,6 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    shell_loop(socket_fd, &server_addr);
+    shell_loop(socket_fd);
     return EXIT_SUCCESS;
 }

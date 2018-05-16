@@ -17,6 +17,6 @@ struct Command
 };
 
 Command* shell_command_create(char** args, int argc);
-void shell_loop(int socket_fd, struct sockaddr_in* socket_addr);
+void shell_loop(int socket_fd);
 
 #endif //KEY_VALUE_DATABASE_SHELL_H

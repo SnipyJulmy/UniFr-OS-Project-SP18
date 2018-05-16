@@ -526,7 +526,6 @@ bool lock_free_data_update(Set* self, uint32_t key, void* data)
     Node* pred;
     Node* curr;
     Node* bucket;
-    Node* tmpNext;
     Conversion next;
 
     if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
@@ -573,5 +572,6 @@ uint32_t lock_free_data_read_key_from_value(Set* self, void* data)
         firstBucket++;
     }
     end:
+    // TODO set errno
     return NULL;
 }

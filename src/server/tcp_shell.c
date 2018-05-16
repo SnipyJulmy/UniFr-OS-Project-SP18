@@ -243,6 +243,5 @@ static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs)
     if (n <= 0)
         return NULL;
     buffer[n] = 0;
-    // TODO check n
     return buffer;
 }

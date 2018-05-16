@@ -60,7 +60,6 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     set->size = INIT_SET_SIZE;
     set->item_count = 0;
 
-    // TODO initialize all the methods
     // Methods binding
     set->add = lock_free_data_add;
     set->add_with_key = lock_free_data_add_with_key;
@@ -106,7 +105,6 @@ Set* lock_free_data_create_set(uint32_t (* fn_hashcode)(void*))
     return set;
 }
 
-// TODO do it with allocator node... -> simpler
 void lock_free_data_free(Set* self)
 {
     for (int i = 0; self->first_bucket[i] != NULL; i++)
@@ -266,7 +264,9 @@ bool lock_free_data_add(Set* self, void* data)
     return true;
 }
 
-// TODO don't work as expected...
+// don't work if we use custom key...
+// the key is generated from the address of the data and
+// not the data itself...
 bool lock_free_data_remove(Set* self, void* data)
 {
     Node* pred;
@@ -333,8 +333,6 @@ bool lock_free_data_contains_from_value(Set* self, void* data)
     return false;
 }
 
-
-// TODO don't work
 bool lock_free_data_remove_from_value(Set* self, void* data)
 {
     Node*** firstBucket = self->first_bucket;
@@ -464,7 +462,6 @@ bool lock_free_data_add_with_key(Set* self, uint32_t key, void* data)
     return true;
 }
 
-// TODO
 void* lock_free_data_read(Set* self, uint32_t key)
 {
     Node* pred;
@@ -474,7 +471,6 @@ void* lock_free_data_read(Set* self, uint32_t key)
 
     if ((bucket = lock_free_data_get_secondary_bucket(self, key % self->size)) == NULL)
     {
-        // TODO set ERRNO
         return NULL;
     }
     key = lock_free_data_reverse(key);

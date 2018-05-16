@@ -176,8 +176,6 @@ static char* fetchTcpLine(int socket_fd)
     if (n <= 0)
         return NULL;
     buffer[n] = 0;
-    //printf("this is n %d",n);
-    // TODO check n ::at set is x and at read is x+5 seems ok
     return buffer;
 }
 

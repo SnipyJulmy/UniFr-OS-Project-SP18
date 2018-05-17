@@ -92,12 +92,12 @@ static void shell_command_destroy(Command* self)
 static int shell_execute(Command* command, int socket_fd)
 {
     // Commented this in order to make test as repeated printf
-    /*if (command->argc <= 0)
+    if (command->argc <= 0)
     {
         debug("No command to execute");
         printf("type help for the usage\n");
         return STATUS_OK;
-    }*/
+    }
     if (strcmp(command->args[0], "exit") == 0)
     {
         return STATUS_EXIT;
@@ -105,8 +105,14 @@ static int shell_execute(Command* command, int socket_fd)
     else if (strcmp(command->args[0], "help") == 0)
     {
         printf("Usage:\n");
-        printf(" ls: \t\t\t\t\tlist table \n add <value>, add <key, value>: \tadd element \n read <key>: \t\t\t\tread element \n");
-        printf(" delete <key>: \t\t\t\tdelete element \n update <key, new_value>: \t\tupdate element \n exit: \t\t\t\t\tquit\n");
+        printf("ls: \t\t\t\t\tlist table \n");
+        printf("add <value>, add <key, value>: \t\tadd element \n");
+        printf("read_k <key>: \t\t\t\tread value from key \n");
+        printf("read_v <value>: \t\t\tread key from value\n");
+        printf("rm_k <key>: \t\t\t\tdelete <k,v> from key\n");
+        printf("rm_v <value> \t\t\t\tdelete <k,v> from value \n");
+        printf("update_kv <key, new_value>: \t\tupdate element \n");
+        printf("q: \t\t\t\t\tquit\n");
         return STATUS_OK;
     }
     else if (strcmp(command->args[0], "ls") == 0)
@@ -121,33 +127,33 @@ static int shell_execute(Command* command, int socket_fd)
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }
-    else if (strcmp(command->args[0], "read") == 0)
+    else if (strcmp(command->args[0], "read_k") == 0)
     {
-        CHECK_ARGC_AND_SEND_COMMAND(2, "read");
+        CHECK_ARGC_AND_SEND_COMMAND(2, "read_k");
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }
-    else if (strcmp(command->args[0], "delete") == 0)
+    else if (strcmp(command->args[0], "read_v") == 0)
     {
-        CHECK_ARGC_AND_SEND_COMMAND(2, "delete");
+        CHECK_ARGC_AND_SEND_COMMAND(2, "read_v");
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }
-    else if (strcmp(command->args[0], "update") == 0)
+    else if (strcmp(command->args[0], "rm_k") == 0)
     {
-        CHECK_ARGC_AND_SEND_COMMAND(3, "update");
+        CHECK_ARGC_AND_SEND_COMMAND(2, "rm_k");
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }
-    else if (strcmp(command->args[0], "delete_value") == 0)
+    else if (strcmp(command->args[0], "rm_v") == 0)
     {
-        CHECK_ARGC_AND_SEND_COMMAND(2, "delete_value");
+        CHECK_ARGC_AND_SEND_COMMAND(2, "rm_v");
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }
-    else if (strcmp(command->args[0], "read_key") == 0)
+    else if (strcmp(command->args[0], "update_kv") == 0)
     {
-        CHECK_ARGC_AND_SEND_COMMAND(2, "read_key");
+        CHECK_ARGC_AND_SEND_COMMAND(3, "update_kv");
         char* line = fetchTcpLine(socket_fd);
         printf("%s\n", line);
     }

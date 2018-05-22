@@ -15,7 +15,7 @@
 
 #define MAKE_AND_SEND do {\
         mkSendBuffer(command);\
-        debug("send following command to the server :\n\t%s\n", sendBuff);\
+        log_info("send following command to the server :\n\t%s\n", sendBuff);\
         write(socket_fd, sendBuff, strlen(sendBuff));\
         } while(0);
 

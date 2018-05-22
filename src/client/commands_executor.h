@@ -5,6 +5,6 @@
 #ifndef KEY_VALUE_DATABASE_COMMANDS_EXECUTOR_H
 #define KEY_VALUE_DATABASE_COMMANDS_EXECUTOR_H
 
-int process_command_file(const char* filename);
+int process_command_file(const char* filename, int socket_fd);
 
 #endif //KEY_VALUE_DATABASE_COMMANDS_EXECUTOR_H

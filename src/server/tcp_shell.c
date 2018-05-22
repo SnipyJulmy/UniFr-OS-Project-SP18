@@ -61,13 +61,13 @@ Command* tcp_shell_command_create(char** args, int argc)
     return command;
 }
 
-static void tcp_shell_command_destroy(Command* self)
+void tcp_shell_command_destroy(Command* self)
 {
     free(self->args);
     free(self);
 }
 
-static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
+int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
 {
     if (command->argc <= 0)
     {
@@ -206,7 +206,7 @@ static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionA
     return STATUS_OK;
 }
 
-static Command* tcp_shell_tokenize_line(char* line)
+Command* tcp_shell_tokenize_line(char* line)
 {
     int buffer_size = SHELL_BUFFER_SIZE;
     int position = 0;
@@ -233,7 +233,7 @@ static Command* tcp_shell_tokenize_line(char* line)
 }
 
 // read a line from the command line interface
-static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs)
+char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs)
 {
     ssize_t n;
     int buffer_size = SHELL_BUFFER_SIZE;

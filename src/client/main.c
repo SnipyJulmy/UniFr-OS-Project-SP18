@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
             for (int j = 0; j < nb_file; j++)
             {
                 log_info("Process command file %s : ", files[j]);
-                int status = process_command_file(files[j]);
+                int status = process_command_file(files[j], socket_fd);
                 if (status == EXIT_FAILURE)
                 {
                     // TODO

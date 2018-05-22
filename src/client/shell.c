@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -95,7 +94,7 @@ static int shell_execute(Command* command, int socket_fd)
     if (command->argc <= 0)
     {
         debug("No command to execute");
-        printf("type help for the usage\n");
+        //printf("type help for the usage\n");
         return STATUS_OK;
     }
     if (strcmp(command->args[0], "exit") == 0)

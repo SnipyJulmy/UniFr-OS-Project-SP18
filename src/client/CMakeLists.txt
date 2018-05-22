@@ -10,4 +10,6 @@ file(GLOB_RECURSE UTILS ../utils/*.c ../utils/*.h)
 add_executable(client
         ${SOURCE}
         ${UTILS}
+        ../../lib/argparser/src/argparser.c
+        ../../lib/argparser/src/argparser.h
         )

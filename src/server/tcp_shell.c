@@ -8,6 +8,7 @@
 
 #include "tcp_shell.h"
 #include "../utils/debug.h"
+#include "../utils/command_interface.h"
 #include "../data_structures/dequeue/dequeue.h"
 #include "database/database_actions.h"
 #include "tcp_shell_macros.h"
@@ -18,10 +19,6 @@
 #define STATUS_FAILURE 2
 #define STATUS_OK 1
 #define STATUS_EXIT 0
-
-#define COMMAND_EMPTY "__command_empty"
-#define COMMAND_ERROR "__command_error"
-#define COMMAND_OK "__command_ok"
 
 // server buffer to send back information to the client
 char sendBuff[SHELL_BUFFER_SIZE];

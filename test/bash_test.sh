@@ -7,8 +7,8 @@ cd ./cmake-build-debug/src/client
 rm list-cmd.txt
 for i in {1..500}
 do
-    echo "delete $i">> list-cmd.txt
-    echo "add $i">> list-cmd.txt
+    echo "add $i $i">> list-cmd.txt
+    echo "read $i">> list-cmd.txt
 done
 echo "ls" >> list-cmd.txt
 

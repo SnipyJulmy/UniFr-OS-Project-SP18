@@ -14,7 +14,7 @@
  */
 
 // #define NDEBUG
-#define LOG_LEVEL LOG_LEVEL_INFO
+#define LOG_LEVEL LOG_LEVEL_WARN
 
 /*
  * Definition

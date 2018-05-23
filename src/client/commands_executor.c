@@ -35,9 +35,9 @@
             gettimeofday(&start, NULL); \
             STATEMENT \
             gettimeofday(&end, NULL); \
-            sprintf(log_buffer, "[start]%li\n" \
+            sprintf(log_buffer, "[start]%li\ncommand : %s\n" \
                                 "%s\n" \
-                                "[end]%li\n\n", start.tv_usec, res, end.tv_usec); \
+                                "[end]%li\n\n", start.tv_usec, sendBuff ,res, end.tv_usec); \
             fputs(log_buffer, log); \
             log_info("write into the log file"); \
             } while(0);
@@ -133,7 +133,7 @@ int process_command_file(const char* filename, const char* log_filename, int soc
     log_info("for each line");
     while (fgets(line, sizeof(line), file))
     {
-        log_info("line value : %s",line);
+        log_info("line value : %s", line);
         // tokenize the line
         FileCommand* command = file_command_tokenize_line(line);
 
@@ -223,7 +223,7 @@ void mkSendBuffer(FileCommand* command)
     snprintf(sendBuff, sizeof(sendBuff), "%s", command->args[0]);
     size_t size_used = strlen(command->args[0]);
 
-    for (int i = 1; i < command->argc - 1; i++)
+    for (int i = 1; i < command->argc; i++)
     {
         snprintf(
                 &(sendBuff[size_used]),

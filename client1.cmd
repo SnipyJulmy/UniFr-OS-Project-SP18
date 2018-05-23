@@ -9,8 +9,8 @@ read_k 2
 read_v c
 read_v b
 read_v a
-update 3 b
-update 2 c
+update_kv 3 b
+update_kv 2 c
 read_k 1
 read_k 2
 read_k 3
@@ -21,7 +21,7 @@ rm_k 2
 read_k 2
 rm_v b
 read_k 3
-update 1 d
+update_kv 1 d
 read_k 1
 read_v d
 rm_k 1

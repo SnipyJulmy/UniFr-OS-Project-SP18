@@ -9,8 +9,11 @@
 - `ls` display the content of the database
 - `add <key> <value>` add the specified *value*, related to the specified *key*, to the database
 - `add <value>` add the specified *value* to the database and return the associated key 
-- `read <key>` return the value of the associated *key*
-- `delete <key>` delete the database entry specified by *key* 
+- `read_k <key>` return the value of the associated *key*
+- `read_v <value>` return a key for the associated *value*
+- `rm_k <key>` delete the database entry specified by *key*
+- `rm_v <value>` delete a database entry specified by *value*
+ 
 - `update <key> <value>` update the value specified by *key*, if *key* don't exist, the behavior is similar to `add <key> <value>` 
 - `q` terminate the server process
 

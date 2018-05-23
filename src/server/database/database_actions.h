@@ -23,6 +23,9 @@
 #include "key_value_database_typedef.h"
 #include "../../data_structures/dequeue/dequeue.h"
 
+void database_actions_init(void);
+void database_actions_destroy(void);
+
 Key database_actions_insert_v(Value* value);
 bool database_actions_insert_kv(Key key, Value* value);
 Value* database_actions_read_v_from_key(Key key);
@@ -34,8 +37,6 @@ bool database_actions_remove_from_k(Key key);
 bool database_actions_remove_from_kv(Key key, Value* value);
 bool database_actions_remove_from_v(Value* value);
 bool database_actions_update_kv(Key key, Value* value);
-void database_actions_init(void);
-void database_actions_destroy(void);
 Dequeue* database_actions_ls(void);
 
 #endif //KEY_VALUE_DATABASE_DATABASE_ACTIONS_H

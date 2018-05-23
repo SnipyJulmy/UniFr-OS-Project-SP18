@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #define MAKE_AND_SEND do {\
         mkSendBuffer(command);\
@@ -29,6 +30,18 @@
             return STATUS_FAILURE;\
         }}while(0);\
         MAKE_AND_SEND;
+
+#define ELAPSED_TIME(STATEMENT) do{\
+            gettimeofday(&start, NULL); \
+            STATEMENT \
+            gettimeofday(&end, NULL); \
+            start.tv_usec; \
+            sprintf(log_buffer, "[start]%li\n" \
+                                "%s\n" \
+                                "[end%li]\n\n", start.tv_usec, res, end.tv_usec); \
+            fputs(log_buffer, log); \
+            log_info("write into the log file"); \
+            } while(0);
 
 #define FILE_COMMAND_BUFFER_SIZE 1024
 #define FILE_COMMAND_TOKEN_DELIMITER " \t\n\r\a"
@@ -97,7 +110,7 @@ FileCommand* file_command_tokenize_line(char* line)
     return file_command_create(tokens, position);
 }
 
-int process_command_file(const char* filename, int socket_fd)
+int process_command_file(const char* filename, const char* log_filename, int socket_fd)
 {
     FILE* file = fopen(filename, "r");
     check_mem(file, {
@@ -105,7 +118,18 @@ int process_command_file(const char* filename, int socket_fd)
         return EXIT_FAILURE;
     });
 
+    FILE* log = fopen(log_filename, "a+");
+    check_mem(log, {
+        fclose(file);
+        log_err("can't create or open file %s", log_filename);
+        return EXIT_FAILURE;
+    });
+
     char line[512];
+
+    char log_buffer[512];
+    struct timeval start;
+    struct timeval end;
 
     log_info("for each line");
     while (fgets(line, sizeof(line), file))
@@ -115,9 +139,10 @@ int process_command_file(const char* filename, int socket_fd)
 
         if (strcmp(command->args[0], "add") == 0)
         {
-            CHECK_ARGC_AND_SEND_COMMAND2(2, 3, "add");
-            char* res = fetchTcpLine(socket_fd);
-            printf("%s\n", res);
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND2(2, 3, "add");
+                    char* res = fetchTcpLine(socket_fd);
+            );
         }
         else if (strcmp(command->args[0], "read") == 0)
         {
@@ -155,6 +180,7 @@ int process_command_file(const char* filename, int socket_fd)
     }
 
     fclose(file);
+    fclose(log);
     return EXIT_SUCCESS;
 }
 

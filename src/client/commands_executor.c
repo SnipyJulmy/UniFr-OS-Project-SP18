@@ -16,7 +16,7 @@
         } while(0);
 
 #define CHECK_ARGC_AND_SEND_COMMAND(NB, COMMAND_NAME) do {\
-        if(command->argc != (1+(NB))) \
+        if(command->argc != (NB)) \
         {\
             log_warn("Invalid number of argument for : " COMMAND_NAME);\
             return STATUS_FAILURE;\
@@ -24,7 +24,7 @@
         MAKE_AND_SEND;
 
 #define CHECK_ARGC_AND_SEND_COMMAND2(A, B, COMMAND_NAME) do {\
-        if(command->argc != ((A)+1) && command->argc != ((B)+1)) \
+        if(command->argc != (A) && command->argc != (B)) \
         {\
             log_warn("Invalid number of argument for : " COMMAND_NAME);\
             return STATUS_FAILURE;\
@@ -133,6 +133,7 @@ int process_command_file(const char* filename, const char* log_filename, int soc
     log_info("for each line");
     while (fgets(line, sizeof(line), file))
     {
+        log_info("line value : %s",line);
         // tokenize the line
         FileCommand* command = file_command_tokenize_line(line);
 
@@ -146,7 +147,7 @@ int process_command_file(const char* filename, const char* log_filename, int soc
         else if (strcmp(command->args[0], "ls") == 0)
         {
             ELAPSED_TIME(
-                    CHECK_ARGC_AND_SEND_COMMAND(2, "ls");
+                    CHECK_ARGC_AND_SEND_COMMAND(1, "ls");
                     char* res = fetchTcpLine(socket_fd);
             );
         }

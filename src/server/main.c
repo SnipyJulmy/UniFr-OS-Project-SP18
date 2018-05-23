@@ -61,7 +61,7 @@ int main(void)
             log_err("Can't create thread to handle connection %d\n", connfd);
         }
 
-        sleep(1);
+        // sleep(1);
         // TODO Idea :
         /*
          *  Add a stop command with password etc...

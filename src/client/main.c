@@ -39,8 +39,11 @@ int main(int argc, char* argv[])
 
     args_add_option(args_new_argumentless(NULL, 1, "-h", "-?", "--help", NULL),
                     "Prints this help message\n(and exits)");
-    args_add_option(args_new_argumented(NULL, "LINE", 0, "-f", "--file", NULL),
+    args_add_option(args_new_argumented(NULL, "FILE", 0, "-f", "--file", NULL),
                     "read a file a execute the command from it");
+    args_add_option(args_new_argumented(NULL, "FILE", 0, "-l", "--logfile", NULL),
+                    "specify the name of the logfile");
+
     args_add_option(args_new_variadic(NULL, "LINE", 0, "-F", "--files", NULL),
                     "read multiple files a execute the commands from it");
 
@@ -95,10 +98,13 @@ int main(int argc, char* argv[])
             size_t nb_file = args_opts_get_count("-f");
             char** files = args_opts_get("-f");
 
+            size_t nb_log_file = args_opts_get_count("-l");
+            char** log_files = args_opts_get("-l");
+
             for (int j = 0; j < nb_file; j++)
             {
                 log_info("Process command file %s : ", files[j]);
-                int status = process_command_file(files[j], socket_fd);
+                int status = process_command_file(files[j], log_files[j], socket_fd);
                 if (status == EXIT_FAILURE)
                 {
                     // TODO

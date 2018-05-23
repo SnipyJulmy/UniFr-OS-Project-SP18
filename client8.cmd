@@ -3,26 +3,26 @@ add 16 a
 add 26 b
 add 36 c
 ls
-read_k 16
-read_k 36
-read_k 26
-read_v c
-read_v b
-read_v a
+read_v 16
+read_v 36
+read_v 26
+read_k c
+read_k b
+read_k a
 update_kv 36 b
 update_kv 26 c
-read_k 16
-read_k 26
-read_k 36
-read_v b
-read_v c
-read_v a
+read_v 16
+read_v 26
+read_v 36
+read_k b
+read_k c
+read_k a
 rm_k 26
-read_k 26
+read_v 26
 rm_v b
-read_k 36
+read_v 36
 update_kv 16 d
-read_k 16
-read_v d
+read_v 16
+read_k d
 rm_k 16
 ls

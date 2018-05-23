@@ -3,26 +3,26 @@ add 13 a
 add 23 b
 add 33 c
 ls
-read 13
-read 33
-read 23
-read c
-read b
-read a
+read_k 13
+read_k 33
+read_k 23
+read_v c
+read_v b
+read_v a
 update 33 b
 update 23 c
-read 13
-read 23
-read 33
-read b
-read c
-read a
+read_k 13
+read_k 23
+read_k 33
+read_v b
+read_v c
+read_v a
 rm_k 23
-read 23
+read_k 23
 rm_v b
-read 33
+read_k 33
 update 13 d
-read 13
-read d
+read_k 13
+read_v d
 rm_k 13
 ls

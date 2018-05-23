@@ -3,26 +3,26 @@ add 10 a
 add 20 b
 add 30 c
 ls
-read 10
-read 30
-read 20
-read c
-read b
-read a
+read_k 10
+read_k 30
+read_k 20
+read_v c
+read_v b
+read_v a
 update 30 b
 update 20 c
-read 10
-read 20
-read 30
-read b
-read c
-read a
+read_k 10
+read_k 20
+read_k 30
+read_v b
+read_v c
+read_v a
 rm_k 20
-read 20
+read_k 20
 rm_v b
-read 30
+read_k 30
 update 10 d
-read 10
-read d
+read_k 10
+read_v d
 rm_k 10
 ls

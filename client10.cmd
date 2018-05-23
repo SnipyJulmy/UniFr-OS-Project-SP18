@@ -3,26 +3,26 @@ add 18 a
 add 28 b
 add 38 c
 ls
-read 18
-read 38
-read 28
-read c
-read b
-read a
+read_k 18
+read_k 38
+read_k 28
+read_v c
+read_v b
+read_v a
 update 38 b
 update 28 c
-read 18
-read 28
-read 38
-read b
-read c
-read a
+read_k 18
+read_k 28
+read_k 38
+read_v b
+read_v c
+read_v a
 rm_k 28
-read 28
+read_k 28
 rm_v b
-read 38
+read_k 38
 update 18 d
-read 18
-read d
+read_k 18
+read_v d
 rm_k 18
 ls

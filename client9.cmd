@@ -3,26 +3,26 @@ add 17 a
 add 27 b
 add 37 c
 ls
-read 17
-read 37
-read 27
-read c
-read b
-read a
+read_k 17
+read_k 37
+read_k 27
+read_v c
+read_v b
+read_v a
 update 37 b
 update 27 c
-read 17
-read 27
-read 37
-read b
-read c
-read a
+read_k 17
+read_k 27
+read_k 37
+read_v b
+read_v c
+read_v a
 rm_k 27
-read 27
+read_k 27
 rm_v b
-read 37
+read_k 37
 update 17 d
-read 17
-read d
+read_k 17
+read_v d
 rm_k 17
 ls

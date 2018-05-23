@@ -8,7 +8,7 @@ read_k 3
 read_k 2
 read_v c
 read_v b
-read a
+read_v a
 update 3 b
 update 2 c
 read_k 1
@@ -18,7 +18,7 @@ read_v b
 read_v c
 read_v a
 rm_k 2
-read 2
+read_k 2
 rm_v b
 read_k 3
 update 1 d

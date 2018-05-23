@@ -46,3 +46,14 @@ cmake-build-debug
 /**/CMakeCache.txt
 /lib/
 *.log
+Supprimerait client_1.cmd
+Supprimerait client_10.cmd
+Supprimerait client_2.cmd
+Supprimerait client_3.cmd
+Supprimerait client_4.cmd
+Supprimerait client_5.cmd
+Supprimerait client_6.cmd
+Supprimerait client_7.cmd
+Supprimerait client_8.cmd
+Supprimerait client_9.cmd
+Supprimerait run.sh

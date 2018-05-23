@@ -35,10 +35,9 @@
             gettimeofday(&start, NULL); \
             STATEMENT \
             gettimeofday(&end, NULL); \
-            start.tv_usec; \
             sprintf(log_buffer, "[start]%li\n" \
                                 "%s\n" \
-                                "[end%li]\n\n", start.tv_usec, res, end.tv_usec); \
+                                "[end]%li\n\n", start.tv_usec, res, end.tv_usec); \
             fputs(log_buffer, log); \
             log_info("write into the log file"); \
             } while(0);

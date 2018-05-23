@@ -7,6 +7,7 @@
 
 #include "dequeue.h"
 #include "../../utils/debug.h"
+#include "../../server/database/key_value_database_typedef.h"
 
 /************************************************************************************/
 /*                                START PRIVATE DECLARATION                         */

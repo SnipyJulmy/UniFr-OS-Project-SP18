@@ -14,7 +14,7 @@
 - `rm_k <key>` delete the database entry specified by *key*
 - `rm_v <value>` delete a database entry specified by *value*
  
-- `update <key> <value>` update the value specified by *key*, if *key* don't exist, the behavior is similar to `add <key> <value>` 
+- `update_kv <key> <value>` update the value specified by *key*, if *key* don't exist, the behavior is similar to `add <key> <value>` 
 - `q` terminate the server process
 
 ## Project specifications

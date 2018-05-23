@@ -1,4 +1,4 @@
-add 1 a 1
-add 2 b 2
-add 3 c 3
+add 1 a
+add 2 b
+add 3 c
 read 3 c

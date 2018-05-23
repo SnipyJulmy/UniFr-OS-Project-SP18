@@ -155,7 +155,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
     }
     else if (strcmp(command->args[0], "rm_k") == 0) // delete a <k,v> from a key
     {
-        CHECK_ARGC_2(2, 3, "rm_k");
+        CHECK_ARGC(2, "rm_k");
         Key key = (Key) strtoul(command->args[1], NULL, 10);
         Value value = command->argc == 2 ?
                       "\0" :

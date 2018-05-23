@@ -144,35 +144,61 @@ int process_command_file(const char* filename, const char* log_filename, int soc
                     char* res = fetchTcpLine(socket_fd);
             );
         }
-        else if (strcmp(command->args[0], "read") == 0)
+        else if (strcmp(command->args[0], "ls") == 0)
         {
-            CHECK_ARGC_AND_SEND_COMMAND(2, "read");
-            char* res = fetchTcpLine(socket_fd);
-            printf("%s\n", res);
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "ls");
+                    char* res = fetchTcpLine(socket_fd);
+            );
         }
-        else if (strcmp(command->args[0], "delete") == 0)
+        else if (strcmp(command->args[0], "read_v") == 0)
         {
-            CHECK_ARGC_AND_SEND_COMMAND(2, "delete");
-            char* res = fetchTcpLine(socket_fd);
-            printf("%s\n", res);
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "read_v");
+                    char* res = fetchTcpLine(socket_fd);
+            );
         }
-        else if (strcmp(command->args[0], "update") == 0)
+        else if (strcmp(command->args[0], "read_k") == 0)
         {
-            CHECK_ARGC_AND_SEND_COMMAND(3, "update");
-            char* res = fetchTcpLine(socket_fd);
-            printf("%s\n", res);
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "read_k");
+                    char* res = fetchTcpLine(socket_fd);
+            );
+        }
+        else if (strcmp(command->args[0], "rm_k") == 0)
+        {
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "rm_k");
+                    char* res = fetchTcpLine(socket_fd);
+            );
+        }
+        else if (strcmp(command->args[0], "rm_v") == 0)
+        {
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "rm_v");
+                    char* res = fetchTcpLine(socket_fd);
+            );
+        }
+        else if (strcmp(command->args[0], "update_kv") == 0)
+        {
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(3, "update_kv");
+                    char* res = fetchTcpLine(socket_fd);
+            );
         }
         else if (strcmp(command->args[0], "delete_value") == 0)
         {
-            CHECK_ARGC_AND_SEND_COMMAND(2, "delete_value");
-            char* res = fetchTcpLine(socket_fd);
-            printf("%s\n", res);
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "delete_value");
+                    char* res = fetchTcpLine(socket_fd);
+            );
         }
         else if (strcmp(command->args[0], "read_key") == 0)
         {
-            CHECK_ARGC_AND_SEND_COMMAND(2, "read_key");
-            char* res = fetchTcpLine(socket_fd);
-            printf("%s\n", res);
+            ELAPSED_TIME(
+                    CHECK_ARGC_AND_SEND_COMMAND(2, "read_key");
+                    char* res = fetchTcpLine(socket_fd);
+            );
         }
 
         // free the command

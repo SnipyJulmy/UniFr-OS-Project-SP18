@@ -20,31 +20,32 @@
 #define STATUS_OK 1
 #define STATUS_EXIT 0
 
+
 // server buffer to send back information to the client
-char sendBuff[SHELL_BUFFER_SIZE];
 
 static char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs);
 static Command* tcp_shell_tokenize_line(char* line);
-static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs);
+static int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs, char* sendBuff);
 static void tcp_shell_command_destroy(Command* self);
 
 void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
 {
-    char* line;
-    Command* command;
     int status;
+    char sendBuff[SHELL_BUFFER_SIZE];
+
+    log_info("conn info : %d %p\n", connectionArgs->connfd, connectionArgs->pthread);
 
     do
     {
-        line = tcp_shell_read_line(connectionArgs);
+        char* line = tcp_shell_read_line(connectionArgs);
+        log_info("execute command : %s", line);
         if (line == NULL)
         {
             log_err("line is null when reading from the tcp socket");
             goto end;
         }
-        command = tcp_shell_tokenize_line(line);
-        command->original_line = line;
-        status = tcp_shell_execute(command, connectionArgs);
+        Command* command = tcp_shell_tokenize_line(line);
+        status = tcp_shell_execute(command, connectionArgs, sendBuff);
         command->destroy(command);
     } while (status != STATUS_EXIT);
     end:;
@@ -53,21 +54,20 @@ void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
 Command* tcp_shell_command_create(char** args, int argc)
 {
     Command* command = malloc(1 * sizeof(Command));
+    check_mem_and_exit(command);
     command->args = args;
     command->argc = argc;
     command->destroy = tcp_shell_command_destroy;
-    check_mem_and_exit(command);
     return command;
 }
 
 void tcp_shell_command_destroy(Command* self)
 {
-    free(self->original_line);
     free(self->args);
     free(self);
 }
 
-int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
+int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs, char* sendBuff)
 {
     if (command->argc <= 0)
     {
@@ -87,7 +87,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
             {
                 KV* elt = dequeue->remove_first(dequeue);
                 size_used += snprintf(sendBuff + size_used,
-                                      sizeof(sendBuff),
+                                      sizeof(char) * SHELL_BUFFER_SIZE,
                                       "<%u,%s>\n",
                                       elt->key, elt->value);
             }
@@ -116,7 +116,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
             {
                 RETURN_COMMAND_ERROR("unable to insert value <%s>", *value);
             }
-            snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
+            snprintf(sendBuff, sizeof(char) * SHELL_BUFFER_SIZE, "key2 : %u", key);
         }
         else // command->argc == 3
         {
@@ -130,7 +130,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
             bool status = database_actions_insert_kv(key, value);
             if (!status)
                 RETURN_COMMAND_ERROR("unable to add <%u,%s>", key, *value);
-            snprintf(sendBuff, sizeof(sendBuff), "key : %u", key);
+            snprintf(sendBuff, sizeof(char) * SHELL_BUFFER_SIZE, "key3 : %u", key);
         }
         debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
@@ -143,7 +143,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
         Key key = database_actions_read_k_from_v(&value);
         if (key == NULL)
             RETURN_COMMAND_ERROR("unable to find a key for the value %s", value);
-        snprintf(sendBuff, sizeof(sendBuff), "read : <%u,%s>", key, value);
+        snprintf(sendBuff, sizeof(char) * SHELL_BUFFER_SIZE, "read : <%u,%s>", key, value);
         debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
     }
@@ -157,7 +157,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
         {
             RETURN_COMMAND_ERROR("unable to read <%u>", key);
         }
-        snprintf(sendBuff, sizeof(sendBuff), "read : <%u,%s>", key, *value);
+        snprintf(sendBuff, sizeof(char) * SHELL_BUFFER_SIZE, "read : <%u,%s>", key, *value);
         debug("send following to the client :\n\t%s\n", sendBuff);
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));
     }
@@ -217,9 +217,10 @@ Command* tcp_shell_tokenize_line(char* line)
     int position = 0;
     char** tokens = malloc(buffer_size * sizeof(char*));
     char* token;
+    char* savedptr = line;
 
     check_mem_and_exit(tokens);
-    token = strtok(line, SHELL_TOKEN_DELIMITER);
+    token = strtok_r(line, SHELL_TOKEN_DELIMITER, &savedptr);
     while (token != NULL)
     {
         tokens[position] = token;
@@ -231,10 +232,11 @@ Command* tcp_shell_tokenize_line(char* line)
             check_mem_and_exit(tokens);
         }
 
-        token = strtok(NULL, SHELL_TOKEN_DELIMITER);
+        token = strtok_r(NULL, SHELL_TOKEN_DELIMITER, &savedptr);
     }
     tokens[position] = NULL;
-    return tcp_shell_command_create(tokens, position);
+    Command* res = tcp_shell_command_create(tokens, position);
+    return res;
 }
 
 // read a line from the command line interface

@@ -13,7 +13,6 @@ struct Command
     // attributes
     char** args;
     int argc;
-    char* original_line;
 
     // methods
     void (* destroy)(Command* self);

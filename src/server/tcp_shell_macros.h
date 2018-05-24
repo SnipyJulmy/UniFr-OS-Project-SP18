@@ -8,7 +8,7 @@
 // echo on command->args[0]
 #define ECHO() \
     do {\
-    snprintf(sendBuff, sizeof(sendBuff), "echo %s", command->args[0]); \
+    snprintf(sendBuff,  sizeof(char) * SHELL_BUFFER_SIZE , "echo %s", command->args[0]); \
     write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
     return STATUS_OK; \
     } while(0);
@@ -21,9 +21,9 @@
                         if(command->argc != (NB)) \
                         { \
                             log_warn("Invalid number of argument for : " COMMAND_NAME \
-                                     " expected %d get %d original line is \"%s\" "\
-                                     ,NB,command->argc,command->original_line);\
-                            snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
+                                     " expected %d get %d"\
+                                     ,NB,command->argc);\
+                            snprintf(sendBuff,  sizeof(char) * SHELL_BUFFER_SIZE , COMMAND_ERROR); \
                             debug("send following to the client :\n\t%s\n", sendBuff);\
                             write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
                             return STATUS_OK;\
@@ -35,17 +35,17 @@
                         if(command->argc != (A) && command->argc != (B)) \
                         { \
                             log_warn("Invalid number of argument for : " COMMAND_NAME \
-                                     " expected %d or %d get %d original line is \"%s\" " \
-                                     ,A,B,command->argc,command->original_line);\
-                            for(int i=0;i<command->argc;i++) printf("%s\n",command->args[i]); \
-                            snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
+                                     " expected %d or %d get %d " \
+                                     ,A,B,command->argc);\
+                            /* for(int i=0;i<command->argc;i++) printf("%s\n",command->args[i]); */\
+                            snprintf(sendBuff,  sizeof(char) * SHELL_BUFFER_SIZE , COMMAND_ERROR); \
                             debug("send following to the client :\n\t%s\n", sendBuff);\
                             write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
                             return STATUS_OK;\
                         }} while(0);
 
 #define RETURN_COMMAND_ERROR(M, ...) do {\
-                        snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR " : " M, ##__VA_ARGS__);\
+                        snprintf(sendBuff,  sizeof(char) * SHELL_BUFFER_SIZE , COMMAND_ERROR " : " M, ##__VA_ARGS__);\
                         debug("send following to the client :\n\t%s\n", sendBuff);\
                         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
                         return STATUS_OK;\
@@ -53,7 +53,7 @@
 
 #define RETURN_COMMAND_OK()\
     do{\
-        snprintf(sendBuff, sizeof(sendBuff), COMMAND_OK);\
+        snprintf(sendBuff, sizeof(char) * SHELL_BUFFER_SIZE , COMMAND_OK);\
         debug("send following to the client :\n\t%s\n", sendBuff);\
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
         return STATUS_OK;\
@@ -61,7 +61,7 @@
 
 #define RETURN_COMMAND_EXIT()\
     do{\
-        snprintf(sendBuff, sizeof(sendBuff), COMMAND_OK);\
+        snprintf(sendBuff,  sizeof(char) * SHELL_BUFFER_SIZE , COMMAND_OK);\
         debug("send following to the client :\n\t%s\n", sendBuff);\
         write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
         return STATUS_EXIT;\
@@ -69,7 +69,7 @@
 
 #define RETURN_COMMAND_EMPTY()\
     do{\
-    snprintf(sendBuff, sizeof(sendBuff), COMMAND_EMPTY);\
+    snprintf(sendBuff, sizeof(char) * SHELL_BUFFER_SIZE, COMMAND_EMPTY);\
     debug("send following to the client :\n\t%s\n", sendBuff);\
     write(connectionArgs->connfd, sendBuff, strlen(sendBuff));\
     return STATUS_OK;\

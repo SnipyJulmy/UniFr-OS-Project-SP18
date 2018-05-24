@@ -10,8 +10,6 @@
 #include "../utils/debug.h"
 #include "tcp_shell.h"
 
-#define BUFFER_LENGTH 1025
-
 static void free_args(ServerConnectionArgs* self)
 {
     free(self->pthread);

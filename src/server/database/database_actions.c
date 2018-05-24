@@ -38,7 +38,10 @@ Key database_actions_insert_v(Value* value)
 
 bool database_actions_insert_kv(Key key, Value* value)
 {
-    return set->add_with_key(set, key, value);
+    bool status = set->add_with_key(set, key, value);
+    if(!status)
+        log_info("can't add <%u,%s>",key,*value);
+    return status;
 }
 
 Value* database_actions_read_v_from_key(Key key)
@@ -60,7 +63,10 @@ bool database_actions_contains_kv(Key key, Value* value)
 
 bool database_actions_remove_from_k(Key key)
 {
-    return set->remove_from_key(set, key);
+    bool status = set->remove_from_key(set, key);
+    if(!status)
+        log_info("can't remove key %u from the databse");
+    return status;
 }
 
 bool database_actions_remove_from_kv(Key key, Value* value)

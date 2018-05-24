@@ -124,15 +124,16 @@ int process_command_file(const char* filename, const char* log_filename, int soc
         return EXIT_FAILURE;
     });
 
-    char line[512];
+    char line[4096];
 
-    char log_buffer[512];
+    char log_buffer[4096];
     struct timeval start;
     struct timeval end;
 
     log_info("for each line");
     while (fgets(line, sizeof(line), file))
     {
+        usleep(2000);
         log_info("line value : %s", line);
         // tokenize the line
         FileCommand* command = file_command_tokenize_line(line);

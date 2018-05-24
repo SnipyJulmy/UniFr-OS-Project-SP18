@@ -38,11 +38,13 @@ void tcp_shell_loop(ServerConnectionArgs* connectionArgs)
     {
         line = tcp_shell_read_line(connectionArgs);
         if (line == NULL)
+        {
+            log_err("line is null when reading from the tcp socket");
             goto end;
+        }
         command = tcp_shell_tokenize_line(line);
+        command->original_line = line;
         status = tcp_shell_execute(command, connectionArgs);
-
-        free(line);
         command->destroy(command);
     } while (status != STATUS_EXIT);
     end:;
@@ -60,6 +62,7 @@ Command* tcp_shell_command_create(char** args, int argc)
 
 void tcp_shell_command_destroy(Command* self)
 {
+    free(self->original_line);
     free(self->args);
     free(self);
 }
@@ -103,8 +106,10 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
         if (command->argc == 2)
         {
             // allocate memory for the value
-            char** value = malloc(1 * sizeof(char*));
+            Value* value = malloc(1 * sizeof(char*));
+            check_mem_and_exit(value);
             value[0] = malloc(strlen(command->args[1]) * sizeof(char));
+            check_mem_and_exit(value[0]);
             strcpy(value[0], command->args[1]);
             key = database_actions_insert_v(value);
             if (key == 0)
@@ -116,7 +121,10 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
         else // command->argc == 3
         {
             Value* value = malloc(1 * sizeof(char*));
+            check_mem_and_exit(value);
             value[0] = malloc(strlen(command->args[2]) * sizeof(char));
+            check_mem_and_exit(value[0]);
+
             strcpy(value[0], command->args[2]);
             key = (Key) strtoul(command->args[1], NULL, 10);
             bool status = database_actions_insert_kv(key, value);
@@ -158,7 +166,7 @@ int tcp_shell_execute(Command* command, ServerConnectionArgs* connectionArgs)
         CHECK_ARGC(2, "rm_k");
         Key key = (Key) strtoul(command->args[1], NULL, 10);
         Value value = command->argc == 2 ?
-                      "\0" :
+                      "_" :
                       command->args[2];
         bool status = command->argc == 2 ?
                       database_actions_remove_from_k(key) :
@@ -236,9 +244,9 @@ char* tcp_shell_read_line(ServerConnectionArgs* connectionArgs)
     int buffer_size = SHELL_BUFFER_SIZE;
     char* buffer = malloc(buffer_size * sizeof(char));
 
-    n = read(connectionArgs->connfd, buffer, sizeof(char) * (buffer_size - 1));
+    while ((n = read(connectionArgs->connfd, buffer, sizeof(char) * (buffer_size - 1))) <= 0);
     if (n <= 0)
         return NULL;
-    buffer[n] = 0;
+    buffer[n] = '\0';
     return buffer;
 }

@@ -20,7 +20,9 @@
                         log_info("check argc for " COMMAND_NAME); \
                         if(command->argc != (NB)) \
                         { \
-                            log_warn("Invalid number of argument for : " COMMAND_NAME);\
+                            log_warn("Invalid number of argument for : " COMMAND_NAME \
+                                     " expected %d get %d original line is \"%s\" "\
+                                     ,NB,command->argc,command->original_line);\
                             snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
                             debug("send following to the client :\n\t%s\n", sendBuff);\
                             write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \
@@ -32,7 +34,10 @@
                         log_info("check argc for " COMMAND_NAME); \
                         if(command->argc != (A) && command->argc != (B)) \
                         { \
-                            log_warn("Invalid number of argument for : " COMMAND_NAME);\
+                            log_warn("Invalid number of argument for : " COMMAND_NAME \
+                                     " expected %d or %d get %d original line is \"%s\" " \
+                                     ,A,B,command->argc,command->original_line);\
+                            for(int i=0;i<command->argc;i++) printf("%s\n",command->args[i]); \
                             snprintf(sendBuff, sizeof(sendBuff), COMMAND_ERROR); \
                             debug("send following to the client :\n\t%s\n", sendBuff);\
                             write(connectionArgs->connfd, sendBuff, strlen(sendBuff)); \

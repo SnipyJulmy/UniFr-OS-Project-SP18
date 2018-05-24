@@ -240,6 +240,7 @@ CTEST(multi_thread_test, add_read_delete)
         end:;
     }
 
+    ASSERT_TRUE(set->item_count == 0);
     set->destroy(set);
 }
 
@@ -319,5 +320,6 @@ CTEST(multi_thread_test, add_read_delete_update)
         end:;
     }
 
+    ASSERT_TRUE(set->item_count == 0);
     set->destroy(set);
 }

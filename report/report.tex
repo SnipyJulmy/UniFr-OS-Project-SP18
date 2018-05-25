@@ -6,6 +6,7 @@
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{placeins}
+\usepackage{csquotes}
 
 \usepackage{etoolbox}
 \usepackage{sourcecodepro}
@@ -120,11 +121,18 @@ citestyle=alphabetic-verb
 
 \section*{Choosen approach}
 
+We have to take care of various aspect when choosing the data structure to
+store the key-value entry : maximal number of entry stored in the database,
+extension of the data structure, number of simultaneous access on the server and
+how to synchronize the threads.
+
+A lock-free hashset data structure offers solutions to all of those challenges.
+We have implements our own data structure in C based on the one created by
+Herliry in \cite{Herlihy2006} in Java.
+
 \section*{Challenges encountered}
 
 \section*{Conclusion}
-
-\chapter*{Bibliography}
 
 \printbibliography
 

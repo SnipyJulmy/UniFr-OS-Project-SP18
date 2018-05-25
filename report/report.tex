@@ -106,7 +106,7 @@ citestyle=alphabetic-verb
   
   \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
 
-  Submitted by Sylvain Julmy, Michael Papinutto, Sami Veillard
+  Submitted by Groupe 4: Sylvain Julmy, Michael Papinutto, Sami Veillard
   
   \noindent\makebox[\linewidth]{\rule{\textwidth}{1pt}}
   \vspace*{0.8cm}
@@ -117,9 +117,13 @@ citestyle=alphabetic-verb
 \newpage
 
 \section*{Introduction}
+For this project, we had to implement a multi-threaded client-server system using TCP sockets.
+This system had abilities to write keys with values, read values providing a key, simultaneous safe access of the readers and the writers.
+This system was subsequently tested using an automated testing in form of a bash script.
 
 \section*{Choosen approach}
-
+We selected a non-blocking approach for the database-action.
+Hence, as this allow to perform several action at once, we did not prioritize read or write action.
 \section*{Challenges encountered}
 
 \section*{Conclusion}
@@ -128,5 +132,72 @@ citestyle=alphabetic-verb
 
 \printbibliography
 
+\section*{Documentation}
+
+\subsection*{Communication}
+The server and the clients communicate through socket.
+
+\subsection*{Server}
+The server is composed of several binary files.
+The main file encompasses the socket setup for the server and dedicated files for communication and the shell graphical user interface.
+The server is multi-threaded, \textit{i.e.}, after each connection of a client the server create a new thread.
+The data structure is described above.
+
+\subsection*{Server usage}
+
+\begin{tabular}{l|c|r}
+\hline
+TCP Port & 5000 (can be reset in the server main file) \\
+\hline
+.\server & server start
+\hline
+\end{tabular}
+
+\subsection*{Client}
+The client is also composed from several binary files.
+The main file set up client socket and dedicated files are used for execution of command and shell graphical interface.
+On the contrary of the server shell, the client shell is an interactive shell which usage is described below.
+Moreover, to simplify benchmark the client can also accept files at launch.
+
+\subsection*{Client usage}
+
+\begin{tabular}{l|c|r}
+\hline
+.\client <server ip address> & client start
+\hline
+.\client -option <server ip address> & client start with options (see below)
+\hline
+\end{tabular}
+
+\begin{tabular}{l|c|r}
+\hline
+\multicolumn{3}{Option at client start (optionnal)}
+\hline
+-?, -h or --help & client command help
+\hline
+-f <file> or --file <file> & client start and execute command present in the file specified after this option
+\hline
+-F <file1> ... <fileN> or --files <file1> ... <fileN> & client start and execute command present in the files specified after this option
+\hline
+
+\begin{tabular}{l|c|r}
+\hline
+\multicolumn{3}{Command usage after client start}
+\hline
+add <value> or add <key> <value> & add a value to the database with or without generated key
+\hline
+ls & list the content of the database (unordered)
+\hline
+read_v <key> & read a value in the database from a key
+\hline
+read_k <value> & read a key in the database from a value
+\hline
+rm_v <key> & delete a value in the database from a key
+\hline
+rm_k <value> & delete a value in the database from a key
+\hline
+update_kv <value> <newvalue> & update an entry in the database
+\hline
+\end{tabular}
 \end{document}
 

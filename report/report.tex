@@ -134,6 +134,10 @@ We have implements our own data structure in C based on the one created by
 Herliry in \cite{Herlihy2006} in Java.
 
 \section*{Challenges encountered}
+One of the challenge we encountered was to read or deleted entries from values.
+Indeed, looking for a value in a hashtable is not as straight forward as it seems to.
+It required to navigate through all the keys until finding the corresponding value.
+Despite the high cost of this operation, we decided to use this method as we did not find any other way top provide such an operation.
 
 \section*{Conclusion}
 

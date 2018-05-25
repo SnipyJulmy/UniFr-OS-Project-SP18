@@ -85,7 +85,8 @@ citestyle=alphabetic-verb
 
 \setlength{\parindent}{0pt}
 
-\bibliography{bibliography.bib}
+\bibliography{bibliography}
+\bibliographystyle{apalike}
 
 \begin{document}
 
@@ -100,7 +101,7 @@ citestyle=alphabetic-verb
   \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
 
   \begin{flushleft}
-    Professor : Philippe Cudré-Mauroux
+    Professor : Philippe Cudre-Mauroux
 
     Assistant : Ines Arous
   \end{flushleft}
@@ -140,7 +141,8 @@ It required to navigate through all the keys until finding the corresponding val
 Despite the high cost of this operation, we decided to use this method as we did not find any other way top provide such an operation.
 
 \section*{Conclusion}
-
+In conclusion, we adressed the challenges proposed in this project using a lock-free hashset data structure.
+Despite
 \printbibliography
 
 \section*{Documentation}
@@ -188,8 +190,9 @@ Moreover, to simplify benchmark the client can also accept files at launch.
 \hline
 -f <file> or --file <file> & client start and execute command present in the file specified after this option
 \hline
--F <file1> ... <fileN> or --files <file1> ... <fileN> & client start and execute command present in the files specified after this option
+-F <file1> \ldots <fileN> or --files <file1> \ldots <fileN> & client start and execute command present in the files specified after this option
 \hline
+\end{tabular}
 
 \begin{tabular}{l|c|r}
 \hline
@@ -210,5 +213,6 @@ rm_k <value> & delete a value in the database from a key
 update_kv <value> <newvalue> & update an entry in the database
 \hline
 \end{tabular}
+
 \end{document}
 

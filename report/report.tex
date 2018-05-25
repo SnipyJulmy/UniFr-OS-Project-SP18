@@ -1,3 +1,4 @@
+
 \documentclass[a4paper,11pt]{report}
 
 \usepackage{fullpage}
@@ -9,9 +10,9 @@
 \usepackage{csquotes}
 
 \usepackage{etoolbox}
-\usepackage{sourcecodepro}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
+\usepackage{array}
 
 \usepackage[
 backend=biber,
@@ -27,7 +28,7 @@ citestyle=alphabetic-verb
 
 % % Page style
 % \usepackage{fancyhdr}
-  
+
 % \setlength{\headheight}{17pt}
 % \pagestyle{fancy}
 
@@ -50,34 +51,34 @@ citestyle=alphabetic-verb
 
 %%%%%%%%%% C
 \newmintinline{c}{
-  fontsize=\small,
-  breaklines=true
+fontsize=\small,
+breaklines=true
 }
 
 \newminted{c}{
-  frame=single,
-  framesep=2mm,
-  fontsize=\scriptsize,
-  mathescape
+frame=single,
+framesep=2mm,
+fontsize=\scriptsize,
+mathescape
 }
 
 \newminted[ccodeline]{c}{
-  frame=single,
-  framesep=2mm,
-  fontsize=\scriptsize,
-  mathescape,
-  linenos
+frame=single,
+framesep=2mm,
+fontsize=\scriptsize,
+mathescape,
+linenos
 }
 
 
 %%%%%%%%% CMAKE
 \newminted{cmake}{
-  frame=single,
-  framesep=2mm,
-  fontsize=\scriptsize,
-  mathescape,
-  linenos,
-  breaklines=true
+frame=single,
+framesep=2mm,
+fontsize=\scriptsize,
+mathescape,
+linenos,
+breaklines=true
 }
 
 % End minted
@@ -88,130 +89,134 @@ citestyle=alphabetic-verb
 \bibliography{bibliography}
 
 \begin{document}
-
-\begin{center}
-  \Large{
+  \begin{center}
+    \Large{
     Operating Systems\\
     Spring 2018
-  }
-  
-  \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
-  Operating Systems Project
-  \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
+    }
 
-  \begin{flushleft}
-    Professor : Philippe Cudre-Mauroux
+    \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
+    Operating Systems Project
+    \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
 
-    Assistant : Ines Arous
-  \end{flushleft}
-  
-  \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
+    \begin{flushleft}
+      Professor : Philippe Cudre-Mauroux
 
-  Submitted by Groupe 4: Sylvain Julmy, Michael Papinutto, Sami Veillard
-  
-  \noindent\makebox[\linewidth]{\rule{\textwidth}{1pt}}
-  \vspace*{0.8cm}
-  \today
+      Assistant : Ines Arous
+    \end{flushleft}
 
-\end{center}
+    \noindent\makebox[\linewidth]{\rule{\linewidth}{0.4pt}}
 
-\newpage
+    Submitted by Groupe 4: Sylvain Julmy, Michael Papinutto, Sami Veillard
 
-\section*{Introduction}
-For this project, we had to implement a multi-threaded client-server system using TCP sockets.
-This system had abilities to write keys with values, read values providing a key, simultaneous safe access of the readers and the writers.
-This system was subsequently tested using an automated testing in form of a bash script.
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{1pt}}
+    \vspace*{0.8cm}
+    \today
 
-\section*{Choosen approach}
+  \end{center}
 
-We have to take care of various aspect when choosing the data structure to
-store the key-value entry : maximal number of entry stored in the database,
-extension of the data structure, number of simultaneous access on the server and
-how to synchronize the threads.
+  \newpage
 
-A lock-free hashset data structure offers solutions to all of those challenges.
-We have implements our own data structure in C based on the one created by
-Herliry in \cite{Herlihy2006} in Java.
+  \section*{Introduction}
+  For this project, we had to implement a multi-threaded client-server system using TCP sockets.
+  This system had abilities to write keys with values, read values providing a key, simultaneous safe access of the readers and the writers.
+  This system was subsequently tested using an automated testing in form of a bash script.
 
-\section*{Challenges encountered}
-One of the challenge we encountered was to read or deleted entries from values.
-Indeed, looking for a value in a hashtable is not as straight forward as it seems to.
-It required to navigate through all the keys until finding the corresponding value.
-Despite the high cost of this operation, we decided to use this method as we did not find any other way top provide such an operation.
+  \section*{Chosen approach}
 
-\section*{Conclusion}
-In conclusion, we adressed the challenges proposed in this project using a lock-free hashset data structure.
-Despite
-\printbibliography
+  We have to take care of various aspect when choosing the data structure to
+  store the key-value entry : maximal number of entry stored in the database,
+  extension of the data structure, number of simultaneous access on the server and
+  how to synchronize the threads.
 
-\section*{Documentation}
+  A lock-free hash-set data structure offers solutions to all of those challenges.
+  We have implements our own data structure in C based on the one created by
+   Herlihy in \cite{Herlihy2006} in Java.
 
-\subsection*{Communication}
-The server and the clients communicate through socket.
+  \section*{Challenges encountered}
+  One of the challenge we encountered was to read or deleted entries from values.
+  Indeed, looking for a value in a hash-table is not as straight forward as it seems to.
+  It required to navigate through all the keys until finding the corresponding value.
+  Despite the high cost of this operation, we decided to use this method as we did not find any other way top provide such an operation.
 
-\subsection*{Server}
-The server is composed of several binary files.
-The main file encompasses the socket setup for the server and dedicated files for communication and the shell graphical user interface.
-The server is multi-threaded, \textit{i.e.}, after each connection of a client the server create a new thread.
-The data structure is described above.
+  \section*{Conclusion}
+  In conclusion, we addressed the challenges proposed in this project using a lock-free hash-set data structure.
+  Despite
+  \printbibliography
 
-\subsection*{Server usage}
+  \newpage
 
-\begin{tabular}{l|c|r}
-\hline
-\textit{TCP Port & 5000 (can be reset in the server main file) \\
-\hline
-\textit{.\server & server start
-\hline
-\end{tabular}
+  \section*{Documentation}
 
-\subsection*{Client}
-The client is also composed from several binary files.
-The main file set up client socket and dedicated files are used for execution of command and shell graphical interface.
-On the contrary of the server shell, the client shell is an interactive shell which usage is described below.
-Moreover, to simplify benchmark the client can also accept files at launch.
+  \subsection*{Communication}
+  The server and the clients communicate through socket.
 
-\subsection*{Client usage}
+  \subsection*{Server}
+  The server is composed of several binary files.
+  The main file encompasses the socket setup for the server and dedicated files for communication and the shell graphical user interface.
+  The server is multi-threaded, \textit{i.e.}, after each connection of a client the server create a new thread.
+  The data structure is described above.
 
-\begin{tabular}{l|c|r}
-\hline
- .\textbackslash client <server ip address> & client start
-\hline
-.\textbackslash client -option <server ip address> & client start with options (see below)
-\hline
-\end{tabular}
 
-\begin{tabular}{l|c|r}
-\hline
-\multicolumn{3}{Option at client start (optionnal)}
-\hline
--?, -h or --help & client command help
-\hline
--f <file> or --file <file> & client start and execute command present in the file specified after this option
-\hline
--F <file1> \ldots <fileN> or --files <file1> \ldots <fileN> & client start and execute command present in the files specified after this option
-\hline
-\end{tabular}
+  \subsection*{Server usage}
 
-\begin{tabular}{l|c|r}
-\hline
-\multicolumn{3}{Command usage after client start}
-\hline
-add <value> or add <key> <value> & add a value to the database with or without generated key
-\hline
-ls & list the content of the database (unordered)
-\hline
-read_v <key> & read a value in the database from a key
-\hline
-read_k <value> & read a key in the database from a value
-\hline
-rm_v <key> & delete a value in the database from a key
-\hline
-rm_k <value> & delete a value in the database from a key
-\hline
-update_kv <value> <newvalue> & update an entry in the database
-\hline
-\end{tabular}
+  \begin{centering}
+    \begin{tabular}{|m{3cm}|m{7cm}|}
+      \hline
+      TCP Port & 5000 (can be reset in the server main file) \\
+      \hline
+      .\textbackslash server & server start \\
+      \hline
+    \end{tabular}
+  \end{centering}
+
+  \subsection*{Client}
+  The client is also composed from several binary files.
+  The main file set up client socket and dedicated files are used for execution of command and shell graphical interface.
+  On the contrary of the server shell, the client shell is an interactive shell which usage is described below.
+  Moreover, to simplify benchmark the client can also accept files at launch.
+
+  \subsection*{Client usage}
+
+  \begin{centering}
+    \subsubsection*{Client basic usage}
+    \begin{tabular}{|m{6cm}|m{6cm}|}
+
+      \hline
+      .\textbackslash client <server ip address> & client start \\
+      \hline
+      .\textbackslash client -option <server ip address> & client start with options (see below) \\
+      \hline
+    \end{tabular}
+    \subsubsection*{Options at start}
+    \begin{tabular}{|m{4.5cm}|m{10.5cm}|}
+      \hline
+      \shortstack{-? \\ -h \\ -{}-help} & client command help \\
+      \hline
+      \shortstack{-f <file> \\ -{}-file <file>} & client start and execute command present in the file specified after this option \\
+      \hline
+      \shortstack{-F <file1> \ldots <fileN> \\ -{}-files <file1> \ldots <fileN>} & client start and execute command present in the files specified after this option \\
+      \hline
+    \end{tabular}
+
+    \subsubsection*{Client command accepted in interactive GUI}
+    \begin{tabular}{|m{7cm}|m{8cm}|}
+      \hline
+      add <value> or add <key> <value> & add a value to the database with or without generated key \\
+      \hline
+      ls & list the content of the database (unordered) \\
+      \hline
+      read\_v <key> & read a value in the database from a key \\
+      \hline
+      read\_k <value> & read a key in the database from a value \\
+      \hline
+      rm\_v <key> & delete a value in the database from a key \\
+      \hline
+      rm\_k <value> & delete a value in the database from a key \\
+      \hline
+      update\_kv <value> <newvalue> & update an entry in the database \\
+      \hline
+    \end{tabular}
+  \end{centering}
 
 \end{document}
-

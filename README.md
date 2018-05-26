@@ -4,6 +4,28 @@
  Michaël Papinutto
  Sami Veillard
  Sylvain Julmy
+## Instructions to build this project
+Use the following commands in a terminal in order to build project 
+```sh
+cmake */UniFr-OS-Project-SP18
+make
+```
+In case the project do not compile do not hesitate to contact us we would be glad to provie you with the executable files.
+
+## Server launch
+| TCP Port | 5000 (Can be set in server main file) |
+|----------|---------------------------------------|
+| .\server | start server                          |
+
+## Client launch
+| .\client <server ip address>         | Client start              |
+|--------------------------------------|---------------------------|
+| .\client -option <server ip address> | Client start with options |
+
+| -? or -h or --help            | Client help option                        |
+|-------------------------------|-------------------------------------------|
+| -f <file> or --file <file>    | Client start and execute command in file  |
+| -F <files> or --files <files> | Client start and execute command in files |
 
 ## Database operations
 - `ls` display the content of the database

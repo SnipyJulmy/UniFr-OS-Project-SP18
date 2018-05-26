@@ -87,7 +87,7 @@
         \end{itemize}
          \begin{figure}
              \centering
-             \includegraphics{hashsetFig1}
+             \includegraphics{../report/images/hashsetFig1.png}
          \end{figure}
     \end{frame}
 
@@ -95,9 +95,45 @@
          Scheme of the procedure that add the key 10 to the lock-free hash-set
          \begin{figure}
              \centering
-             \includegraphics{hashsetFig2}
+             \includegraphics{../report/images/hashsetFig2.png}
          \end{figure}
     \end{frame}
+
+    \section{Usage and Graphical User Interface}
+
+     \begin{frame}{Program Basic Usage}
+         \begin{tcolorbox}[taborange,tabularx={X|Y}, boxrule=3pt, title=Server usage]
+            TCP Port & 5000 (can be changed in file) \\\hline
+            .\textbackslash server & server start
+         \end{tcolorbox}
+         \begin{tcolorbox}[tabvert,tabularx={X|Y}, boxrule=3pt, title=Client Start]
+            .\textbackslash client <server ip address> & client start \\\hline
+            .\textbackslash client -option <server ip address> & client start with options
+         \end{tcolorbox}
+    \end{frame}
+    \begin{frame}{Client Usage and Commands}
+          \begin{tcolorbox}[tabbleu,tabularx={X|Y}, boxrule=3pt, title=Client Special Starts]
+              {-? \\ -h \\ -{}-help} & client command help \\\hline
+            {-f <file> \\ -{}-file <file>} & client start and execute commands in the file \\\hline
+            {-F <file1> \ldots <fileN> \\ -{}-files <file1> \ldots <fileN>} & client start and execute commands in the files \\
+         \end{tcolorbox}
+         \begin{tcolorbox}[tabvert,tabularx={X|Y}, boxrule=3pt, title=Commands in interactive GUI]
+             add <value> or add <key> <value> & add a value to the database  \\\hline
+            ls & list content (unordered) \\\hline
+            read\_v <key> & read value from  key \\\hline
+            read\_k <value> & read key from value \\\hline
+            rm\_v <key> & delete value from key \\\hline
+            rm\_k <value> & delete value from key \\\hline
+            update\_kv <value> <newvalue> & update an entry
+         \end{tcolorbox}
+    \end{frame}
+
+    \begin{frame}{Demo}
+        \boitebleue{\begin{center}
+                     DEMO
+        \end{center}}
+    \end{frame}
+
 
     \setion{Test}
 
@@ -321,6 +357,7 @@
             Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
             Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
         \end{tcolorbox}
+
 
         \begin{tcolorbox}[taborange,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt, title=Mon tableau des prix]
             Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline

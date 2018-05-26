@@ -72,13 +72,14 @@
 
      \begin{frame}{non-blocking operations}
 
-        Non-blocking operations use atomic operations allowing to perform several action at each clock cycle\\
-        As the actions are perform in a single cycle it is not crucial to wait for the operation to be completed \\
+        Non-blocking operations use atomic operations allowing to perform several actions at each clock cycle\\
+        These atomic operations are operations that cannot be stopped before they ends and as they proceed to multiple
+        operations at each cycle it is not crucial to block them \\
         In C, atomic operations functionality such as CompareAndSet can be done by "stealing" a bit from a pointer
         using bit-wise operators to extract the pointer and the mark from a single word \\
 
         \begin{itemize}
-            \item Swap values example
+            \item Swap values example (highly used for crypto-currencies)
         \end{itemize}
     \end{frame}
 
@@ -140,7 +141,7 @@
 
 
     \section{Tests}
-    \begin{frame}{Tests scenarios}
+    \begin{frame}{Tests scenarii}
         We tested the following scenarios:
         \begin{itemize}
             \item Collisions scenario : Operations that can collide (a client delete a value before another access it)

@@ -89,6 +89,7 @@
 \setlength{\parindent}{0pt}
 
 \bibliography{bibliography}
+\bibliographystyle{ieeetr}
 
 \begin{document}
     \begin{center}
@@ -120,19 +121,18 @@
     \newpage
 
     \section*{Introduction}
-    For this project, we had to implement a multi-threaded client-server system using TCP sockets.
-    This system has ability to write keys with values, read values providing a key, simultaneous safe access of the
-readers and the writers.
-    This system was subsequently tested using an automated test in form of a bash script and text files of commands.
+    For this project, we implemented a multi-threaded client-server system using TCP sockets.
+
     One of the problem in designing such system is related to the database structure.
     Indeed, we can increase memory required but not time as this would impact User Experience.
     Hence, we tended to choose faster algorithm.
     Indeed, looking at applications usage revealed that sets are used in the following way: 90\% of calls are contains(),
     9\% are add() and 1\% are remove(). In this project, we selected a hash set for those reasons.
     Even though this system might require more memory resources and was rather complicated to implement, it was found to
-    be efficient and powerful according to our test.
-    This report mainly focus in explaining our approach as it was not part of the course and might be a strength of
-    our project.
+    be efficient and powerful according to our test. Finally, our system has ability to write keys with values, read values
+    providing a key, simultaneous safe access of the readers and the writers. This system was subsequently tested using
+    an automated test in form of a bash script and text files of commands. This report mainly focus in explaining our
+    approach as it was not part of the course and might be a strength of our project.
 
 
     \section*{Chosen approach}
@@ -143,16 +143,19 @@ readers and the writers.
     how to synchronize the threads.
 
     A lock-free hash-set data structure offers solutions to all of those challenges without blocking threads using mutex
-    nor semaphores. We have implements our own data structure in C based on the one created by Herlihy in
-    \cite{Herlihy2006} in Java. Indeed, by using this implementation there is no need to prioritize neither read nor write action.
+    nor semaphores. We have implements our own data structure in C based on the one created by Herlihy in~\cite{Herlihy2006}
+    in Java. Indeed, by using this implementation there is no need to prioritize neither read nor write action.
 
-    More Specifically, we used a reversed split-ordering hash set.
-    A bucket is linked to a stack and as the list grow supplemental buckets references are added so that
-    no object is ever too far from the start of a bucket, \textit{i.e.}, the bucket size is keep small.
-    This implementation ensures that when an item is put in the stack, it will not be moved.
-    However, to do so, items have to be put in the stack using a recursive-split order.
-    Moreover, to avoid problems occurring when deleting a node referenced by a bucket, a sentinel node is added
-    at the beginning of each bucket. This special type of buckets are never deleted (see \ref{fig:Fig1}).
+    Such implementation to be non-blocking requires atomic operations. Atomic operations are unique or multiple operations
+    that cannot be stopped before their ends. In C, atomic operations such as CompareAndSet can be done by "stealing" a
+    bit from a pointer using bit-wise operators to extract the pointer and the mark from a single word~\cite{Herlihy2006}.
+    More Specifically, we used a reversed split-ordering hash set. A bucket is linked to a stack and as the list grow
+    supplemental buckets references are added so that no object is ever too far from the start of a bucket, \textit{i.e.},
+    the bucket size is kept small. This implementation ensures that when an item is put in the stack, it will not be
+    moved. To do so, items have to be put in the stack using a recursive-split order. Moreover, to avoid
+    problems occurring when deleting a node referenced by a bucket, a sentinel node is added at the beginning of each
+    bucket. This special type of buckets are never deleted and can be identified by the Most Sensibel Bit which is set
+    to 0 whereas for usual bucket is set to 1(see Figure~\ref{fig:Fig1}).
 
     \begin{figure}[h]
         \centering
@@ -167,9 +170,9 @@ readers and the writers.
 
     When inserting a new key in this data structure, the table is grown incrementally.
     As buckets are in a linked list ordered using split-ordering, the table resizing mechanism is independent to
-    the threshold that is decide when resizing. As the sets grows, more of the array will be use. Hence, when adding
-    new values to a not yet initialized bucket, it should have be initialized according to the current table capacity,
-    it will be initialized as. (see \ref{fig:Fig2}).
+    the threshold that decides when to resize. As the sets grows, most of the array will be use. Hence, when adding
+    new values to a not yet initialized bucket that should have beeen initialized according to the current table capacity,
+    this bucket will be initialized without generating an error. (see Figure~\ref{fig:Fig2}).
 
 
     \begin{figure}[h]
@@ -197,19 +200,59 @@ readers and the writers.
 
     Another challenge that we encountered was that we noticed using the implementation described above was not
     thread friendly.
-    This problem was in fact due to the fact that tokenizing commands string was keeping an internal static variable.
-    This issue took us a lot of time and debugging to be solved.
+    This problem was in fact due to the string tokenizer for commands was kept within an internal static variable. This
+    issue was subsequently solved by reprogramming the tokenizer and further tested to ensure that thread kept their own
+    tokenized command. This issue took us a lot of time and debugging to be solved.
 
     Finally, as only one of us was familiar with non-blocking operation and well versed in the intricacies of C programming,
     the other two had to keep up and learn a new way to program and think as this material was not presented
     during the class.
 
+    \section*{Tests Results}
+    We set up 3 test scenarii to evaluate our project: Collisions, No-Collisions ans Many Clients. In the Collisions scenario,
+    we tested  11 clients and 28 commands (308 operations in total) using every operations available. In the No-Collisions
+    scenario we tested 8 clients and 2700 commands (21600 operations in total). In the Many-Clients we tested 32 clients
+    and 300 commands (9600 operations in total). In the No-Collisions and the Many-Clients scenarii we only used add, read
+    value from key and delete key from value.
+
+    \begin{centering}
+
+        \begin{tabular}{|m{5cm}||m{3cm}|m{3cm}|m{3cm}|}\hline
+            \multicolumn{4}{|c|}{Collision scenario}\\\hline\hline
+           & Add & Read & Delete\\\hline
+           Number of errors & 0 & 22 & 0 \\\hline
+           Percentage of errors & 0\% & 7.14\% & 0\%\\\hline
+        \end{tabular}
+
+        \vspace{1cm}
+        \begin{tabular}{|m{5cm}||m{3cm}|m{3cm}|m{3cm}|}\hline
+            \multicolumn{4}{|c|}{No-Collision scenario}\\\hline\hline
+           & Add & Read & Delete\\\hline
+           Number of errors & 0 & 0 & 0 \\\hline
+           Percentage of errors & 0\% & 0\% & 0\%\\\hline
+        \end{tabular}
+
+        \vspace{1cm}
+        \begin{tabular}{|m{5cm}||m{3cm}|m{3cm}|m{3cm}|}\hline
+            \multicolumn{4}{|c|}{Many-Clients scenario}\\\hline\hline
+           & Add & Read & Delete\\\hline
+           Number of errors & 0 & 0 & 0 \\\hline
+           Percentage of errors & 0\% & 0\% & 0\%\\\hline
+        \end{tabular}
+    \end{centering}
+
+    \vspace{1cm}
+    Interestingly, the Many-Clients scenario required more time than the previous one despite it has half less operations.
+    This is probably due to the synchronisation of clients requests.
+
+
     \section*{Conclusion}
-    In conclusion, we addressed the challenges proposed in this project using a lock-free hash-set data structure which
-    offered us a way to cope with the prioritization of read and write operation. Moreover, as the usual operations use
-    in a set was found to be mainly compose of contains and add, this implementation offered a fair trade off between
-    between response time and memory pressure. However, such implementation does not prevent collisions but rather
-    exhibits collision when entries were already deleted in the data structure which however also occurs in other implementations.
+    In conclusion, we addressed the challenges proposed in this project using a reversed split-ordering block-free
+    hash-set data structure which offered us a way to cope with the prioritization of read and write operation.
+    Moreover, as the usual operations use in a set was found to be mainly compose of contains and add, this
+    implementation offered a fair trade off between between response time and memory pressure. However, such
+    implementation does not prevent collisions but rather exhibits collision when entries were already deleted in the
+    data structure also occuring in other implementations.
 
 
     \printbibliography

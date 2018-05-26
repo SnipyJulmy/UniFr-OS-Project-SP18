@@ -43,6 +43,10 @@
         \titlepage
     \end{frame}
 
+    \begin{frame}{Sommaire}
+        \tableofcontents
+        % possibilité d'ajouter l'option [pausesections]
+    \end{frame}
 
     \section{Selected Approach}
 
@@ -135,254 +139,46 @@
     \end{frame}
 
 
-    \setion{Test}
-
-    \begin{frame}{Multithreaded Server}
-        Texte normal \alert{Texte Alert}  \exemple{Texte exemple} \emph{Texte emphase}
-
-        \begin{columns}
-
-            \begin{column}{0.5\textwidth}
-                \begin{block}{Bloc simple}
-                    \begin{itemize}
-                        \item Premier point
-                    \end{itemize}
-                \end{block}
-
-                \begin{exampleblock}{Bloc exemple}
-                    \begin{itemize}
-                        \item Premier point
-                    \end{itemize}
-                \end{exampleblock}
-
-                \begin{alertblock}{Bloc alert}
-                    \begin{itemize}
-                        \item Premier point
-                    \end{itemize}
-                \end{alertblock}
-
-            \end{column}
-
-            \begin{column}{0.5\textwidth}
-                \boiteviolette{
-                Une boite violette
-                }
-
-                \boiteorange{
-                Une boite orange
-                }
-
-                \boitegrise{
-                Une boite grise
-                }
-
-
-
-                \begin{tcolorbox}[tabvert,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt, title=Mon tableau des prix]
-                    Couleur & Prix 1  & Prix 2  & Prix 3 \\\hline\hline
-                    Rouge   & 10.00   & 20.00   &  30.00 \\\hline
-                    Vert    & 20.00   & 30.00   &  40.00  \\\hline
-                    Bleu    & 30.00   & 40.00   &  50.00 \\\hline\hline
-                    Orange  & 60.00   & 90.00   & 120.00
-                \end{tcolorbox}
-
-            \end{column}
-
-        \end{columns}
-    \end{frame}
-
-
-
-
-    \section{Les blocs}
-
-    \begin{frame}{Les blocs}
-
-        \begin{block}{Bloc simple}
-            \begin{itemize}
-                \item Premier point
-                \item Second point
-                \item Troisième point
-            \end{itemize}
-        \end{block}
-
-        \begin{exampleblock}{Bloc exemple}
-            \begin{itemize}
-                \item Premier point
-                \item Second point
-                \item Troisième point
-            \end{itemize}
-        \end{exampleblock}
-
-        \begin{alertblock}{Bloc alert}
-            \begin{itemize}
-                \item Premier point
-                \item Second point
-                \item Troisième point
-            \end{itemize}
-        \end{alertblock}
-    \end{frame}
-
-
-    \section{Les bo\^ites}
-
-    \begin{frame}{Les boites}
-
-        \begin{columns}
-
-            \begin{column}{0.5\textwidth}
-                \boitejaune{
-                Ceci est \\
-                une boite jaune
-                }
-
-                \boiteorange{
-                Ceci est \\
-                une boite orange
-                }
-
-                \boitemarron{
-                Ceci est \\
-                une boite marron
-                }
-            \end{column}
-
-            \begin{column}{0.5\textwidth}
-                \boiteviolette{
-                Ceci est \\
-                une boite violette
-                }
-
-                \boitebleue{
-                Ceci est \\
-                une boite bleue
-                }
-
-                \boitegrise{
-                Ceci est \\
-                une boite grise
-                }
-
-            \end{column}
-
-        \end{columns}
-
-
-    \end{frame}
-
-
-
-    \section{Les listes}
-    \subsection{Liste à item}
-
-    \begin{frame}{Titre de la frame}
-
+    \section{Tests}
+    \begin{frame}{Tests scenarios}
+        We tested the following scenarios:
         \begin{itemize}
-            \item premier élément de liste,
-            \item deuxième élément de liste,
-            \item troisième élément de liste.
+            \item Collisions scenario : Operations that can collide (a client delete a value before another access it)
+            \item No-Collisions scenario : Operations that are order so that no collision can occurs
+            \item Many client: several client with similar scenario as no-collisions
         \end{itemize}
     \end{frame}
 
-    \subsection{Liste énumérative}
-    \begin{frame}{Titre de la frame}
-        \begin{enumerate}
-            \item élément de liste numéro 1,
-            \item élément de liste numéro 2,
-            \item élément de liste numéro 3.
-        \end{enumerate}
+     \begin{frame}{Collision scenario}
+         We tested 11 clients and 28 commands (308 operations in total)
+         \begin{tcolorbox}[tabrouge,tabularx={X|Y|Y|Y}, boxrule=3pt]
+               & Add & Read & Delete\\\hline
+               Number of errors & 0 & 22 & 0 \\\hline
+               Percentage of errors & 0\% & 7.14\% & 0\%
+         \end{tcolorbox}
+    \end{frame}
+     \begin{frame}{No-collision scenario}
+         We tested 8 clients and 2700 commands (21600 operations in total)
+         \begin{tcolorbox}[taborange,tabularx={X|Y|Y|Y}, boxrule=3pt]
+               & Add & Read & Delete\\\hline
+               Number of errors & 0 & 0 & 0 \\\hline
+               Percentage of errors & 0\% & 0\% & 0\%
+         \end{tcolorbox}
+    \end{frame}
+         \begin{frame}{Many clients scenario}
+         We tested 32 clients and 300 commands (9600 operations in total)
+         \begin{tcolorbox}[taborange,tabularx={X|Y|Y|Y}, boxrule=3pt]
+               & Add & Read & Delete\\\hline
+               Number of errors & 0 & 0 & 0 \\\hline
+               Percentage of errors & 0\% & 0\% & 0\%
+         \end{tcolorbox}
+         This last test required more time than the previous one despite it has half less operations
     \end{frame}
 
-
-    \subsection{Liste descriptive}
-    \begin{frame}{Titre de la frame}
-        \begin{description}
-            \item [Thème de présentation : ] ces thèmes sont en fait...
-            \item [Thème de couleur : ] gère tout ce qui est couleur...
-            \item [Thème de police : ] s'occupe de tout ce qui est police, gras...
-            \item [Thème interne : ] s'occupe de l'apparence des éléments...
-        \end{description}
-    \end{frame}
-
-
-
-    \section{Le texte}
-
-    \begin{frame}{Titre de la frame}
-
-        Voici du texte normal
-
-        \alert{Voici du texte \texttt{alert}}
-
-        \exemple{Voici du texte \texttt{exemple}}
-
-        \emph{Voici du texte \texttt{emphase}}
+    \section{Final}
+    \begin{frame}
+        \centering
+        \textcolor{MidnightBlue}{\Huge Thank you for your attention !}
 
     \end{frame}
-
-
-    \section{Les tableaux}
-
-    \begin{frame}{Tableaux}
-
-        % merci: http://tex.stackexchange.com/questions/112343/beautiful-table-samples
-
-        \begin{tcolorbox}[tabjaune,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt]
-            Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-            Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-            Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-            Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-            Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-        \end{tcolorbox}
-
-        \begin{tcolorbox}[tabvert,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt, title=Mon tableau des prix]
-            Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-            Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-            Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-            Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-            Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-        \end{tcolorbox}
-
-    \end{frame}
-
-
-    \begin{frame}{Tableaux}
-
-        % merci: http://tex.stackexchange.com/questions/112343/beautiful-table-samples
-
-        \begin{tcolorbox}[tabgris,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt]
-            Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-            Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-            Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-            Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-            Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-        \end{tcolorbox}
-
-
-        \begin{tcolorbox}[taborange,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt, title=Mon tableau des prix]
-            Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-            Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-            Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-            Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-            Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-        \end{tcolorbox}
-
-    \end{frame}
-
-
-
-    \section{Les images}
-
-    \begin{frame}{Titre de la frame}
-
-        \begin{figure}
-            \centering
-            \includegraphics[scale=0.5]{images/architecturebretonne_wikipedia.jpg}
-            \caption{Éléments d'architecture bretonne typique du Sud de la France. (\href{http://commons.wikimedia.org/wiki/File:Colmar_-_Alsace.jpg}{Wikipédia.fr} CC-By-Sa)}
-        \end{figure}
-
-    \end{frame}
-
-
-
 \end{document}

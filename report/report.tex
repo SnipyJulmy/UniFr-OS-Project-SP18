@@ -121,15 +121,15 @@
 
     \section*{Introduction}
     For this project, we had to implement a multi-threaded client-server system using TCP sockets.
-    This system had abilities to write keys with values, read values providing a key, simultaneous safe access of the
-    readers and the writers.
-    This system was subsequently tested using an automated testing in form of a bash script and text files of commands.
+    This system has ability to write keys with values, read values providing a key, simultaneous safe access of the
+readers and the writers.
+    This system was subsequently tested using an automated test in form of a bash script and text files of commands.
     One of the problem in designing such system is related to the database structure.
     Indeed, we can increase memory required but not time as this would impact User Experience.
-    Hence, we tend to choose faster algorithm.
+    Hence, we tended to choose faster algorithm.
     Indeed, looking at applications usage revealed that sets are used in the following way: 90\% of calls are contains(),
     9\% are add() and 1\% are remove(). In this project, we selected a hash set for those reasons.
-    Even though this system might require more memory ressources and was rather complicated to implement, it was found to
+    Even though this system might require more memory resources and was rather complicated to implement, it was found to
     be efficient and powerful according to our test.
     This report mainly focus in explaining our approach as it was not part of the course and might be a strength of
     our project.
@@ -137,21 +137,21 @@
 
     \section*{Chosen approach}
 
-    We had to take care of various aspect when choosing the data structure to
+    We had to keep in mind various aspect when choosing the data structure to
     store the key-value entry : maximal number of entry stored in the database,
     extension of the data structure, number of simultaneous access on the server and
     how to synchronize the threads.
 
     A lock-free hash-set data structure offers solutions to all of those challenges without blocking threads using mutex
     nor semaphores. We have implements our own data structure in C based on the one created by Herlihy in
-    \cite{Herlihy2006} in Java. Indeed, there is no need to prioritize neither read nor write action.
+    \cite{Herlihy2006} in Java. Indeed, by using this implementation there is no need to prioritize neither read nor write action.
 
     More Specifically, we used a reversed split-ordering hash set.
     A bucket is linked to a stack and as the list grow supplemental buckets references are added so that
     no object is ever too far from the start of a bucket, \textit{i.e.}, the bucket size is keep small.
-    This implementation ensures that when an item is put in the stack, it will not be move.
+    This implementation ensures that when an item is put in the stack, it will not be moved.
     However, to do so, items have to be put in the stack using a recursive-split order.
-    Moreover, to avoid problems occuring when deleting node referenced by a bucket, a sentinel node is added
+    Moreover, to avoid problems occurring when deleting a node referenced by a bucket, a sentinel node is added
     at the beginning of each bucket. This special type of buckets are never deleted (see \ref{fig:Fig1}).
 
     \begin{figure}[h]
@@ -166,10 +166,10 @@
     \end{figure}
 
     When inserting a new key in this data structure, the table is grown incrementally.
-    As buckets are in a linked list ordered using split-ordering, the table resizing mechanism is independant to
-    the threshold that decide when resizing. As the sets grows more of the array will be use. Hence, when adding
-    new values to a not yet initialized bucket that should have be initialized according to the current table capacity,
-    it will be initialized (see \ref{fig:Fig2}).
+    As buckets are in a linked list ordered using split-ordering, the table resizing mechanism is independent to
+    the threshold that is decide when resizing. As the sets grows, more of the array will be use. Hence, when adding
+    new values to a not yet initialized bucket, it should have be initialized according to the current table capacity,
+    it will be initialized as. (see \ref{fig:Fig2}).
 
 
     \begin{figure}[h]
@@ -178,39 +178,38 @@
         \caption{Scheme of the procedure that add the key 10 to the lock-free hash set.
         As above, split-order key values are expressed in binary above buckets (here 8 bits words).
         (a) Buckets 0, 1 and 3 but bucket 2 is not.
-        (b) An object with hash value of 10 is inserted to the set. This cause bucket 2 to be initialized and to
-        add a new sentinel is inserted with split-order key 2.
+        (b) An object with hash value of 10 is inserted to the set. This cause bucket 2 to be initialized and a new sentinel is inserted with split-order key 2.
         (c) Bucket 2 is affiliated with a new sentinel.
         (d) Finally, the split-order ordinary key 10 is added to bucket 2.}
         \label{fig:Fig2}
     \end{figure}
 
     In summary, our chosen approach implements a split-ordered hash set which is an array of buckets where each bucket
-    is a reference into a lock-free list where nodes are sorted by their bit-reversed hash codes.
+    is a reference to a lock-free list where nodes are sorted by their bit-reversed hash codes.
     The number of buckets grows dynamically, and each new bucket is initialized when accessed for the first time.
 
     \section*{Challenges encountered}
     One of the challenge we encountered was to read or deleted entries from values.
-    Indeed, looking for a value in a hash-table is not as straight forward as it seems to.
-    It required to navigate through all the keys until finding the corresponding value.
-    Despite the high cost of this operation, we decided to use this method as we did not find any other way top provide
+    Indeed, looking for a value in a hash-table is not as straight forward as it seems.
+    It requires navigating through all the keys until the corresponding value is found.
+    Despite the high cost of this operation, we decided to use this method as we did not find any other way to provide
     such an operation.
 
     Another challenge that we encountered was that we noticed using the implementation described above was not
     thread friendly.
     This problem was in fact due to the fact that tokenizing commands string was keeping an internal static variable.
-    This issue took us a lot of time and rethinking to be solved.
+    This issue took us a lot of time and debugging to be solved.
 
-    Finally, as only one of us was familiar with non-blocking operation and well experimented in c programming,
-    the two others had to keep up and learn a new way to program and think as this material was not presented
+    Finally, as only one of us was familiar with non-blocking operation and well versed in the intricacies of C programming,
+    the other two had to keep up and learn a new way to program and think as this material was not presented
     during the class.
 
     \section*{Conclusion}
     In conclusion, we addressed the challenges proposed in this project using a lock-free hash-set data structure which
     offered us a way to cope with the prioritization of read and write operation. Moreover, as the usual operations use
     in a set was found to be mainly compose of contains and add, this implementation offered a fair trade off between
-    between response time and memory pressure. However, such implementation do not prevent collisions but rather
-    exhibits collision when entries were already deleted in the data structure which also occurs in other implementations.
+    between response time and memory pressure. However, such implementation does not prevent collisions but rather
+    exhibits collision when entries were already deleted in the data structure which however also occurs in other implementations.
 
 
     \printbibliography
@@ -243,11 +242,11 @@
     \end{centering}
 
     \subsection*{Client}
-    The client is also composed from several binary files.
-    The main file set up client socket and dedicated files are used for execution of command and shell graphical
+    The client is also composed of several binary files.
+    The main file sets up client socket and dedicated files are used for execution of command and shell graphical
     interface.
-    On the contrary of the server shell, the client shell is an interactive shell which usage is described below.
-    Moreover, to simplify benchmark the client can also accept files at launch.
+    On the contrary of the server shell, the client shell is an interactive shell the usage thereof is described below.
+    Moreover, to simplify benchmarking, the client can also accept files at launch.
 
     \subsection*{Client usage}
 
@@ -275,19 +274,19 @@
         \subsubsection*{Client command accepted in interactive GUI}
         \begin{tabular}{|m{7cm}|m{8cm}|}
             \hline
-            add <value> or add <key> <value> & add a value to the database with or without generated key \\
+            add <value> or add <key> <value> & adds a value to the database with or without a generated key \\
             \hline
-            ls & list the content of the database (unordered) \\
+            ls & lists the content of the database (unordered) \\
             \hline
-            read\_v <key> & read a value in the database from a key \\
+            read\_v <key> & reads a value in the database from a key \\
             \hline
-            read\_k <value> & read a key in the database from a value \\
+            read\_k <value> & reads a key in the database from a value \\
             \hline
-            rm\_v <key> & delete a value in the database from a key \\
+            rm\_v <key> & deletes a value in the database from a key \\
             \hline
-            rm\_k <value> & delete a value in the database from a key \\
+            rm\_k <value> & deletes a value in the database from a key \\
             \hline
-            update\_kv <value> <newvalue> & update an entry in the database \\
+            update\_kv <value> <newvalue> & updates an entry in the database \\
             \hline
         \end{tabular}
     \end{centering}

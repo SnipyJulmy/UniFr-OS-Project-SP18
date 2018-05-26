@@ -50,7 +50,7 @@
 
     \section{Selected Approach}
 
-    \begin{frame}{Multithreaded Server}
+    \begin{frame}{Multi-threaded Server}
         We selected a multi-threaded server as: \\
         \begin{itemize}
             \item Allows to access same data structure
@@ -65,7 +65,7 @@
 
         \begin{itemize}
             \item No need to prioritize read or write operations
-            \item No dreadlock problems
+            \item No deadlock problems
             \item All clients have the same right to access the data structure at any time
         \end{itemize}
     \end{frame}
@@ -73,12 +73,12 @@
      \begin{frame}{non-blocking operations}
 
         Non-blocking operations use atomic operations allowing to perform several action at each clock cycle\\
-        As the actions are perform in one cycle it is not crucial to wait for the operation to be completed \\
-        In c atomic operations functionnality such as CompareAndSet can be done by "stealing" a bit from a pointer
+        As the actions are perform in a single cycle it is not crucial to wait for the operation to be completed \\
+        In C, atomic operations functionality such as CompareAndSet can be done by "stealing" a bit from a pointer
         using bit-wise operators to extract the pointer and the mark from a single word \\
 
         \begin{itemize}
-            \item Swap values exemple
+            \item Swap values example
         \end{itemize}
     \end{frame}
 

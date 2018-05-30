@@ -4,8 +4,8 @@
 rm -f *.log
 rm -f *.cmd
 
-NB_CLIENT=32
-NB_VALUE=100
+NB_CLIENT=128
+NB_VALUE=10
 
 for (( i=1; i<(($NB_CLIENT + 1));i++ ))
 do

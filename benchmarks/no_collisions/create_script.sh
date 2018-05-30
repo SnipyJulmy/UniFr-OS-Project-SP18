@@ -3,7 +3,7 @@
 rm -f *.log
 rm -f *.cmd
 
-for i in {1..8}
+for i in {1..7}
 do
     FILE="client_$i.cmd"
     touch ${FILE}
@@ -41,7 +41,7 @@ fi
 
 touch ${RUN_SCRIPT}
 echo '#!/usr/bin/env bash' >> ${RUN_SCRIPT}
-for i in {1..8}
+for i in {1..7}
 do
     FILE="client_$i.cmd"
     LOG="client_$i.log"

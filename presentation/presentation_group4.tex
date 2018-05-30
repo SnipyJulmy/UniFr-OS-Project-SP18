@@ -58,7 +58,7 @@
 
 \institute[UniFr]{University of Fribourg}
 
-\date{30 Septembre 2018}
+\date{\today}
 % Optionnel. La date, généralement celle du jour de la conférence
 
 \subject{Presentation projet OS Group 4 Sylvain Julmy, Michael Papinutto et Sami Veillard}
@@ -70,11 +70,6 @@
 \begin{document}
 
 \maketitle
-
-\begin{frame}
-  \frametitle{Table of contents}
-  \tableofcontents
-\end{frame}
 
 \section{Selected Approach}
 
@@ -204,7 +199,7 @@
   We tested the following scenarios:
   \begin{itemize}
   \item Scenario with collisions : operations that can collide (a client delete a value before another access it).
-  \item Scenario without collision : operations that are ordered so that no collision can occur.
+  \item Scenario without collision : operations are selected to avoid collisions.
   \item Scenario with many clients : several clients with a similar scenario as no-collisions.
   \end{itemize}
 \end{frame}
@@ -256,8 +251,16 @@
 \section{Conclusion}
 
 \begin{frame}
+  \frametitle{Conclusion}
+  \begin{itemize}
+  \item Efficient lock-free implementation
+  \item Understand the lock-free concept and its primitives
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \centering
-  \textcolor{MidnightBlue}{\Huge Thank's for your attention !}
+  \textcolor{MidnightBlue}{\Huge Thanks for your attention !}
 \end{frame}
 
 \end{document}
